@@ -11,6 +11,10 @@ Entstanden ist das Template aus einem realen Projekt mit 31 Seiten (einem Famili
 - **Baukasten statt Framework.** Ein fester Kern (Theming, einklappbare Sektionen, Druckausgabe, Barrierefreiheit) plus über 20 optionale Bausteine, die sich einzeln übernehmen oder weglassen lassen. Die beiden Beispielseiten zeigen bewusst *alles* im Einsatz — sie sind Schaukasten, nicht Mindestumfang.
 - **Für die Arbeit mit KI-Agenten gebaut.** Die ausführliche `CLAUDE.md` dokumentiert jede Konvention, jeden Fallstrick und einen Fragenkatalog für den Projektstart — [Claude Code](https://claude.com/claude-code) (oder ein anderes Agenten-Tool) kann daraus direkt neue Projekte aufbauen.
 
+## Live-Demo
+
+👉 **[n3m3515.github.io/html-project-blueprint](https://n3m3515.github.io/html-project-blueprint/)** — direkt im Browser ausprobieren, alle Designs und Bausteine live testen.
+
 ## Schnellstart
 
 ```bash
