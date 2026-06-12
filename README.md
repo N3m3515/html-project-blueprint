@@ -2,7 +2,7 @@
 
 Ein wiederverwendbares Template für kleine bis mittlere Info-Projekte: Reiseplaner, Vergleichsseiten, Wissenssammlungen, Familien-Dashboards, Event-Guides. **Kein Build, kein Framework, kein Package Manager** — jede Seite ist eine einzelne HTML-Datei, die direkt im Browser läuft, auch per Doppelklick vom Dateisystem (`file://`).
 
-Entstanden ist das Template aus einem realen Projekt mit 31 Seiten (einem Familien-Urlaubsplaner), aus dem alle bewährten Muster, Bausteine und Qualitätsregeln extrahiert wurden.
+Entstanden ist das Template aus einem realen Projekt mit 31 Seiten (einem Familien-Urlaubsplaner), aus dem alle bewährten Muster, Bausteine und Qualitätsregeln extrahiert wurden. **Das gesamte Projekt wurde mit [Claude Code](https://claude.com/claude-code) (Anthropics KI-Agent) entwickelt** — von der ersten Seite bis zur Extraktion dieses Templates. Es ist gezielt für die weitere Arbeit mit Claude ausgelegt: Die `CLAUDE.md` ist so geschrieben, dass Claude Code ein neues Projekt eigenständig aufbauen, Reviews durchführen und Konventionen einhalten kann.
 
 ## Warum dieses Template?
 
@@ -83,6 +83,16 @@ Jeder Baustein besteht aus einem markierten CSS-Block, optionalem Markup und ein
 
 Läuft in allen aktuellen Browsern (Chrome/Edge, Firefox, Safari), ohne JavaScript bleiben alle Inhalte lesbar (`noscript`-Fallback). Bekannte, dokumentierte Grenzen: Bei `file://` isolieren Firefox/Safari den localStorage pro Datei (der Export/Import-Baustein ist der Ausweg), und das keylose Google-Maps-Embed ist inoffiziell (die normalen Maps-Links bleiben als Fallback immer funktionsfähig).
 
+## Mit Claude Code verwenden
+
+Dieses Template ist auf die Zusammenarbeit mit [Claude Code](https://claude.com/claude-code) ausgelegt:
+
+1. **Repo klonen und Claude Code starten** — die `CLAUDE.md` wird automatisch als Kontext geladen.
+2. **Neues Projekt initialisieren** — Claude stellt die Fragen aus dem Projektstart-Katalog (Thema, Struktur, Design, Bausteine) und befüllt dann die Seiten.
+3. **Iterativ weiterentwickeln** — Claude kennt alle Klassen-Konventionen, Fallstricke und QS-Werkzeuge und kann neue Sektionen, Seiten oder Designs hinzufügen, ohne dass man die Dokumentation selbst lesen muss.
+
+Die `CLAUDE.md` beschreibt außerdem, welche Fragen Claude vor dem ersten Code-Schritt stellen soll — so entstehen keine unnötigen Umbauten, weil Design oder Struktur hinterher nicht passen.
+
 ## Lizenz
 
-Noch nicht festgelegt — vor der Veröffentlichung eine `LICENSE`-Datei ergänzen (für ein Template dieser Art bietet sich z. B. MIT an).
+[MIT](LICENSE) — frei verwendbar für private, kommerzielle und proprietäre Projekte. Einzige Bedingung: der Lizenztext bleibt erhalten.
