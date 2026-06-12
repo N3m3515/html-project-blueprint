@@ -6,6 +6,8 @@
 <meta name="color-scheme" content="dark light">
 <title>Detailseite — Eintrag Alpha</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧩%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f1117" id="theme-color-meta">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -397,6 +399,8 @@ body{padding-top:3.4rem;}
 .lightbox img{max-width:100%;max-height:80vh;border-radius:var(--r-md);}
 .lb-cap{font-size:13px;color:#cfd5e4;margin-top:10px;}
 .lb-close{position:fixed;top:1rem;right:1rem;background:var(--bg3);border:var(--bw) solid var(--bdr2);color:var(--tx);border-radius:var(--r-sm);font-size:16px;padding:6px 12px;cursor:pointer;}
+.lb-prev,.lb-next{position:fixed;top:50%;transform:translateY(-50%);background:var(--bg3);border:var(--bw) solid var(--bdr2);color:var(--tx);border-radius:var(--r-sm);font-size:18px;padding:8px 14px;cursor:pointer;line-height:1;z-index:1;}
+.lb-prev{left:1rem;}.lb-next{right:5rem;}
 
 /* === Baustein: Timeline === */
 .timeline{display:flex;flex-direction:column;margin:10px 0;}
@@ -448,6 +452,20 @@ body{padding-top:3.4rem;}
 .data-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:2.5rem;padding-top:1rem;border-top:var(--bw) solid var(--bdr);font-size:12px;color:var(--tx3);}
 .data-tools .lb{font-family:inherit;cursor:pointer;}
 
+/* === Baustein: Permalink === */
+.permalink-btn{background:none;border:none;cursor:pointer;font-size:12px;padding:3px 5px;color:var(--tx3);opacity:0;transition:opacity .15s,color .15s;flex-shrink:0;}
+.sec-hd:hover .permalink-btn,.permalink-btn:focus{opacity:1;}
+.permalink-btn:hover{color:var(--blue);}
+/* === Baustein: Druckauswahl === */
+.print-cfg-btn{position:fixed;bottom:1rem;right:3.5rem;z-index:200;background:var(--bg3);border:var(--bw) solid var(--bdr2);border-radius:var(--r-sm);padding:5px 10px;font-size:14px;cursor:pointer;color:var(--tx2);line-height:1;}
+.print-cfg-btn:hover{background:var(--bg4);color:var(--tx);}
+.print-cfg{position:fixed;bottom:3.2rem;right:3.5rem;z-index:201;background:var(--bg2);border:var(--bw) solid var(--bdr2);border-radius:var(--r-md);padding:12px;min-width:190px;max-height:55vh;overflow-y:auto;display:none;box-shadow:var(--shadow-lift);}
+.print-cfg.on{display:block;}
+.print-cfg-hd{font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
+.print-cfg label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--tx2);padding:3px 0;cursor:pointer;user-select:none;}
+.print-cfg input[type=checkbox]{accent-color:var(--teal);width:14px;height:14px;flex-shrink:0;}
+mark{background:var(--amber-bg);color:var(--amber);border-radius:2px;padding:0 2px;}
+@media print{.print-cfg-btn,.print-cfg{display:none !important;}}
 /* === Reduced Motion === */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
@@ -858,6 +876,13 @@ document.documentElement.setAttribute('data-design',d);})();</script>
   <div class="tip tip-amber"><span class="s">📌</span><span>Gespeichert wird unter dem Key <code>note-&lt;dateiname&gt;</code> — jede Seite hat ihr eigenes Notizfeld. Es gilt dieselbe <code>file://</code>-Einschränkung wie bei der Checkliste; die Export/Import-Leiste unten sichert Notizen zusammen mit allen anderen lokalen Daten.</span></div>
 </div></div>
 
+<!-- BAUSTEIN Druckauswahl: wählt einzelne Sektionen zum Drucken (gehört zu Script-Block 6) -->
+<button class="print-cfg-btn" id="print-cfg-btn" onclick="togglePrintCfg()" title="Druckauswahl" aria-label="Druckauswahl öffnen">🖨</button>
+<div class="print-cfg" id="print-cfg" role="dialog" aria-label="Abschnitte zum Drucken wählen">
+  <div class="print-cfg-hd">Drucken — Abschnitte wählen</div>
+  <div id="print-cfg-list"></div>
+</div>
+
 <!-- BAUSTEIN Daten Export/Import: sichert die localStorage-Daten als JSON-Datei (gehört zu Script-Block 7) -->
 <div class="data-tools">
   <span>💾 Lokale Daten (Favoriten, Haken, Notizen, Theme):</span>
@@ -870,9 +895,11 @@ document.documentElement.setAttribute('data-design',d);})();</script>
 <button class="totop" id="totop" onclick="window.scrollTo(0,0)" title="Nach oben" aria-label="Zurück nach oben">↑</button>
 
 <!-- BAUSTEIN Lightbox-Overlay (gehört zur Galerie + Script-Block 6) -->
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Bildansicht" onclick="closeLB()">
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Bildansicht" onclick="if(event.target===this)closeLB()">
   <figure><img src="" alt=""><figcaption class="lb-cap"></figcaption></figure>
   <button class="lb-close" aria-label="Bildansicht schließen" onclick="closeLB()">✕</button>
+  <button class="lb-prev" aria-label="Vorheriges Bild" onclick="lbNav(-1)">‹</button>
+  <button class="lb-next" aria-label="Nächstes Bild" onclick="lbNav(1)">›</button>
 </div>
 
 <!-- SCRIPT-BLOCK 2: Seiten-Funktion (Zwei-Ansichten-Toggle) — OPTIONALER BAUSTEIN, gehört zum wtoggle-Markup -->
@@ -900,8 +927,9 @@ document.addEventListener('click',function(e){
   var d=document.documentElement.getAttribute('data-design'); // DESIGN-AUSWAHL (nur Template): design-Teil in fertigen Projekten entfernen
   location.href=h+(h.includes('?')?'&':'?')+'theme='+t+(d&&d!=='polar'?'&design='+d:'');
 });
-function toggleTheme(){var h=document.documentElement,n=h.getAttribute('data-theme')==='light'?'dark':'light';h.setAttribute('data-theme',n);localStorage.setItem('theme',n);var b=document.getElementById('theme-btn');if(b)b.textContent=n==='light'?'🌙':'☀️';}
-(function(){var b=document.getElementById('theme-btn');if(b)b.textContent=(document.documentElement.getAttribute('data-theme')||'dark')==='light'?'🌙':'☀️';})();
+function toggleTheme(){var h=document.documentElement,n=h.getAttribute('data-theme')==='light'?'dark':'light';h.setAttribute('data-theme',n);localStorage.setItem('theme',n);var b=document.getElementById('theme-btn');if(b)b.textContent=n==='light'?'🌙':'☀️';var mc=document.getElementById('theme-color-meta');if(mc)mc.content=n==='light'?'#f5f7fb':'#0f1117';}
+(function(){var b=document.getElementById('theme-btn');if(b)b.textContent=(document.documentElement.getAttribute('data-theme')||'dark')==='light'?'🌙':'☀️';var mc=document.getElementById('theme-color-meta');if(mc)mc.content=(document.documentElement.getAttribute('data-theme')||'dark')==='light'?'#f5f7fb':'#0f1117';})();
+if('serviceWorker' in navigator && location.protocol !== 'file:')navigator.serviceWorker.register('sw.js');
 // DESIGN-AUSWAHL (nur Template): in fertigen Projekten komplett entfernen
 function setDesign(v){document.documentElement.setAttribute('data-design',v);try{localStorage.setItem('design',v);}catch(e){}}
 (function(){var s=document.getElementById('design-select');if(s)s.value=document.documentElement.getAttribute('data-design')||'polar';})();
@@ -913,7 +941,7 @@ function showRoute(btn){
   if(btn._map){btn._map.remove();btn._map=null;btn.textContent='🚗 Route';return;}
   var d=document.createElement('div');d.className='map-embed';
   var i=document.createElement('iframe');i.loading='lazy';i.title='Route ab Basisort';
-  i.src='https://maps.google.com/maps?saddr='+encodeURIComponent(MAP_ORIGIN)+'&daddr='+btn.dataset.dest+'&output=embed';
+  i.src='https://maps.google.com/maps?saddr='+encodeURIComponent(MAP_ORIGIN)+'&daddr='+encodeURIComponent(decodeURIComponent(btn.dataset.dest))+'&output=embed';
   d.appendChild(i);
   var host=btn.closest('.links')||btn.closest('.poi-links');
   if(host){host.insertAdjacentElement('afterend',d);}else{btn.insertAdjacentElement('afterend',d);}
@@ -924,6 +952,26 @@ function showRoute(btn){
 <script>
 function toggleFold(id,btn){var f=document.getElementById(id).classList.toggle('folded');btn.textContent=f?'▸':'▾';btn.setAttribute('aria-expanded',f?'false':'true');}
 document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('click',function(){var sec=document.querySelector(a.getAttribute('href'));if(!sec)return;var b=sec.querySelector('.sec-body.folded');if(b){var fb=sec.querySelector('.fold-btn');toggleFold(b.id,fb);}});});
+// Permalink-Buttons: 🔗 hinter jedem Sektions-Titel mit ID
+(function(){
+  function copyPermalink(id,btn){
+    var url=location.href.split('#')[0]+'#'+id;
+    if(navigator.clipboard){navigator.clipboard.writeText(url).then(function(){
+      var old=btn.textContent;btn.textContent='✓';setTimeout(function(){btn.textContent=old;},1200);
+    }).catch(function(){prompt('URL kopieren:',url);});}
+    else{prompt('URL kopieren:',url);}
+  }
+  document.querySelectorAll('.sec[id]').forEach(function(sec){
+    var hd=sec.querySelector('.sec-hd');if(!hd)return;
+    var btn=document.createElement('button');
+    btn.className='permalink-btn';btn.textContent='🔗';btn.title='Link zu dieser Sektion kopieren';
+    btn.setAttribute('aria-label','Link zu dieser Sektion kopieren');
+    btn.addEventListener('click',function(e){e.stopPropagation();copyPermalink(sec.id,btn);});
+    hd.insertBefore(btn,hd.querySelector('.fold-btn'));
+  });
+  // Beim Laden: falls #hash auf eine eingeklappte Sektion zeigt, aufklappen
+  if(location.hash){var t=document.querySelector(location.hash);if(t){var b2=t.querySelector('.sec-body.folded');if(b2){var fb2=t.querySelector('.fold-btn');if(fb2)toggleFold(b2.id,fb2);}}}
+})();
 </script>
 <!-- SCRIPT-BLOCK 6: Zusatz-Bausteine (Checkliste, Lightbox, Back-to-top, Termin-Intelligenz, Tabellen-Sortierung, Notizen, FAQ-Druckhelfer) — OPTIONAL, nur übernehmen was die Seite nutzt -->
 <script>
@@ -943,18 +991,37 @@ function updateCl(){
   if(n)n.textContent=done.length+' / '+all.length+' erledigt';
 }
 updateCl();
-// Lightbox: übernimmt src/alt des Thumbnails + data-cap als Unterschrift
-function openLB(btn){
-  var lb=document.getElementById('lightbox'),img=lb.querySelector('img'),th=btn.querySelector('img');
+// Lightbox: ←/→ Navigation zwischen allen .g-item-Buttons
+var _lbItems=[],_lbIdx=0;
+function _showLB(idx){
+  var lb=document.getElementById('lightbox'),btn=_lbItems[idx];
+  if(!lb||!btn)return;
+  var th=btn.querySelector('img'),img=lb.querySelector('img');
   img.src=th.src;img.alt=th.alt;
   lb.querySelector('.lb-cap').textContent=btn.dataset.cap||th.alt||'';
-  lb.classList.add('on');document.body.style.overflow='hidden';
+  var prev=lb.querySelector('.lb-prev'),next=lb.querySelector('.lb-next');
+  if(prev)prev.style.visibility=_lbItems.length>1?'':'hidden';
+  if(next)next.style.visibility=_lbItems.length>1?'':'hidden';
+}
+function openLB(btn){
+  _lbItems=Array.prototype.slice.call(document.querySelectorAll('.g-item'));
+  _lbIdx=_lbItems.indexOf(btn);if(_lbIdx<0)_lbIdx=0;
+  _showLB(_lbIdx);
+  document.getElementById('lightbox').classList.add('on');document.body.style.overflow='hidden';
+}
+function lbNav(dir){
+  _lbIdx=(_lbIdx+dir+_lbItems.length)%_lbItems.length;
+  _showLB(_lbIdx);
 }
 function closeLB(){
   var lb=document.getElementById('lightbox');
   lb.classList.remove('on');document.body.style.overflow='';
 }
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLB();});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape')closeLB();
+  else if(e.key==='ArrowLeft')lbNav(-1);
+  else if(e.key==='ArrowRight')lbNav(1);
+});
 // Back-to-top: einblenden ab 600px Scrolltiefe (scroll-behavior aus dem CSS greift, inkl. Reduced-Motion-Override)
 (function(){
   var t=document.getElementById('totop');if(!t)return;
@@ -1009,6 +1076,34 @@ function sortRt(th){
     catch(e){if(st)st.textContent='⚠ Speichern nicht möglich.';}
   });
 })();
+// Druckauswahl: Panel aufbauen + beforeprint/afterprint-Koordination (gemeinsam mit FAQ-Druckhelfer unten)
+(function(){
+  var list=document.getElementById('print-cfg-list');if(!list)return;
+  var secs=document.querySelectorAll('.sec');
+  var hidden=[];
+  secs.forEach(function(sec,i){
+    var title=(sec.querySelector('.sec-title')||sec.querySelector('h2')||{}).textContent||('Abschnitt '+(i+1));
+    var lbl=document.createElement('label');
+    var cb=document.createElement('input');cb.type='checkbox';cb.checked=true;cb.dataset.secIdx=i;
+    lbl.appendChild(cb);lbl.appendChild(document.createTextNode(title.trim()));
+    list.appendChild(lbl);
+  });
+  window.togglePrintCfg=function(){document.getElementById('print-cfg').classList.toggle('on');};
+  document.addEventListener('click',function(e){
+    var cfg=document.getElementById('print-cfg');
+    if(!cfg)return;
+    if(!cfg.contains(e.target)&&e.target.id!=='print-cfg-btn')cfg.classList.remove('on');
+  });
+  window.addEventListener('beforeprint',function(){
+    hidden=[];
+    list.querySelectorAll('input[type=checkbox]').forEach(function(cb,i){
+      var sec=secs[i];if(!cb.checked&&sec){hidden.push(sec);sec.style.display='none';}
+    });
+  });
+  window.addEventListener('afterprint',function(){
+    hidden.forEach(function(sec){sec.style.display='';});hidden=[];
+  });
+})();
 // FAQ-Druckhelfer: geschlossene <details> drucken ihren Inhalt nicht — beim Drucken alle öffnen, danach zurücksetzen
 window.addEventListener('beforeprint',function(){
   document.querySelectorAll('details.faq:not([open])').forEach(function(d){d.dataset.auto='1';d.open=true;});
@@ -1040,7 +1135,11 @@ function importData(inp){
   r.onload=function(){
     try{
       var o=JSON.parse(r.result);
-      Object.keys(o).forEach(function(k){try{localStorage.setItem(k,String(o[k]));}catch(e){}});
+      if(typeof o!=='object'||Array.isArray(o)||!o)throw new Error('no object');
+      Object.keys(o).forEach(function(k){
+        if(k==='theme'||k==='design'||k==='favs'||/^(fold|ck|note)-/.test(k))
+          try{localStorage.setItem(k,String(o[k]));}catch(e){}
+      });
       location.reload();
     }catch(e){alert('Import fehlgeschlagen: keine gültige JSON-Datei.');}
   };

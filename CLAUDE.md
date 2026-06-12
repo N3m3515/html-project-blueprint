@@ -5,7 +5,7 @@ Dieser Ordner ist ein wiederverwendbares Template, extrahiert aus dem Urlaubspla
 ## Architektur-Prinzipien
 
 1. **Kein Build, kein Framework, kein Package Manager.** Jede `.html`-Datei läuft direkt im Browser, auch per `file://` vom Dateisystem. Keine externen Abhängigkeiten außer Google Fonts (mit System-Font-Fallback).
-2. **Jede Seite ist self-contained**: kompletter eigener `<style>`-Block und eigene `<script>`-Blöcke. Kein geteiltes CSS-/JS-File — bewusste Entscheidung, damit eine Seite nie kaputt geht, weil eine andere geändert wurde, und damit einzelne Dateien verschickt/kopiert werden können. (Dokumentierte Ausnahme: die reine **Daten**-Datei `search-index.js` des Such-Bausteins — fehlt sie, zeigt die Suche schlicht keine Treffer, nichts anderes bricht.)
+2. **Jede Seite ist self-contained**: kompletter eigener `<style>`-Block und eigene `<script>`-Blöcke. Kein geteiltes CSS-/JS-File — bewusste Entscheidung, damit eine Seite nie kaputt geht, weil eine andere geändert wurde, und damit einzelne Dateien verschickt/kopiert werden können. (Dokumentierte Ausnahmen: die **Daten**-Datei `search-index.js` des Such-Bausteins — fehlt sie, zeigt die Suche keine Treffer; `sw.js`/`manifest.json`/`icon.svg` des PWA-Bausteins — Web-Standards, die im Projektstamm liegen müssen.)
 3. **Konsequenz daraus**: Änderungen an geteilten Klassen müssen **auf allen Seiten identisch** nachgezogen werden (Script-gestützt per `sed`/Python), sonst entsteht Design-Drift. Und: eine benutzte, aber im File nicht definierte Klasse rendert **stillschweigend unstyled** — bei neuen Sektionen immer prüfen, ob alle verwendeten Klassen im `<style>`-Block der Datei existieren.
 4. **Struktur**: eine `index.html` als Einstieg/Übersicht (Tab-Navigation, Karten-Grid mit Links) + beliebig viele Detailseiten (`detail.html` ist das Muster). Detailseiten verlinken zurück per fixiertem Zurück-Button.
 
@@ -16,7 +16,10 @@ Dieser Ordner ist ein wiederverwendbares Template, extrahiert aus dem Urlaubspla
 | `CLAUDE.md` | Diese Doku — bei Projektstart anpassen (Inhalt, Tabs, Domäne) und kontinuierlich pflegen |
 | `index.html` | Übersichtsseite: Hero mit einklappbarem Infokasten, Schnellauswahl-Box, Tab-Navigation, verlinkte Karten (`.pcard`) |
 | `detail.html` | Detailseiten-Template mit allen Mustern: TOC, Fold, Theme, Karten-Embeds, Cards, POI-Listen, Events, Vergleichstabelle, Specgrid, Key-Value-Infos |
-| `search-index.js` | Daten-Datei des Such-Bausteins (manuell gepflegter Seiten-Index) — die einzige Nicht-HTML-Datei; nur nötig, wenn der Baustein „Seitenübergreifende Suche" verwendet wird |
+| `search-index.js` | Daten-Datei des Such-Bausteins (manuell gepflegter Seiten-Index) — nur nötig, wenn der Baustein „Seitenübergreifende Suche" verwendet wird |
+| `manifest.json` | PWA-Manifest: App-Name, Icon, Theme-Farbe, Display-Modus — bei Projektstart anpassen |
+| `sw.js` | Service Worker für Offline-Support (PWA-Baustein) — cacht alle HTML-Seiten; CACHE-Version und PRECACHE-Liste bei neuen Seiten aktualisieren |
+| `icon.svg` | Template-Icon (🧩 auf dunklem Hintergrund) — durch projektspezifisches Icon ersetzen |
 | `README.md` | Öffentliche Projektbeschreibung (GitHub-Schaufenster) — bei Projektstart auf das neue Projekt umschreiben oder entfernen |
 
 ## Baukasten-Prinzip — Kern vs. optionale Bausteine
@@ -59,6 +62,12 @@ Nicht jedes Projekt braucht jeden Baustein (eine Google-Maps-Anbindung ist z. B.
 | **Notizen** (Detail) | Freitext pro Seite, lokal gespeichert | Sektion mit `.notes-area`-Textarea + `.notes-status`, Notiz-Teil von Script-Block 6 (Key `note-<dateiname>`), CSS-Marker | Sektion + Script-Teil weglassen |
 | **Daten Export/Import** | localStorage-Stand als JSON sichern/einspielen — der Ausweg aus der `file://`-Isolation und für Browser-Wechsel | `.data-tools`-Leiste am Seitenende, Script-Block 7 (`exportData`/`importData`), CSS-Marker | Leiste + Export/Import-Teil von Block 7 weglassen |
 | **Tastatur-Shortcuts** | `t` = Theme umschalten, `/` = Suchfeld fokussieren | Listener in Script-Block 7 (greift nicht in Eingabefeldern; `Esc` haben Lightbox/Vergleich eigene Listener) | Listener-Teil von Block 7 weglassen |
+| **Lightbox-Navigation** | ←/→ zwischen Galerie-Bildern | `lb-prev`/`lb-next`-Buttons im `#lightbox`-Overlay, `lbNav(dir)` + `_lbItems[]`/`_lbIdx` in Script-Block 6, `ArrowLeft`/`ArrowRight` im keydown-Listener | Pfeiltasten-Listener im keydown-Block entfernen, Prev/Next-Buttons aus dem Overlay löschen |
+| **URL-State** (Index) | Tab + Filter in der URL — teilbare und bookmarkbare Filterzustände | `show()` schreibt `?tab=` · `applyFilter()` schreibt `?q=`/`?tags=` · Init-IIFE liest sie beim Laden — alles per `history.replaceState` | `history.replaceState`-Zeilen + Init-IIFE aus `applyFilter()` entfernen |
+| **Abschnitts-Permalink** (Detail) | 🔗-Button an jedem Sektions-Titel zum Kopieren des `#hash`-Links | IIFE in Script-Block 5, injiziert `.permalink-btn` in jede `.sec[id] .sec-hd`; öffnet beim Laden eingeklappte Hash-Ziele | IIFE + CSS `/* === Baustein: Permalink === */` weglassen |
+| **Suchfeld-Highlighting** (Index) | Treffertext in Suchergebnissen gelb markiert | `hi()`-Funktion in `siteSearch()` + CSS `mark`-Regel in `/* === Baustein: Permalink === */`-Block | `hi()`-Aufrufe durch direktes `esc()` ersetzen + `mark`-CSS entfernen |
+| **Druckauswahl** | 🖨-Button öffnet Panel — Sektionen per Checkbox auswählen; nicht angekreuzte werden beim Drucken ausgeblendet | `.print-cfg-btn`/`.print-cfg`-HTML, CSS `/* === Baustein: Druckauswahl === */`, Script-Block „Druckauswahl" (Index) bzw. Teil von Script-Block 6 (Detail) | HTML-Panel + Script-Block weglassen; CSS bleibt harmlos im Datei |
+| **PWA / Offline** | App installierbar + Offline-Nutzung via Service Worker | `manifest.json` + `icon.svg` + `sw.js`; `<link rel="manifest">` + `<meta name="theme-color" id="theme-color-meta">` im `<head>`; SW-Registrierung + `theme-color`-Update in `toggleTheme()` — **nur auf HTTPS aktiv** (`file://` wird per Check übersprungen) | `manifest.json`/`sw.js`/`icon.svg` löschen, `<link rel="manifest">` + `<meta name="theme-color">` + SW-Registrierungszeile aus HTML entfernen |
 
 **Wichtige Klarstellung zur „keine Klassen löschen"-Regel:** Ungenutzte CSS-Klassen bleiben immer im `<style>`-Block — sie sind der Werkzeugkasten und kosten nichts. Aktiv entfernt wird beim Zuschneiden nur **Markup** (Sektionen, Buttons) und ggf. der zugehörige **Script-Block**. Die Script-Blöcke sind genau dafür nummeriert bzw. per HTML-Kommentar benannt und unabhängig: Blöcke 1/3/5 sind Kern, alle anderen sind je nach Projekt verzichtbar (Details im Abschnitt „JavaScript-Muster").
 
@@ -196,6 +205,25 @@ Regeln dazu: **Nie** Radien/Borders/Schriften wieder hart in Komponenten codiere
 **Neues Design anlegen:** Beide Blöcke (Dark + Light) eines bestehenden Designs kopieren, `data-design`-Namen ändern, Werte anpassen, als `<option>` in die Template-Auswahlbox eintragen — und **auf allen Seiten identisch** einfügen. Kontrast grob prüfen: `--tx` auf `--bg2` und Akzentfarbe auf zugehörigem `-bg`/`-dim` müssen lesbar bleiben (Richtwert WCAG AA, Kontrast ≥ 4,5:1 für Fließtext).
 
 **Warum der Link-Interceptor?** Bei `file://` isolieren Firefox/Safari den localStorage pro Datei — ohne Theme-Weitergabe per URL-Param würde jede Seite mit ihrem eigenen (ggf. abweichenden) Theme öffnen. Der Interceptor ignoriert externe Links (`https:`, `mailto:`), reine Anker-Links und Links, die schon `?theme=` tragen.
+
+## PWA / Offline-Baustein
+
+Funktioniert **nur auf HTTPS** (GitHub Pages, Netlify, eigener Server) — bei `file://` wird der Service Worker per Check übersprungen, nichts bricht.
+
+**Drei Pflichtdateien im Projektstamm:**
+- `manifest.json` — App-Metadaten. Bei Projektstart anpassen: `name`, `short_name`, `description`, `background_color`, `theme_color`.
+- `icon.svg` — App-Icon; durch ein projektspezifisches Icon ersetzen. Ein SVG-Icon mit `"sizes":"any"` deckt alle Browser-Anforderungen ab.
+- `sw.js` — Service Worker. **Zwei Stellen pflegen**: `CACHE`-Version erhöhen (`'bp-v1'` → `'bp-v2'` usw.) nach jeder Inhaltsänderung, damit alle Clients das Update erhalten; `PRECACHE`-Liste aktualisieren wenn neue `.html`-Seiten hinzukommen.
+
+**Pro HTML-Seite drei Zeilen:**
+1. `<link rel="manifest" href="manifest.json">` nach dem Favicon-Link im `<head>`
+2. `<meta name="theme-color" content="#0f1117" id="theme-color-meta">` danach (Farbe = Dark-Hintergrund)
+3. In `toggleTheme()`: `var mc=document.getElementById('theme-color-meta');if(mc)mc.content=n==='light'?'#f5f7fb':'#0f1117';` — hält die Browser-Chrome-Farbe mit dem Theme synchron.
+4. Am Ende des Theme-Script-Blocks: `if('serviceWorker' in navigator && location.protocol !== 'file:')navigator.serviceWorker.register('sw.js');`
+
+**SW-Strategie**: Cache-First mit dynamischer Befüllung — bekannte Seiten werden vorab gecacht (`PRECACHE`), unbekannte beim ersten Abruf ergänzt. `skipWaiting` + `clients.claim()` sorgen dafür, dass Updates sofort aktiv werden.
+
+**Architektur-Ausnahme**: `sw.js`, `manifest.json` und `icon.svg` sind die einzigen Nicht-HTML-Dateien neben `search-index.js` — sie sind Web-Standards, keine Hilfsskripte, und müssen im Projektstamm liegen.
 
 ## Tab-Navigation (nur Index)
 

@@ -8,12 +8,12 @@ Entstanden ist das Template aus einem realen Projekt mit 31 Seiten (einem Famili
 
 - **Null Abhängigkeiten.** Keine npm-Installation, kein Bundler, kein Server. Klonen, `index.html` öffnen, fertig. Einzige externe Ressource ist ein Google Font — mit System-Font-Fallback.
 - **Jede Seite ist self-contained.** Kompletter eigener CSS- und JS-Block pro Datei. Eine Seite geht nie kaputt, weil eine andere geändert wurde — und einzelne Seiten lassen sich verschicken oder kopieren.
-- **Baukasten statt Framework.** Ein fester Kern (Theming, einklappbare Sektionen, Druckausgabe, Barrierefreiheit) plus über 20 optionale Bausteine, die sich einzeln übernehmen oder weglassen lassen. Die beiden Beispielseiten zeigen bewusst *alles* im Einsatz — sie sind Schaukasten, nicht Mindestumfang.
+- **Baukasten statt Framework.** Ein fester Kern (Theming, einklappbare Sektionen, Druckausgabe, Barrierefreiheit) plus über 25 optionale Bausteine, die sich einzeln übernehmen oder weglassen lassen. Die beiden Beispielseiten zeigen bewusst *alles* im Einsatz — sie sind Schaukasten, nicht Mindestumfang.
 - **Für die Arbeit mit KI-Agenten gebaut.** Die ausführliche `CLAUDE.md` dokumentiert jede Konvention, jeden Fallstrick und einen Fragenkatalog für den Projektstart — [Claude Code](https://claude.com/claude-code) (oder ein anderes Agenten-Tool) kann daraus direkt neue Projekte aufbauen.
 
 ## Live-Demo
 
-👉 **[n3m3515.github.io/html-project-blueprint](https://n3m3515.github.io/html-project-blueprint/)** — direkt im Browser ausprobieren, alle Designs und Bausteine live testen.
+👉 **[n3m3515.github.io/html-project-blueprint](https://n3m3515.github.io/html-project-blueprint/)** — direkt im Browser ausprobieren, alle Designs und Bausteine live testen. Auf der Demo-Seite lässt sich die App auch als PWA installieren (Chrome/Edge: Installieren-Symbol in der Adresszeile).
 
 ## Schnellstart
 
@@ -52,17 +52,19 @@ Möglich machen das **Struktur-Tokens**: Schrift, Eckenradien, Rahmenstärke und
 | Kategorie | Bausteine |
 |---|---|
 | Navigation | Tab-Navigation mit `?tab=`-Rücksprung · TOC-Sprungleiste · Back-to-top |
-| Finden & Wählen | Live-Suche + Tag-Filter + Favoriten · seitenübergreifende Suche (`search-index.js`) · Favoriten-Vergleichsansicht · Sortierung für Grids und Tabellen · interaktiver Entscheidungsbaum · Schnellauswahl-Box |
+| Finden & Wählen | Live-Suche + Tag-Filter + Favoriten · seitenübergreifende Suche mit **Suchfeld-Highlighting** · Favoriten-Vergleichsansicht · Sortierung für Grids und Tabellen · interaktiver Entscheidungsbaum · Schnellauswahl-Box · **URL-State** (Filter/Tab in der URL — bookmarkbar und teilbar) |
 | Karten | Google-Maps-Routen ohne API-Key (Anreise-Karte + „🚗 Route"-Buttons) · OpenStreetMap-Embeds |
-| Inhalt | Cards, POI-Listen, Termin-Listen, Vergleichstabellen, Key-Value-Kacheln, Begriffstabellen · Zwei-Ansichten-Toggle · Timeline · Balkendiagramm (CSS-only) · FAQ-Akkordeon (komplett JS-frei) |
+| Inhalt | Cards, POI-Listen, Termin-Listen, Vergleichstabellen, Key-Value-Kacheln, Begriffstabellen · Zwei-Ansichten-Toggle · Timeline · Balkendiagramm (CSS-only) · FAQ-Akkordeon (komplett JS-frei) · **Abschnitts-Permalinks** (🔗-Button an jedem Sektions-Titel) |
 | Persistenz | abhakbare Checkliste mit Fortschrittsbalken · Notizfeld pro Seite · Termin-Intelligenz (vergangene Termine dimmen + Countdown) · Daten-Export/Import als JSON |
-| Komfort | Tastatur-Shortcuts (`t` Theme, `/` Suche) · Lightbox-Galerie |
+| Komfort | Tastatur-Shortcuts (`t` Theme, `/` Suche) · Lightbox-Galerie **mit ←/→-Navigation** (Tastatur + Buttons) · **Druckauswahl** (🖨-Button wählt Sektionen vor dem Drucken) |
+| Offline & Mobil | **PWA-Baustein** (`manifest.json` + `sw.js`): installierbar als App, Offline-Nutzung via Service Worker — automatisch aktiv auf HTTPS, bei `file://` übersprungen |
 
 Jeder Baustein besteht aus einem markierten CSS-Block, optionalem Markup und einem benannten Script-Block — alles einzeln kopier- und entfernbar. Die `CLAUDE.md` dokumentiert pro Baustein, was dazugehört und wie man ihn sauber weglässt.
 
 ## Qualität eingebaut
 
 - **QS-Werkzeuge als Copy-&-Paste-Snippets** (Python-Heredocs, keine Hilfsdateien im Projekt): HTML-Tag-Balance-Check, Abgleich benutzter vs. definierter CSS-Klassen, **Block-Sync** (hält geteilte CSS-Blöcke über alle Seiten identisch) und ein **WCAG-Kontrast-Check** für neue Farbwelten.
+- **Sicherheit**: XSS-Schutz durch `esc()`-Helper in allen `innerHTML`-Pfaden · `importData()` nur mit Whitelist bekannter localStorage-Keys · URL-Parameter korrekt enkodiert.
 - Dokumentierte Fallstricke aus dem Ursprungsprojekt (häufige Klassen-Tippfehler, Link-Verifikation per `curl`, localStorage-Eigenheiten bei `file://`).
 - Ein **Projektstart-Fragenkatalog** in der `CLAUDE.md`: sechs Fragengruppen (Thema, Struktur, Design, Bausteine, Inhalte, Pflege), die vor dem ersten Code geklärt werden — damit das Projekt von Anfang an die richtigen Bausteine bekommt.
 
@@ -71,7 +73,10 @@ Jeder Baustein besteht aus einem markierten CSS-Block, optionalem Markup und ein
 ```
 ├── index.html        Übersichtsseite — Tabs, Karten-Grid, Suche, Filter, Entscheidungsbaum
 ├── detail.html       Detailseiten-Muster — alle Content- und Persistenz-Bausteine
-├── search-index.js   Daten-Datei des Such-Bausteins (einzige Nicht-HTML-Datei, optional)
+├── search-index.js   Daten-Datei des Such-Bausteins (optional)
+├── manifest.json     PWA-Manifest — bei Projektstart anpassen (Name, Icon, Farbe)
+├── sw.js             Service Worker — cacht alle Seiten für Offline-Nutzung
+├── icon.svg          Template-App-Icon — durch projektspezifisches Icon ersetzen
 ├── CLAUDE.md         Vollständige technische Doku: Konventionen, Bausteine, Checklisten, QS
 └── README.md         Diese Datei
 ```
@@ -82,10 +87,11 @@ Jeder Baustein besteht aus einem markierten CSS-Block, optionalem Markup und ein
 2. Design festlegen: per Auswahlbox durchprobieren, dann `data-design` im `<html>`-Tag fixieren und die drei markierten Template-Stellen entfernen (in der `CLAUDE.md` Schritt für Schritt beschrieben).
 3. Nicht benötigte Bausteine entfernen — Markup und Script-Blöcke raus, CSS bleibt als Werkzeugkasten drin.
 4. `detail.html` pro Unterseite kopieren, Inhalte füllen, Karte auf der Index einhängen — Checkliste in der `CLAUDE.md`.
+5. PWA anpassen: `manifest.json` (Name, Farbe), `icon.svg` (eigenes Icon), `sw.js` (PRECACHE-Liste mit allen neuen `.html`-Seiten ergänzen).
 
 ## Browser & Grenzen
 
-Läuft in allen aktuellen Browsern (Chrome/Edge, Firefox, Safari), ohne JavaScript bleiben alle Inhalte lesbar (`noscript`-Fallback). Bekannte, dokumentierte Grenzen: Bei `file://` isolieren Firefox/Safari den localStorage pro Datei (der Export/Import-Baustein ist der Ausweg), und das keylose Google-Maps-Embed ist inoffiziell (die normalen Maps-Links bleiben als Fallback immer funktionsfähig).
+Läuft in allen aktuellen Browsern (Chrome/Edge, Firefox, Safari), ohne JavaScript bleiben alle Inhalte lesbar (`noscript`-Fallback). Bekannte, dokumentierte Grenzen: Bei `file://` isolieren Firefox/Safari den localStorage pro Datei (der Export/Import-Baustein ist der Ausweg); der PWA-Service-Worker erfordert HTTPS und ist bei `file://` deaktiviert; das keylose Google-Maps-Embed ist inoffiziell (die normalen Maps-Links bleiben als Fallback immer funktionsfähig).
 
 ## Mit Claude Code verwenden
 
