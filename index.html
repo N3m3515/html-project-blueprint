@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<title>Projekt-Blueprint — Übersicht</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧩%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0f1117; --bg2:#181c27; --bg3:#1f2333; --bg4:#252a3a;
+  --bdr:#2e3347; --bdr2:#3a4060;
+  --tx:#e8eaf0; --tx2:#9ba3b8; --tx3:#6b7590;
+  --blue:#85B7EB; --blue-bg:#0c1e3a; --blue-dim:#1a2e50; --blue-bdr:#1a3560;
+  --teal:#5DCAA5; --teal-bg:#0a2218; --teal-dim:#0f2e22; --teal-bdr:#0f3028;
+  --green:#97C459; --green-bg:#141f07; --green-bdr:#1e3010;
+  --amber:#FAC775; --amber-bg:#251800; --amber-bdr:#3a2808;
+  --coral:#F0997B; --coral-bg:#2a1008; --coral-bdr:#3a1808;
+  --purple:#AFA9EC; --purple-bg:#1a1840; --purple-bdr:#2a2870;
+  --gray-dim:#222636;
+  --ok:var(--teal); --no:var(--coral); --maybe:var(--amber);
+  /* Struktur-Tokens — machen radikale Designs möglich (Designs dürfen sie überschreiben) */
+  --font-body:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  --r-xl:16px;--r-lg:12px;--r-md:10px;--r-sm:8px;--r-xs:6px;--r-pill:999px;
+  --bw:1px;
+  --shadow:0 1px 4px rgba(0,0,0,.18);--shadow-hover:0 2px 10px rgba(0,0,0,.28);--shadow-lift:0 4px 16px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);line-height:1.5;padding:1.25rem clamp(1rem,4vw,2rem);max-width:min(1200px,92vw);margin:0 auto;}
+a{color:var(--blue);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+.hero{background:var(--blue-bg);border:var(--bw) solid var(--blue-bdr);border-radius:var(--r-lg);padding:1.75rem;margin-bottom:1.5rem;}
+.hero-title{font-size:22px;font-weight:500;color:var(--blue);margin-bottom:6px;}
+.hero-sub{font-size:14px;color:var(--tx2);line-height:1.6;}
+.prefs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:1rem;}
+.pref{background:rgba(255,255,255,.04);border:var(--bw) solid var(--bdr2);border-radius:var(--r-sm);padding:8px 12px;font-size:12px;color:var(--tx2);}
+.pref-icon{font-size:15px;margin-bottom:3px;}
+.pref-label{font-weight:500;color:var(--tx);display:block;margin-bottom:2px;}
+
+.tabs{display:flex;gap:0;margin-bottom:1.5rem;border:var(--bw) solid var(--bdr2);border-radius:var(--r-md);overflow:hidden;width:100%;}
+.tab{flex:1;font-size:12px;font-weight:500;padding:9px 4px;cursor:pointer;background:var(--bg3);color:var(--tx2);border:none;border-right:var(--bw) solid var(--bdr2);text-align:center;transition:background .15s,color .15s;}
+.tab:last-child{border-right:none;}
+.tab.on{background:var(--blue-dim);color:var(--blue);}
+.tab:hover:not(.on){background:var(--bg4);color:var(--tx);}
+@media (max-width:760px){
+  .tabs{flex-wrap:wrap;gap:6px;border:none;border-radius:0;overflow:visible;}
+  .tab{flex:1 1 30%;min-width:104px;border:var(--bw) solid var(--bdr2);border-radius:var(--r-sm);}
+}
+.page{display:none;}
+.page.on{display:block;}
+
+.sec{margin-bottom:2rem;}
+.sec-hd{display:flex;align-items:center;gap:10px;margin-bottom:1rem;padding-bottom:8px;border-bottom:var(--bw) solid var(--bdr);}
+.sec-sym{font-size:18px;line-height:1;}
+.sec-title{font-size:16px;font-weight:500;color:var(--tx);}
+.sub{font-size:11px;font-weight:500;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;}
+.div{height:1px;background:var(--bdr);margin:2rem 0;}
+
+.b{font-size:12px;font-weight:500;padding:4px 10px;border-radius:var(--r-xs);display:inline-flex;align-items:center;gap:5px;}
+.b-sm{font-size:11px;padding:3px 8px;}
+.b-blue{background:var(--blue-dim);color:var(--blue);border:var(--bw) solid var(--blue-bdr);}
+.b-teal{background:var(--teal-dim);color:var(--teal);border:var(--bw) solid var(--teal-bdr);}
+.b-green{background:var(--green-bg);color:var(--green);border:var(--bw) solid var(--green-bdr);}
+.b-amber{background:var(--amber-bg);color:var(--amber);border:var(--bw) solid var(--amber-bdr);}
+.b-coral{background:var(--coral-bg);color:var(--coral);border:var(--bw) solid var(--coral-bdr);}
+.b-purple{background:var(--purple-bg);color:var(--purple);border:var(--bw) solid var(--purple-bdr);}
+.b-gray{background:var(--gray-dim);color:var(--tx2);border:var(--bw) solid var(--bdr2);}
+
+.tip{border-radius:var(--r-sm);padding:10px 14px;font-size:12px;line-height:1.55;margin-top:10px;display:flex;gap:8px;align-items:flex-start;}
+.tip .s{font-size:15px;flex-shrink:0;}
+.tip-blue{background:var(--blue-dim);border:var(--bw) solid var(--blue-bdr);color:var(--tx2);}
+.tip-teal{background:var(--teal-dim);border:var(--bw) solid var(--teal-bdr);color:var(--tx2);}
+.tip-amber{background:var(--amber-bg);border:var(--bw) solid var(--amber-bdr);color:var(--tx2);}
+.tip-coral{background:var(--coral-bg);border:var(--bw) solid var(--coral-bdr);color:var(--tx2);}
+.tip-green{background:var(--green-bg);border:var(--bw) solid var(--green-bdr);color:var(--tx2);}
+
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:1.25rem;}
+.info-card{background:var(--bg2);border:var(--bw) solid var(--bdr);border-radius:var(--r-lg);padding:1rem 1.1rem;}
+.info-icon{font-size:20px;margin-bottom:6px;}
+.info-title{font-size:13px;font-weight:500;color:var(--tx);margin-bottom:5px;}
+.info-body{font-size:12px;color:var(--tx2);line-height:1.6;}
+
+.lang-wrap{background:var(--bg2);border:var(--bw) solid var(--bdr);border-radius:var(--r-lg);overflow:hidden;margin-bottom:1.25rem;}
+.lang-table{width:100%;border-collapse:collapse;font-size:12px;}
+.lang-table th{font-size:11px;font-weight:500;color:var(--tx3);text-align:left;padding:7px 10px;border-bottom:var(--bw) solid var(--bdr);background:var(--bg3);text-transform:uppercase;letter-spacing:.4px;}
+.lang-table td{padding:6px 10px;border-bottom:var(--bw) solid var(--bdr);vertical-align:top;}
+.lang-table tr:last-child td{border-bottom:none;}
+.lang-kw{color:var(--teal);font-weight:500;}
+.lang-de{color:var(--tx2);}
+.lang-pr{color:var(--tx3);font-style:italic;}
+
+.lb{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:4px 9px;border-radius:var(--r-xs);border:var(--bw) solid var(--bdr2);background:var(--bg3);color:var(--tx2);text-decoration:none;white-space:nowrap;}
+.lb:hover{background:var(--bg4);color:var(--tx);text-decoration:none;}
+.lb-blue{border-color:var(--blue-bdr);background:var(--blue-dim);color:var(--blue);}
+.lb-teal{border-color:var(--teal-bdr);background:var(--teal-dim);color:var(--teal);}
+.lb-amber{border-color:var(--amber-bdr);background:var(--amber-bg);color:var(--amber);}
+.lb-green{border-color:var(--green-bdr);background:var(--green-bg);color:var(--green);}
+.ok{color:var(--ok);}.no{color:var(--no);}.mb{color:var(--maybe);}
+
+.park-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:1.5rem;}
+.plink{text-decoration:none;display:block;}
+.pcard{background:var(--bg2);border:var(--bw) solid var(--bdr);border-radius:var(--r-lg);padding:1.1rem;display:flex;flex-direction:column;transition:border-color .15s,transform .15s,background .15s;cursor:pointer;height:100%;}
+.plink:hover .pcard{border-color:var(--teal-bdr);transform:translateY(-2px);}
+.pcard.hl{border-color:var(--teal-bdr);background:var(--teal-bg);}
+.pcard.hl:hover{background:var(--teal-bg);}
+.pcard.hl2{border-color:var(--amber-bdr);}
+.pcard.current{border-color:var(--green-bdr);background:var(--green-bg);}
+.pcard.current:hover{background:var(--green-bg);}
+.pc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;}
+.pc-name{font-size:14px;font-weight:500;color:var(--tx);line-height:1.35;}
+.pc-op{font-size:11px;color:var(--tx3);margin-top:2px;}
+.pc-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;}
+.pc-body{font-size:12px;color:var(--tx2);line-height:1.55;flex:1;margin-bottom:10px;}
+.pc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:var(--bw) solid var(--bdr);}
+.pc-drive{font-size:11px;font-weight:500;padding:3px 8px;border-radius:5px;}
+.drive-g{background:var(--green-bg);color:var(--green);border:var(--bw) solid var(--green-bdr);}
+.drive-a{background:var(--amber-bg);color:var(--amber);border:var(--bw) solid var(--amber-bdr);}
+.drive-c{background:var(--coral-bg);color:var(--coral);border:var(--bw) solid var(--coral-bdr);}
+.pc-action{font-size:11px;font-weight:500;padding:3px 10px;border-radius:5px;}
+.pc-action.ready{background:var(--teal-dim);color:var(--teal);border:var(--bw) solid var(--teal-bdr);}
+.pc-action.wip{background:var(--gray-dim);color:var(--tx3);border:var(--bw) solid var(--bdr2);}
+
+/* Schnellauswahl-Box */
+.eh-wrap{margin:1rem 0 1.75rem;}
+.eh-box{background:var(--bg2);border:var(--bw) solid var(--bdr);border-radius:var(--r-xl);padding:1.25rem 1.5rem;}
+.eh-title{font-size:13px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem;}
+.eh-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;}
+.eh-card{background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-md);padding:.9rem 1rem;display:flex;flex-direction:column;}
+.eh-card.c-teal{border-color:var(--teal-bdr);background:var(--teal-dim);}
+.eh-card.c-amber{border-color:var(--amber-bdr);background:var(--amber-bg);}
+.eh-ico{font-size:18px;margin-bottom:4px;}
+.eh-kw{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:7px;}
+.eh-body{font-size:12px;color:var(--tx2);line-height:1.5;flex:1;}
+.eh-body strong{color:var(--tx);font-weight:500;}
+.eh-row{padding:2px 0;}
+.eh-note{font-size:11px;color:var(--tx3);margin-top:7px;font-style:italic;}
+.eh-bud{font-size:11px;margin-top:8px;color:var(--tx3);border-top:var(--bw) solid var(--bdr);padding-top:7px;}
+
+html[data-theme="light"] {
+  --bg:#f5f7fb;--bg2:#ffffff;--bg3:#eef1f8;--bg4:#e5e9f5;
+  --bdr:#d0d5e8;--bdr2:#b8bfd4;
+  --tx:#1a1d2e;--tx2:#50587a;--tx3:#7c88a8;
+  --blue:#1857a0;--blue-bg:#ddeaf8;--blue-dim:#c8dcf5;--blue-bdr:#8ab8e0;
+  --teal:#0e7a5c;--teal-bg:#d0ece6;--teal-dim:#b5dfd5;--teal-bdr:#68b89a;
+  --green:#3d7e1c;--green-bg:#dff0c8;--green-bdr:#8ec850;
+  --amber:#8a5c0a;--amber-bg:#fdf2d8;--amber-bdr:#dca840;
+  --coral:#b83a20;--coral-bg:#fde6e0;--coral-bdr:#dc8870;
+  --purple:#4848a8;--purple-bg:#e8e8f8;--purple-bdr:#9898d5;
+  --gray-dim:#e5e9f5;
+  --ok:#0e7a5c;--no:#b83a20;--maybe:#8a5c0a;
+  --shadow:0 1px 3px rgba(0,0,0,.07);--shadow-hover:0 2px 8px rgba(0,0,0,.1);--shadow-lift:0 4px 14px rgba(0,0,0,.12);
+}
+html[data-theme="light"] .pref{background:rgba(0,0,0,.03);}
+
+
+/* === Designs (Farbwelten) — Standard „polar" = :root/Default-Light; weitere per data-design am <html>-Tag.
+   Regel: Der Light-Block eines Designs MUSS alle Variablen neu setzen, die sein Dark-Block setzt. === */
+.design-select{position:fixed;top:.75rem;right:3.6rem;z-index:200;background:var(--bg3);border:var(--bw) solid var(--bdr2);border-radius:var(--r-sm);padding:5px 8px;font-size:12px;font-family:inherit;color:var(--tx2);cursor:pointer;}
+.design-select:hover{background:var(--bg4);color:var(--tx);}
+
+/* — Design „wald" — grün-erdig, gedeckte Naturtöne — */
+html[data-design="wald"]{
+  --bg:#11150f;--bg2:#1a2016;--bg3:#222a1d;--bg4:#2a3424;
+  --bdr:#333f2c;--bdr2:#42523a;
+  --tx:#e9eee4;--tx2:#a8b59c;--tx3:#768767;
+  --blue:#8FC1E8;--blue-bg:#102536;--blue-dim:#1a3349;--blue-bdr:#1f415c;
+  --teal:#7BCB9B;--teal-bg:#11271a;--teal-dim:#173321;--teal-bdr:#1d4029;
+  --green:#A9C86A;--green-bg:#1a2408;--green-bdr:#2c3c12;
+  --amber:#E8C277;--amber-bg:#2a1f08;--amber-bdr:#41320f;
+  --coral:#E89B7B;--coral-bg:#2e1408;--coral-bdr:#44200e;
+  --purple:#B5AEDC;--purple-bg:#1e1c38;--purple-bdr:#2f2c58;
+  --gray-dim:#252c20;
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+html[data-design="wald"][data-theme="light"]{
+  --bg:#f3f6ee;--bg2:#ffffff;--bg3:#e9efdf;--bg4:#dde6cf;
+  --bdr:#ccd8bb;--bdr2:#b3c29e;
+  --tx:#1c2415;--tx2:#4c5c3c;--tx3:#79886a;
+  --blue:#1a5e8a;--blue-bg:#dcebf5;--blue-dim:#c9e0ef;--blue-bdr:#92bedb;
+  --teal:#1d7a4b;--teal-bg:#d7eede;--teal-dim:#c4e5d0;--teal-bdr:#7fc49c;
+  --green:#4a7d18;--green-bg:#e4f0cd;--green-bdr:#a3c863;
+  --amber:#8a5e10;--amber-bg:#f7efd5;--amber-bdr:#d3b25c;
+  --coral:#ad4a22;--coral-bg:#f9e6dc;--coral-bdr:#dd9a78;
+  --purple:#50509d;--purple-bg:#e9e9f6;--purple-bdr:#a3a3d6;
+  --gray-dim:#e6ecdb;
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+
+/* — Design „abend" — warmes Terracotta, Sonnenuntergangstöne — */
+html[data-design="abend"]{
+  --bg:#171110;--bg2:#211917;--bg3:#2b211e;--bg4:#352a26;
+  --bdr:#41332d;--bdr2:#54433b;
+  --tx:#f0e9e4;--tx2:#bda99c;--tx3:#8c776a;
+  --blue:#94B8E0;--blue-bg:#14233a;--blue-dim:#1d3050;--blue-bdr:#28406a;
+  --teal:#6FC9A8;--teal-bg:#0e2a1e;--teal-dim:#143626;--teal-bdr:#1a4530;
+  --green:#B0C46A;--green-bg:#1f2408;--green-bdr:#333c12;
+  --amber:#F2B96B;--amber-bg:#2e1d04;--amber-bdr:#463008;
+  --coral:#F0937B;--coral-bg:#331108;--coral-bdr:#4a1c0e;
+  --purple:#C3A8DC;--purple-bg:#261a38;--purple-bdr:#3c2a58;
+  --gray-dim:#2b2320;
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+html[data-design="abend"][data-theme="light"]{
+  --bg:#faf4ef;--bg2:#ffffff;--bg3:#f3e9e0;--bg4:#ead9cc;
+  --bdr:#ddc8b8;--bdr2:#c8ab96;
+  --tx:#2a1d14;--tx2:#6b5240;--tx3:#99826f;
+  --blue:#275a94;--blue-bg:#ddeaf6;--blue-dim:#cadef1;--blue-bdr:#94bbdf;
+  --teal:#167455;--teal-bg:#d6ecdf;--teal-dim:#c2e3d2;--teal-bdr:#79bfa0;
+  --green:#5c7a16;--green-bg:#ecf0cf;--green-bdr:#b5c45e;
+  --amber:#94600c;--amber-bg:#f9efd8;--amber-bdr:#d9b25e;
+  --coral:#b54324;--coral-bg:#fbe5db;--coral-bdr:#de9678;
+  --purple:#6a4ba0;--purple-bg:#efe7f7;--purple-bdr:#bb9fd9;
+  --gray-dim:#efe3d8;
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+
+/* — Design „graphit" — neutral, entsättigt, dezent — */
+html[data-design="graphit"]{
+  --bg:#101012;--bg2:#19191c;--bg3:#212126;--bg4:#2a2a30;
+  --bdr:#323239;--bdr2:#44444d;
+  --tx:#ebebee;--tx2:#a4a4ae;--tx3:#717179;
+  --blue:#A9BFD6;--blue-bg:#1b2430;--blue-dim:#232e3d;--blue-bdr:#2f3d50;
+  --teal:#97C6B4;--teal-bg:#182722;--teal-dim:#1f312b;--teal-bdr:#28443a;
+  --green:#AEC295;--green-bg:#1e2417;--green-bdr:#303a24;
+  --amber:#D6BC8E;--amber-bg:#292113;--amber-bdr:#3e331f;
+  --coral:#D69C8E;--coral-bg:#2b1c17;--coral-bdr:#423025;
+  --purple:#B6B2CE;--purple-bg:#201f30;--purple-bdr:#34324c;
+  --gray-dim:#242428;
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+html[data-design="graphit"][data-theme="light"]{
+  --bg:#f5f5f7;--bg2:#ffffff;--bg3:#ececef;--bg4:#e0e0e5;
+  --bdr:#d2d2da;--bdr2:#b9b9c4;
+  --tx:#1c1c22;--tx2:#54545e;--tx3:#84848e;
+  --blue:#3d5a78;--blue-bg:#e2e9f1;--blue-dim:#d3dde9;--blue-bdr:#a3b7cb;
+  --teal:#2e6b56;--teal-bg:#ddece6;--teal-dim:#cce4da;--teal-bdr:#8fbcab;
+  --green:#4e6b34;--green-bg:#e6eedb;--green-bdr:#aac38b;
+  --amber:#7a6230;--amber-bg:#f3ecdb;--amber-bdr:#cdb887;
+  --coral:#9c4f3a;--coral-bg:#f6e5df;--coral-bdr:#d5a08c;
+  --purple:#565284;--purple-bg:#e9e8f2;--purple-bdr:#aaa7cc;
+  --gray-dim:#e7e7ec;
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+
+
+/* — Design „terminal" — RADIKAL: Monospace, null Radien, Phosphorgrün / Papier-Terminal — */
+html[data-design="terminal"]{
+  --font-body:ui-monospace,'Cascadia Code','JetBrains Mono',Consolas,monospace;
+  --r-xl:0;--r-lg:0;--r-md:0;--r-sm:0;--r-xs:0;--r-pill:0;
+  --bw:1px;
+  --shadow:none;--shadow-hover:none;--shadow-lift:none;
+  --bg:#0a0e0a;--bg2:#0e140e;--bg3:#142014;--bg4:#1b2a1b;
+  --bdr:#1f3a1f;--bdr2:#2e552e;
+  --tx:#c8f5c8;--tx2:#7fbf7f;--tx3:#4e8a4e;
+  --blue:#7fd4f0;--blue-bg:#06222e;--blue-dim:#0a2e3d;--blue-bdr:#11465c;
+  --teal:#5ef0a0;--teal-bg:#06250f;--teal-dim:#0a3318;--teal-bdr:#0f4a22;
+  --green:#a8f05e;--green-bg:#1a2606;--green-bdr:#2a3d0a;
+  --amber:#f0d05e;--amber-bg:#2a2206;--amber-bdr:#42360a;
+  --coral:#f08a6a;--coral-bg:#2e1206;--coral-bdr:#481d0a;
+  --purple:#c8a8f0;--purple-bg:#1d1430;--purple-bdr:#2f2150;
+  --gray-dim:#142014;
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+html[data-design="terminal"][data-theme="light"]{
+  --font-body:ui-monospace,'Cascadia Code','JetBrains Mono',Consolas,monospace;
+  --r-xl:0;--r-lg:0;--r-md:0;--r-sm:0;--r-xs:0;--r-pill:0;
+  --bw:1px;
+  --shadow:none;--shadow-hover:none;--shadow-lift:none;
+  --bg:#f6f3ea;--bg2:#fdfbf4;--bg3:#ece7d8;--bg4:#dfd8c4;
+  --bdr:#c9c0a6;--bdr2:#a89e80;
+  --tx:#21331f;--tx2:#4c5f47;--tx3:#7a8a72;
+  --blue:#0f5a78;--blue-bg:#dceaf2;--blue-dim:#c9dfeb;--blue-bdr:#8cbcd4;
+  --teal:#0e6e3c;--teal-bg:#d8ecdc;--teal-dim:#c3e3cb;--teal-bdr:#7cc093;
+  --green:#41700e;--green-bg:#e4eecb;--green-bdr:#a4c45e;
+  --amber:#7d5e08;--amber-bg:#f4ecd0;--amber-bdr:#cfb35a;
+  --coral:#a8421e;--coral-bg:#f6e3d8;--coral-bdr:#d79571;
+  --purple:#54489a;--purple-bg:#e8e6f4;--purple-bdr:#a49ed4;
+  --gray-dim:#e8e2d0;
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+
+/* — Design „brutal" — RADIKAL: null Radien, 2px-Rahmen in Akzentfarbe, harte Offset-Schatten — */
+html[data-design="brutal"]{
+  --r-xl:0;--r-lg:0;--r-md:0;--r-sm:0;--r-xs:0;--r-pill:0;
+  --bw:2px;
+  --shadow:4px 4px 0 var(--bdr2);--shadow-hover:6px 6px 0 var(--bdr2);--shadow-lift:6px 6px 0 var(--bdr2);
+  --bg:#141414;--bg2:#1c1c1c;--bg3:#262626;--bg4:#303030;
+  --bdr:#4a4a4a;--bdr2:#8a8a8a;
+  --tx:#f2f2f2;--tx2:#bdbdbd;--tx3:#8a8a8a;
+  --blue:#5CB3FF;--blue-bg:#0a2540;--blue-dim:#0e3257;--blue-bdr:#5CB3FF;
+  --teal:#2EE6A8;--teal-bg:#062e21;--teal-dim:#0a3d2c;--teal-bdr:#2EE6A8;
+  --green:#9BE62E;--green-bg:#1d2e06;--green-bdr:#9BE62E;
+  --amber:#FFC53D;--amber-bg:#332503;--amber-bdr:#FFC53D;
+  --coral:#FF7A59;--coral-bg:#33130a;--coral-bdr:#FF7A59;
+  --purple:#B59CFF;--purple-bg:#1e1433;--purple-bdr:#B59CFF;
+  --gray-dim:#262626;
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+html[data-design="brutal"][data-theme="light"]{
+  --r-xl:0;--r-lg:0;--r-md:0;--r-sm:0;--r-xs:0;--r-pill:0;
+  --bw:2px;
+  --shadow:4px 4px 0 #111111;--shadow-hover:6px 6px 0 #111111;--shadow-lift:6px 6px 0 #111111;
+  --bg:#ffffff;--bg2:#ffffff;--bg3:#f2f2f2;--bg4:#e6e6e6;
+  --bdr:#111111;--bdr2:#111111;
+  --tx:#111111;--tx2:#333333;--tx3:#666666;
+  --blue:#0055cc;--blue-bg:#e0edff;--blue-dim:#cce0ff;--blue-bdr:#0055cc;
+  --teal:#007a4d;--teal-bg:#d6f2e4;--teal-dim:#bfe9d5;--teal-bdr:#007a4d;
+  --green:#3f7a00;--green-bg:#e4f2cc;--green-bdr:#3f7a00;
+  --amber:#8a6200;--amber-bg:#fdf0cc;--amber-bdr:#8a6200;
+  --coral:#c23a14;--coral-bg:#fbe2d9;--coral-bdr:#c23a14;
+  --purple:#5a3dbf;--purple-bg:#e9e3fa;--purple-bdr:#5a3dbf;
+  --gray-dim:#e6e6e6;
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+
+.theme-toggle{position:fixed;top:.75rem;right:.75rem;z-index:200;background:var(--bg3);border:var(--bw) solid var(--bdr2);border-radius:var(--r-sm);padding:5px 10px;font-size:15px;cursor:pointer;color:var(--tx2);line-height:1;transition:background .15s,border-color .15s;}
+.theme-toggle:hover{background:var(--bg4);color:var(--tx);}
+
+/* === Design-Verbesserungen === */
+body{font-family:var(--font-body);line-height:1.55;}
+html{scroll-behavior:smooth;scroll-padding-top:1rem;}
+::selection{background:var(--teal-dim);color:var(--teal);}
+::-webkit-scrollbar{width:7px;height:7px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:4px;}
+::-webkit-scrollbar-thumb:hover{background:var(--tx3);}
+a{text-underline-offset:3px;}
+.hero{background:linear-gradient(135deg,var(--blue-bg) 0%,var(--bg2) 100%);}
+.pcard{box-shadow:var(--shadow);transition:box-shadow .18s,border-color .18s,transform .18s;}
+.plink:hover .pcard{box-shadow:var(--shadow-lift);}
+.lb{transition:background .15s,color .15s,border-color .15s;}
+.tip{border-left-width:3px;}
+
+/* === Semantik & Lesbarkeit === */
+h1,h2{margin:0;font:inherit;}
+body{font-size:13px;}
+.info-body,.tip,.pc-body,.pref,.eh-body{font-size:13px;}
+
+/* === Sektions-Fold === */
+.hero-title,.eh-title{display:flex;align-items:center;gap:10px;}
+.hero-title .fold-btn,.eh-title .fold-btn{margin-left:auto;}
+.sec-hd .fold-btn{margin-left:auto;}
+.fold-btn{cursor:pointer;font-family:inherit;font-size:11px;font-weight:500;line-height:1;padding:5px 10px;border-radius:var(--r-xs);border:var(--bw) solid var(--bdr2);background:var(--bg3);color:var(--tx2);flex-shrink:0;letter-spacing:normal;text-transform:none;}
+.fold-btn:hover{background:var(--bg4);color:var(--tx);}
+.folded{display:none !important;}
+
+/* === Baustein: Filter & Favoriten === */
+.filterbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+.fsearch{background:var(--bg3);border:var(--bw) solid var(--bdr2);border-radius:var(--r-sm);color:var(--tx);font:inherit;font-size:13px;padding:7px 12px;min-width:200px;flex:1 1 200px;}
+.fsearch:focus{outline:none;border-color:var(--blue-bdr);background:var(--bg4);}
+.fsearch::placeholder{color:var(--tx3);}
+.tagchip{font-size:11px;font-weight:500;padding:5px 11px;border-radius:var(--r-pill);background:var(--bg3);border:var(--bw) solid var(--bdr2);color:var(--tx2);cursor:pointer;font-family:inherit;}
+.tagchip:hover{background:var(--bg4);color:var(--tx);}
+.tagchip.on{background:var(--teal-dim);border-color:var(--teal-bdr);color:var(--teal);}
+.fav-btn{background:none;border:none;font-size:16px;cursor:pointer;line-height:1;padding:0 0 0 6px;flex-shrink:0;color:var(--amber);}
+.filter-empty{font-size:12px;color:var(--tx3);padding:1rem;text-align:center;display:none;}
+
+/* === Baustein: Seitenübergreifende Suche === */
+.ss-wrap{margin:-.25rem 0 1.25rem;}
+.ss-wrap .fsearch{width:100%;}
+.ss-results{display:none;margin-top:8px;background:var(--bg2);border:var(--bw) solid var(--bdr);border-radius:var(--r-md);overflow:hidden;}
+.ss-hit{display:block;padding:9px 13px;border-bottom:var(--bw) solid var(--bdr);text-decoration:none;}
+.ss-hit:last-child{border-bottom:none;}
+.ss-hit:hover{background:var(--bg3);text-decoration:none;}
+.ss-title{display:block;font-size:13px;font-weight:500;color:var(--blue);}
+.ss-desc{display:block;font-size:12px;color:var(--tx2);margin-top:1px;}
+.ss-none{padding:9px 13px;font-size:12px;color:var(--tx3);}
+
+/* === Baustein: Vergleichsansicht === */
+.cmp-overlay{position:fixed;inset:0;z-index:300;background:rgba(10,12,20,.85);display:none;align-items:flex-start;justify-content:center;padding:3.5rem 1rem 2rem;overflow:auto;}
+.cmp-overlay.on{display:flex;}
+.cmp-panel{background:var(--bg2);border:var(--bw) solid var(--bdr2);border-radius:var(--r-lg);max-width:760px;width:100%;padding:1.25rem 1.4rem;}
+.cmp-title{font-size:15px;font-weight:500;color:var(--tx);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.cmp-title .fold-btn{margin-left:auto;}
+.cmp-table{width:100%;border-collapse:collapse;font-size:12px;}
+.cmp-table th{font-size:11px;font-weight:500;color:var(--tx3);text-align:left;padding:7px 10px;border-bottom:var(--bw) solid var(--bdr);background:var(--bg3);}
+.cmp-table td{padding:7px 10px;border-bottom:var(--bw) solid var(--bdr);color:var(--tx2);vertical-align:top;}
+.cmp-table td:first-child{color:var(--tx3);font-size:11px;text-transform:uppercase;letter-spacing:.4px;}
+.cmp-table tr:last-child td{border-bottom:none;}
+
+/* === Baustein: Sortierung === */
+.fsort{background:var(--bg3);border:var(--bw) solid var(--bdr2);border-radius:var(--r-pill);color:var(--tx2);font-family:inherit;font-size:11px;font-weight:500;padding:5px 9px;cursor:pointer;}
+.fsort:hover{background:var(--bg4);color:var(--tx);}
+
+/* === Baustein: Entscheidungsbaum === */
+.dt-q{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--tx2);margin-bottom:10px;}
+.dt-opt{font-size:11px;font-weight:500;padding:5px 11px;border-radius:var(--r-pill);background:var(--bg3);border:var(--bw) solid var(--bdr2);color:var(--tx2);cursor:pointer;font-family:inherit;}
+.dt-opt:hover{background:var(--bg4);color:var(--tx);}
+.dt-opt.on{background:var(--teal-dim);border-color:var(--teal-bdr);color:var(--teal);}
+.pcard.dt-hit{border-color:var(--teal-bdr);box-shadow:0 0 0 2px var(--teal-bdr);}
+.pcard.dt-dim{opacity:.35;}
+
+/* === Baustein: Daten Export/Import === */
+.data-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:2.5rem;padding-top:1rem;border-top:var(--bw) solid var(--bdr);font-size:12px;color:var(--tx3);}
+.data-tools .lb{font-family:inherit;cursor:pointer;}
+
+/* === Reduced Motion === */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *,::before,::after{transition:none !important;animation:none !important;}
+}
+
+/* === Print === */
+@media print{
+  :root{
+    --bg:#ffffff;--bg2:#ffffff;--bg3:#eef1f8;--bg4:#e5e9f5;
+    --bdr:#d0d5e8;--bdr2:#b8bfd4;
+    --tx:#1a1d2e;--tx2:#50587a;--tx3:#7c88a8;
+    --blue:#1857a0;--blue-bg:#ddeaf8;--blue-dim:#c8dcf5;--blue-bdr:#8ab8e0;
+    --teal:#0e7a5c;--teal-bg:#d0ece6;--teal-dim:#b5dfd5;--teal-bdr:#68b89a;
+    --green:#3d7e1c;--green-bg:#dff0c8;--green-bdr:#8ec850;
+    --amber:#8a5c0a;--amber-bg:#fdf2d8;--amber-bdr:#dca840;
+    --coral:#b83a20;--coral-bg:#fde6e0;--coral-bdr:#dc8870;
+    --purple:#4848a8;--purple-bg:#e8e8f8;--purple-bdr:#9898d5;
+    --gray-dim:#e5e9f5;
+    --ok:#0e7a5c;--no:#b83a20;--maybe:#8a5c0a;
+  }
+  body{background:#fff;max-width:100%;}
+  .theme-toggle,.design-select,.fold-btn,.tabs,.filterbar,.fav-btn,.ss-wrap,.cmp-overlay,.dt-q,.tagchip,.data-tools{display:none !important;}
+  .folded{display:block !important;}
+  .page{display:block !important;}
+  .pref{background:rgba(0,0,0,.03);}
+  .pcard,.info-card,.eh-card,.tip,.pref{break-inside:avoid;box-shadow:none !important;}
+  .plink:hover .pcard{box-shadow:none !important;transform:none;}
+}
+</style>
+<script>(function(){var p=new URLSearchParams(location.search),t=p.get('theme')||localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');if(p.get('theme'))try{localStorage.setItem('theme',t);}catch(e){}document.documentElement.setAttribute('data-theme',t);
+/* DESIGN-AUSWAHL (nur Template): die folgenden zwei Zeilen in fertigen Projekten löschen und stattdessen data-design fest im <html>-Tag setzen */
+var d=p.get('design')||localStorage.getItem('design')||'polar';if(p.get('design'))try{localStorage.setItem('design',d);}catch(e){}
+document.documentElement.setAttribute('data-design',d);})();</script>
+<noscript><style>.folded{display:block !important;}.page{display:block;}.tabs,.fold-btn,.theme-toggle,.design-select,.filterbar,.fav-btn,.ss-wrap,.cmp-overlay,.dt-q,.dt-opt,.tagchip,.data-tools{display:none;}</style></noscript>
+</head>
+<body>
+<!-- DESIGN-AUSWAHL — nur im Template! In fertigen Projekten: <select> löschen und data-design fest im <html>-Tag setzen -->
+<select class="design-select" id="design-select" onchange="setDesign(this.value)" title="Design wählen (nur im Template)" aria-label="Design auswählen">
+  <option value="polar">🎨 Polar</option>
+  <option value="wald">🎨 Wald</option>
+  <option value="abend">🎨 Abend</option>
+  <option value="graphit">🎨 Graphit</option>
+  <option value="terminal">🎨 Terminal</option>
+  <option value="brutal">🎨 Brutal</option>
+</select>
+<button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Light/Dark umschalten" aria-label="Zwischen hellem und dunklem Design umschalten">☀️</button>
+
+<!-- HERO mit einklappbarem Infokasten (#prefs, Zustand in localStorage) -->
+<div class="hero">
+  <h1 class="hero-title"><span>🧩 Projekt-Blueprint — Übersicht</span><button class="fold-btn" data-fold="prefs" aria-controls="prefs" aria-expanded="false" onclick="toggleFold('prefs',this)" title="Ein-/Ausklappen">▸</button></h1>
+  <div class="hero-sub">Statisches HTML-Mehrseiten-Template · Tabs, Dark/Light-Mode, einklappbare Sektionen, Karten-Grid · Jede Karte führt zu einer eigenen Detailseite</div>
+  <div class="prefs folded" id="prefs">
+    <div class="pref"><div class="pref-icon">🎯</div><span class="pref-label">Zielgruppe</span>Hier stehen die wichtigsten Rahmenbedingungen des Projekts — wer es nutzt, was es leisten soll, was zu beachten ist.</div>
+    <div class="pref"><div class="pref-icon">⚙️</div><span class="pref-label">Technik</span>Kein Build, kein Framework · läuft per file:// direkt im Browser · jede Seite self-contained (eigenes CSS &amp; JS).</div>
+    <div class="pref"><div class="pref-icon">🎨</div><span class="pref-label">Design</span>Dark Mode als Default, Light-Override per CSS-Variablen · Akzentfarben blue/teal/green/amber/coral/purple.</div>
+    <div class="pref"><div class="pref-icon">📐</div><span class="pref-label">Konventionen</span>Details in der CLAUDE.md dieses Ordners — Klassenkatalog, Fallstricke, Checklisten für neue Seiten.</div>
+  </div>
+</div>
+
+<!-- OPTIONALER BAUSTEIN „Seitenübergreifende Suche": durchsucht den manuell gepflegten Index in search-index.js (eigener Script-Block am Seitenende) -->
+<div class="ss-wrap">
+  <input class="fsearch" id="sitesearch" type="search" placeholder="🔎 Alle Seiten durchsuchen … (Shortcut: /)" oninput="siteSearch()" aria-label="Alle Seiten durchsuchen">
+  <div class="ss-results" id="ss-results"></div>
+</div>
+
+<!-- SCHNELLAUSWAHL (#eh-grid, Default eingeklappt, Zustand in localStorage) -->
+<div class="eh-wrap">
+  <div class="eh-box">
+    <h2 class="eh-title"><span>Schnellauswahl — Welcher Eintrag passt wann?</span><button class="fold-btn" data-fold="eh-grid" aria-controls="eh-grid" aria-expanded="false" onclick="toggleFold('eh-grid',this)" title="Ein-/Ausklappen">▸</button></h2>
+    <div class="eh-grid folded" id="eh-grid">
+      <div class="eh-card">
+        <div class="eh-ico">🚀</div>
+        <div class="eh-kw">Szenario 1 — Schnellstart</div>
+        <div class="eh-body">
+          <div class="eh-row"><strong>Kategorie A:</strong> Eintrag Alpha, Eintrag Beta</div>
+          <div class="eh-row"><strong>Kategorie B:</strong> Eintrag Gamma</div>
+          <div class="eh-note">Kurzer Hinweis zum Szenario — wann diese Auswahl sinnvoll ist</div>
+        </div>
+      </div>
+      <div class="eh-card c-teal">
+        <div class="eh-ico">⭐</div>
+        <div class="eh-kw">Szenario 2 — Empfehlung</div>
+        <div class="eh-body">
+          <div class="eh-row"><strong>Top:</strong> Eintrag Alpha* · Eintrag Delta</div>
+          <div class="eh-row"><strong>Gut:</strong> Eintrag Beta · Eintrag Gamma</div>
+          <div class="eh-note">*Fußnoten für Einschränkungen direkt hier erklären, nicht verstecken</div>
+        </div>
+      </div>
+      <div class="eh-card c-amber">
+        <div class="eh-ico">💶</div>
+        <div class="eh-kw">Szenario 3 — Überblick mit Stufen</div>
+        <div class="eh-body">
+          <div class="eh-row"><strong>€ (Stufe 1):</strong> Eintrag Gamma</div>
+          <div class="eh-row"><strong>€€ (Stufe 2):</strong> Eintrag Alpha · Eintrag Beta</div>
+          <div class="eh-row"><strong>€€€ (Stufe 3):</strong> Eintrag Delta</div>
+          <div class="eh-note">💸 Hinweise auf versteckte Treiber gehören als eh-note hierher</div>
+        </div>
+        <div class="eh-bud">Richtwerte: Bezugsgröße der Stufen hier definieren</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB-NAVIGATION -->
+<div class="tabs" role="tablist">
+  <button class="tab on" role="tab" aria-selected="true" onclick="show('a',this)">🅰️ Kategorie A</button>
+  <button class="tab" role="tab" aria-selected="false" onclick="show('b',this)">🅱️ Kategorie B</button>
+  <button class="tab" role="tab" aria-selected="false" onclick="show('c',this)">🆑 Kategorie C</button>
+</div>
+
+<!-- ===== KATEGORIE A ===== -->
+<div class="page on" id="p-a" role="tabpanel">
+
+<div class="sec">
+  <div class="sec-hd"><span class="sec-sym">ℹ️</span><h2 class="sec-title">Hintergrund-Infos zu Kategorie A</h2><button class="fold-btn" data-fold="secbody-1" aria-controls="secbody-1" aria-expanded="false" onclick="toggleFold('secbody-1',this)" title="Ein-/Ausklappen">▸</button></div>
+<div class="sec-body folded" id="secbody-1">
+  <div class="sub">📋 Info-Karten — kurze Wissenshäppchen</div>
+  <div class="info-grid">
+    <div class="info-card"><div class="info-icon">💡</div><div class="info-title">Erster Hinweis</div><div class="info-body">Info-Karten eignen sich für gleichrangige, kurze Wissenseinheiten — Regeln, Tipps, Unterschiede. Drei bis acht Karten pro Grid.</div></div>
+    <div class="info-card"><div class="info-icon">⚠️</div><div class="info-title">Zweiter Hinweis</div><div class="info-body">Jede Karte: Icon, fetter Kurztitel, zwei bis vier Sätze Fließtext. Keine Links in Info-Karten — dafür gibt es die Cards auf den Detailseiten.</div></div>
+    <div class="info-card"><div class="info-icon">🔧</div><div class="info-title">Dritter Hinweis</div><div class="info-body">Das Grid bricht automatisch um (auto-fit, min 200px) — keine media queries pro Karte nötig.</div></div>
+  </div>
+
+  <div class="sub">💬 Begriffs-Tabelle (z. B. Glossar, Übersetzungen, Shortcuts)</div>
+  <div class="lang-wrap">
+    <table class="lang-table">
+      <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Anmerkung</th></tr></thead>
+      <tbody>
+        <tr><td class="lang-kw">Schlüsselbegriff A</td><td class="lang-de">Erklärung des Begriffs</td><td class="lang-pr">kursive Zusatzinfo</td></tr>
+        <tr><td class="lang-kw">Schlüsselbegriff B</td><td class="lang-de">Erklärung des Begriffs</td><td class="lang-pr">kursive Zusatzinfo</td></tr>
+        <tr><td class="lang-kw">Schlüsselbegriff C</td><td class="lang-de">Erklärung des Begriffs</td><td class="lang-pr">kursive Zusatzinfo</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tip tip-blue"><span class="s">🚨</span><span><strong>Wichtig-Kasten:</strong> Für die eine Information, die niemand übersehen darf — sparsam einsetzen.</span></div>
+</div></div>
+
+<div class="div"></div>
+
+<!-- OPTIONALER BAUSTEIN „Entscheidungsbaum": Antworten markieren passende Karten im filter-grid (eigener Script-Block am Seitenende) -->
+<div class="sec">
+  <div class="sec-hd"><span class="sec-sym">🧭</span><h2 class="sec-title">Entscheidungsbaum — interaktive Auswahlhilfe</h2><button class="fold-btn" data-fold="secbody-6" aria-controls="secbody-6" aria-expanded="false" onclick="toggleFold('secbody-6',this)" title="Ein-/Ausklappen">▸</button></div>
+<div class="sec-body folded" id="secbody-6">
+  <div class="dt-q">1. Welcher Schwerpunkt? <button class="dt-opt" data-q="1" data-need="tag:tag-a" aria-pressed="false" onclick="dtPick(this)">🏷 Thema A</button><button class="dt-opt" data-q="1" data-need="tag:tag-b" aria-pressed="false" onclick="dtPick(this)">🏷 Thema B</button></div>
+  <div class="dt-q">2. Nur Einträge mit fertiger Detailseite? <button class="dt-opt" data-q="2" data-need="ready" aria-pressed="false" onclick="dtPick(this)">✓ Ja</button><button class="dt-opt" data-q="2" data-need="" aria-pressed="false" onclick="dtPick(this)">Egal</button></div>
+  <button class="tagchip" onclick="dtReset()">↺ Zurücksetzen</button>
+  <div class="tip tip-blue"><span class="s">💡</span><span>Jede Antwort schärft die Auswahl: Karten im Grid unten, die zu allen gewählten Antworten passen, bekommen einen <strong>teal-Rahmen</strong> (<code>dt-hit</code>), der Rest wird gedimmt (<code>dt-dim</code>). Die Antworten sind über <code>data-need</code> mit Kriterien verknüpft — <code>tag:&lt;tag&gt;</code> prüft <code>data-tags</code>, <code>ready</code> prüft auf eine fertige Detailseite.</span></div>
+</div></div>
+
+<div class="div"></div>
+
+<div class="sec">
+  <div class="sec-hd"><span class="sec-sym">🗂️</span><h2 class="sec-title">Einträge — Kategorie A</h2><button class="fold-btn" data-fold="secbody-2" aria-controls="secbody-2" aria-expanded="true" onclick="toggleFold('secbody-2',this)" title="Ein-/Ausklappen">▾</button></div>
+<div class="sec-body" id="secbody-2">
+  <div class="tip tip-green" style="margin-bottom:14px;"><span class="s">💡</span><span>Legende: <span class="ok">✓</span> = Detailseite fertig, <span style="color:var(--tx3);">⏳</span> = in Arbeit. <span style="color:var(--teal);">Teal-Rand</span> = Top-Empfehlung (max. 1–2 pro Tab) · <span style="color:var(--amber);">Amber-Rand</span> = zweite Wahl · <span style="color:var(--green);">Grüne Karte</span> = aktueller/gebuchter Eintrag.</span></div>
+
+  <!-- OPTIONALER BAUSTEIN „Filter & Favoriten": Live-Suche + Tag-Chips + Favoriten-Filter über dem Grid (eigener Script-Block am Seitenende) -->
+  <div class="filterbar">
+    <input class="fsearch" id="fsearch" type="search" placeholder="🔎 Einträge durchsuchen …" oninput="applyFilter()" aria-label="Einträge durchsuchen">
+    <button class="tagchip" data-tag="tag-a" aria-pressed="false" onclick="toggleTag(this)">🏷 Tag A</button>
+    <button class="tagchip" data-tag="tag-b" aria-pressed="false" onclick="toggleTag(this)">🏷 Tag B</button>
+    <button class="tagchip" id="favonly" aria-pressed="false" onclick="toggleFavOnly(this)">⭐ Nur Favoriten</button>
+    <button class="tagchip" id="cmpbtn" style="display:none;" onclick="openCmp()">⚖ Favoriten vergleichen</button>
+    <select class="fsort" id="fsort" onchange="applySort(this.value)" aria-label="Einträge sortieren">
+      <option value="">↕ Standard-Reihenfolge</option>
+      <option value="name">Name A–Z</option>
+      <option value="val">Beste Kennzahl zuerst</option>
+    </select>
+  </div>
+
+  <div class="park-grid" id="filter-grid">
+    <a class="plink" href="detail.html" data-tags="tag-a tag-b" data-sort-val="1" data-cmp='{"Kennzahl":"gut","Status":"Detailseite fertig","Tags":"Tag A + Tag B"}'>
+      <div class="pcard hl">
+        <div class="pc-top">
+          <div><div class="pc-name">Eintrag Alpha</div><div class="pc-op">Unterzeile — Ort, Betreiber, Quelle …</div></div>
+          <button class="fav-btn" data-fav="alpha" aria-pressed="false" aria-label="Eintrag Alpha als Favorit merken" onclick="toggleFav(event,this)">☆</button>
+        </div>
+        <div class="pc-tags"><span class="b b-sm b-teal">🏷 Tag 1</span><span class="b b-sm b-blue">🏷 Tag 2</span><span class="b b-sm b-gray">🏷 Tag 3</span></div>
+        <div class="pc-body">Zwei bis vier Sätze Teasertext: Was erwartet einen auf der Detailseite, was ist das Besondere an diesem Eintrag? Diese Karte ist die Top-Empfehlung (Modifier <em>hl</em>) und verlinkt auf detail.html.</div>
+        <div class="pc-footer">
+          <span class="pc-drive drive-g">📊 Kennzahl gut</span>
+          <span class="pc-action ready">✓ Detailseite →</span>
+        </div>
+      </div>
+    </a>
+    <div class="pcard hl2" data-tags="tag-b" data-sort-val="2" data-cmp='{"Kennzahl":"mittel","Status":"in Arbeit","Tags":"Tag B"}'>
+      <div class="pc-top">
+        <div><div class="pc-name">Eintrag Beta</div><div class="pc-op">Unterzeile — Ort, Betreiber, Quelle …</div></div>
+        <button class="fav-btn" data-fav="beta" aria-pressed="false" aria-label="Eintrag Beta als Favorit merken" onclick="toggleFav(event,this)">☆</button>
+      </div>
+      <div class="pc-tags"><span class="b b-sm b-amber">🏷 Zweite Wahl</span><span class="b b-sm b-gray">🏷 Tag</span></div>
+      <div class="pc-body">Karte ohne Link (kein <em>plink</em>-Wrapper), weil die Detailseite noch nicht existiert — verlinkte Dateien müssen immer existieren, sonst stiller Fehler. Modifier <em>hl2</em> = zweite Wahl.</div>
+      <div class="pc-footer">
+        <span class="pc-drive drive-a">📊 Kennzahl mittel</span>
+        <span class="pc-action wip">⏳ In Arbeit</span>
+      </div>
+    </div>
+  </div>
+  <div class="filter-empty" id="filter-empty">Keine Treffer — Suchbegriff oder Filter anpassen.</div>
+</div></div>
+
+</div>
+
+<!-- ===== KATEGORIE B ===== -->
+<div class="page" id="p-b" role="tabpanel">
+
+<div class="sec">
+  <div class="sec-hd"><span class="sec-sym">🗂️</span><h2 class="sec-title">Einträge — Kategorie B</h2><button class="fold-btn" data-fold="secbody-3" aria-controls="secbody-3" aria-expanded="true" onclick="toggleFold('secbody-3',this)" title="Ein-/Ausklappen">▾</button></div>
+<div class="sec-body" id="secbody-3">
+
+  <div class="park-grid">
+    <div class="pcard current">
+      <div class="pc-top">
+        <div><div class="pc-name">Eintrag Gamma</div><div class="pc-op">Unterzeile — Ort, Betreiber, Quelle …</div></div>
+      </div>
+      <div class="pc-tags"><span class="b b-sm b-green">📅 Aktuell / Gebucht</span><span class="b b-sm b-gray">🏷 Tag</span></div>
+      <div class="pc-body">Modifier <em>current</em> (grün) kennzeichnet den aktiven bzw. fest gebuchten Eintrag — die Legende im jeweiligen Tab erklärt das.</div>
+      <div class="pc-footer">
+        <span class="pc-drive drive-g">📊 Kennzahl gut</span>
+        <span class="pc-action wip">⏳ In Arbeit</span>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pc-top">
+        <div><div class="pc-name">Eintrag Delta</div><div class="pc-op">Unterzeile — Ort, Betreiber, Quelle …</div></div>
+      </div>
+      <div class="pc-tags"><span class="b b-sm b-purple">🏷 Tag</span></div>
+      <div class="pc-body">Neutrale Karte ohne Modifier. Kennzahl-Badge unten links als Ampel: <em>drive-g</em> grün, <em>drive-a</em> amber, <em>drive-c</em> coral.</div>
+      <div class="pc-footer">
+        <span class="pc-drive drive-c">📊 Kennzahl kritisch</span>
+        <span class="pc-action wip">⏳ In Arbeit</span>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+</div>
+
+<!-- ===== KATEGORIE C ===== -->
+<div class="page" id="p-c" role="tabpanel">
+
+<div class="sec">
+  <div class="sec-hd"><span class="sec-sym">🗂️</span><h2 class="sec-title">Einträge — Kategorie C, Unterabschnitt 1</h2><button class="fold-btn" data-fold="secbody-4" aria-controls="secbody-4" aria-expanded="true" onclick="toggleFold('secbody-4',this)" title="Ein-/Ausklappen">▾</button></div>
+<div class="sec-body" id="secbody-4">
+  <div class="park-grid">
+    <div class="pcard">
+      <div class="pc-top">
+        <div><div class="pc-name">Eintrag Epsilon</div><div class="pc-op">Unterzeile</div></div>
+      </div>
+      <div class="pc-tags"><span class="b b-sm b-blue">🏷 Tag</span></div>
+      <div class="pc-body">Ein Tab kann mehrere Unterabschnitte enthalten — getrennt durch eine <em>div</em>-Trennlinie (siehe unten).</div>
+      <div class="pc-footer">
+        <span class="pc-drive drive-a">📊 Kennzahl mittel</span>
+        <span class="pc-action wip">⏳ In Arbeit</span>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<div class="div"></div>
+
+<div class="sec">
+  <div class="sec-hd"><span class="sec-sym">🗂️</span><h2 class="sec-title">Einträge — Kategorie C, Unterabschnitt 2</h2><button class="fold-btn" data-fold="secbody-5" aria-controls="secbody-5" aria-expanded="true" onclick="toggleFold('secbody-5',this)" title="Ein-/Ausklappen">▾</button></div>
+<div class="sec-body" id="secbody-5">
+  <div class="park-grid">
+    <div class="pcard">
+      <div class="pc-top">
+        <div><div class="pc-name">Eintrag Zeta</div><div class="pc-op">Unterzeile</div></div>
+      </div>
+      <div class="pc-tags"><span class="b b-sm b-coral">🏷 Tag</span></div>
+      <div class="pc-body">Platzhalter für den zweiten Unterabschnitt.</div>
+      <div class="pc-footer">
+        <span class="pc-drive drive-c">📊 Kennzahl kritisch</span>
+        <span class="pc-action wip">⏳ In Arbeit</span>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+</div>
+
+<!-- BAUSTEIN Vergleichsansicht: Overlay (gehört zum ⚖-Button der filterbar + Vergleich-Script-Block) -->
+<div class="cmp-overlay" id="cmp-overlay" role="dialog" aria-modal="true" aria-label="Favoriten-Vergleich" onclick="if(event.target===this)closeCmp()">
+  <div class="cmp-panel">
+    <div class="cmp-title"><span>⚖ Favoriten im Vergleich</span><button class="fold-btn" onclick="closeCmp()" aria-label="Vergleich schließen">✕</button></div>
+    <table class="cmp-table" id="cmp-table"></table>
+  </div>
+</div>
+
+<!-- BAUSTEIN Daten Export/Import: sichert die localStorage-Daten als JSON-Datei (gehört zu Script-Block „Export/Import + Shortcuts") -->
+<div class="data-tools">
+  <span>💾 Lokale Daten (Favoriten, Haken, Notizen, Theme):</span>
+  <button class="lb" onclick="exportData()">⬇ Exportieren</button>
+  <label class="lb" for="imp-file">⬆ Importieren</label>
+  <input type="file" id="imp-file" accept="application/json,.json" hidden onchange="importData(this)">
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t => { t.classList.remove('on'); t.setAttribute('aria-selected', 'false'); });
+  document.getElementById('p-' + id).classList.add('on');
+  btn.classList.add('on');
+  btn.setAttribute('aria-selected', 'true');
+}
+function toggleFold(id, btn) {
+  var folded = document.getElementById(id).classList.toggle('folded');
+  btn.textContent = folded ? '▸' : '▾';
+  btn.setAttribute('aria-expanded', folded ? 'false' : 'true');
+  try { localStorage.setItem('fold-' + id, folded ? '1' : '0'); } catch (e) {}
+}
+(function () {
+  // Default: eingeklappt. Nur aufklappen, wenn der User es zuvor explizit aufgeklappt hat.
+  ['prefs', 'eh-grid'].forEach(function (id) {
+    try {
+      if (localStorage.getItem('fold-' + id) === '0') {
+        document.getElementById(id).classList.remove('folded');
+        var b = document.querySelector('[data-fold="' + id + '"]');
+        if (b) { b.textContent = '▾'; b.setAttribute('aria-expanded', 'true'); }
+      }
+    } catch (e) {}
+  });
+})();
+(function () {
+  // ?tab=xx (von den Zurück-Buttons der Detailseiten): passenden Tab aktivieren
+  var tab = new URLSearchParams(location.search).get('tab');
+  if (!tab || !document.getElementById('p-' + tab)) return;
+  var btn = null;
+  document.querySelectorAll('.tab').forEach(function (b) {
+    if ((b.getAttribute('onclick') || '').indexOf("show('" + tab + "'") !== -1) btn = b;
+  });
+  if (btn) show(tab, btn);
+})();
+</script>
+<!-- SCRIPT-BLOCK „Filter & Favoriten" — OPTIONALER BAUSTEIN, gehört zur .filterbar + den .fav-btn-Sternen -->
+<script>
+var FAVS = [];
+try { FAVS = JSON.parse(localStorage.getItem('favs') || '[]'); } catch (e) {}
+function saveFavs() { try { localStorage.setItem('favs', JSON.stringify(FAVS)); } catch (e) {} }
+function toggleFav(e, btn) {
+  e.preventDefault(); e.stopPropagation(); // verhindert Navigation, wenn der Stern in einem plink-Link sitzt
+  var id = btn.dataset.fav, i = FAVS.indexOf(id);
+  if (i > -1) FAVS.splice(i, 1); else FAVS.push(id);
+  saveFavs();
+  btn.textContent = i > -1 ? '☆' : '⭐';
+  btn.setAttribute('aria-pressed', i > -1 ? 'false' : 'true');
+  applyFilter();
+  if (typeof updateCmpBtn === 'function') updateCmpBtn(); // Baustein Vergleichsansicht, falls vorhanden
+}
+(function () { // gespeicherte Favoriten beim Laden markieren
+  document.querySelectorAll('.fav-btn').forEach(function (b) {
+    if (FAVS.indexOf(b.dataset.fav) > -1) { b.textContent = '⭐'; b.setAttribute('aria-pressed', 'true'); }
+  });
+})();
+var ACTIVE_TAGS = [], FAV_ONLY = false;
+function toggleTag(btn) {
+  var t = btn.dataset.tag, i = ACTIVE_TAGS.indexOf(t);
+  if (i > -1) ACTIVE_TAGS.splice(i, 1); else ACTIVE_TAGS.push(t);
+  btn.classList.toggle('on', i === -1);
+  btn.setAttribute('aria-pressed', i === -1 ? 'true' : 'false');
+  applyFilter();
+}
+function toggleFavOnly(btn) {
+  FAV_ONLY = !FAV_ONLY;
+  btn.classList.toggle('on', FAV_ONLY);
+  btn.setAttribute('aria-pressed', FAV_ONLY ? 'true' : 'false');
+  applyFilter();
+}
+function applyFilter() {
+  var grid = document.getElementById('filter-grid');
+  if (!grid) return;
+  var q = (document.getElementById('fsearch').value || '').trim().toLowerCase();
+  var hits = 0;
+  Array.prototype.forEach.call(grid.children, function (el) {
+    var tags = (el.dataset.tags || '').split(/\s+/);
+    var fav = el.querySelector('.fav-btn');
+    var ok = (!q || el.textContent.toLowerCase().indexOf(q) > -1)
+      && ACTIVE_TAGS.every(function (t) { return tags.indexOf(t) > -1; })
+      && (!FAV_ONLY || (fav && FAVS.indexOf(fav.dataset.fav) > -1));
+    el.style.display = ok ? '' : 'none';
+    if (ok) hits++;
+  });
+  var empty = document.getElementById('filter-empty');
+  if (empty) empty.style.display = hits ? 'none' : 'block';
+}
+</script>
+<!-- SCRIPT-BLOCK „Seitenübergreifende Suche" — OPTIONALER BAUSTEIN; durchsucht SEARCH_INDEX aus search-index.js (manuell pflegen!) -->
+<script src="search-index.js"></script>
+<script>
+function siteSearch() {
+  var q = (document.getElementById('sitesearch').value || '').trim().toLowerCase();
+  var box = document.getElementById('ss-results');
+  if (!q || typeof SEARCH_INDEX === 'undefined') { box.style.display = 'none'; box.innerHTML = ''; return; }
+  var hits = SEARCH_INDEX.filter(function (e) {
+    return (e.title + ' ' + e.desc + ' ' + e.keywords).toLowerCase().indexOf(q) > -1;
+  });
+  // innerHTML ist hier OK: der Index ist eigener, redaktioneller Inhalt (keine Nutzereingaben)
+  box.innerHTML = hits.length
+    ? hits.map(function (e) { return '<a class="ss-hit" href="' + e.url + '"><span class="ss-title">' + e.title + '</span><span class="ss-desc">' + e.desc + '</span></a>'; }).join('')
+    : '<div class="ss-none">Keine Treffer im Seiten-Index.</div>';
+  box.style.display = 'block';
+}
+</script>
+<!-- SCRIPT-BLOCK „Vergleichsansicht" — OPTIONALER BAUSTEIN (⚖-Button, data-cmp-Attribute, #cmp-overlay); setzt den Filter-&-Favoriten-Baustein voraus -->
+<script>
+function updateCmpBtn() {
+  var b = document.getElementById('cmpbtn');
+  if (b) b.style.display = FAVS.length >= 2 ? '' : 'none';
+}
+updateCmpBtn();
+function openCmp() {
+  var grid = document.getElementById('filter-grid'), cols = [];
+  Array.prototype.forEach.call(grid.children, function (el) {
+    var fav = el.querySelector('.fav-btn');
+    if (!fav || FAVS.indexOf(fav.dataset.fav) < 0) return;
+    var card = el.classList.contains('pcard') ? el : el.querySelector('.pcard');
+    var data = {};
+    try { data = JSON.parse(el.dataset.cmp || '{}'); } catch (e) {}
+    cols.push({ name: (card.querySelector('.pc-name') || fav).textContent || fav.dataset.fav, data: data });
+  });
+  var keys = [];
+  cols.forEach(function (c) { Object.keys(c.data).forEach(function (k) { if (keys.indexOf(k) < 0) keys.push(k); }); });
+  var html = '<tr><th>Merkmal</th>' + cols.map(function (c) { return '<th>' + c.name + '</th>'; }).join('') + '</tr>';
+  keys.forEach(function (k) {
+    html += '<tr><td>' + k + '</td>' + cols.map(function (c) { return '<td>' + (c.data[k] || '—') + '</td>'; }).join('') + '</tr>';
+  });
+  document.getElementById('cmp-table').innerHTML = html;
+  document.getElementById('cmp-overlay').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeCmp() {
+  document.getElementById('cmp-overlay').classList.remove('on');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeCmp(); });
+</script>
+<!-- SCRIPT-BLOCK „Sortierung" — OPTIONALER BAUSTEIN (gehört zum .fsort-Select; Karten brauchen data-sort-val für die Kennzahl-Sortierung) -->
+<script>
+(function () { // Original-Reihenfolge merken, damit „Standard" zurücksortieren kann
+  var g = document.getElementById('filter-grid');
+  if (g) Array.prototype.forEach.call(g.children, function (el, i) { el.dataset.orig = i; });
+})();
+function applySort(mode) {
+  var g = document.getElementById('filter-grid');
+  if (!g) return;
+  Array.prototype.slice.call(g.children).sort(function (a, b) {
+    if (mode === 'name') {
+      var an = ((a.querySelector('.pc-name') || {}).textContent || '').trim().toLowerCase();
+      var bn = ((b.querySelector('.pc-name') || {}).textContent || '').trim().toLowerCase();
+      return an < bn ? -1 : an > bn ? 1 : 0;
+    }
+    if (mode === 'val') return (+a.dataset.sortVal || 99) - (+b.dataset.sortVal || 99);
+    return (+a.dataset.orig) - (+b.dataset.orig);
+  }).forEach(function (el) { g.appendChild(el); });
+}
+</script>
+<!-- SCRIPT-BLOCK „Entscheidungsbaum" — OPTIONALER BAUSTEIN (gehört zur dt-q-Sektion; markiert Karten im #filter-grid) -->
+<script>
+function dtPick(btn) {
+  var was = btn.classList.contains('on');
+  document.querySelectorAll('.dt-opt[data-q="' + btn.dataset.q + '"]').forEach(function (b) {
+    b.classList.remove('on'); b.setAttribute('aria-pressed', 'false');
+  });
+  if (!was) { btn.classList.add('on'); btn.setAttribute('aria-pressed', 'true'); }
+  dtApply();
+}
+function dtReset() {
+  document.querySelectorAll('.dt-opt.on').forEach(function (b) {
+    b.classList.remove('on'); b.setAttribute('aria-pressed', 'false');
+  });
+  dtApply();
+}
+function dtApply() {
+  var needs = [];
+  document.querySelectorAll('.dt-opt.on').forEach(function (b) { if (b.dataset.need) needs.push(b.dataset.need); });
+  var grid = document.getElementById('filter-grid');
+  if (!grid) return;
+  Array.prototype.forEach.call(grid.children, function (el) {
+    var card = el.classList.contains('pcard') ? el : el.querySelector('.pcard');
+    if (!card) return;
+    card.classList.remove('dt-hit', 'dt-dim');
+    if (!needs.length) return;
+    var tags = (el.dataset.tags || '').split(/\s+/);
+    var hit = needs.every(function (n) {
+      if (n.indexOf('tag:') === 0) return tags.indexOf(n.slice(4)) > -1;
+      if (n === 'ready') return !!el.querySelector('.pc-action.ready');
+      return true;
+    });
+    card.classList.add(hit ? 'dt-hit' : 'dt-dim');
+  });
+}
+</script>
+<!-- SCRIPT-BLOCK „Daten Export/Import + Tastatur-Shortcuts" — OPTIONALE BAUSTEINE (gehört zur .data-tools-Leiste) -->
+<script>
+// Export/Import: sichert alle Projekt-Keys des localStorage als JSON-Datei (Blob-Download funktioniert auch bei file://).
+// Löst die file://-Isolation: Daten lassen sich so zwischen Browsern/Rechnern umziehen.
+function exportData(){
+  var out={};
+  for(var i=0;i<localStorage.length;i++){
+    var k=localStorage.key(i);
+    if(k==='theme'||k==='design'||k==='favs'||/^(fold|ck|note)-/.test(k))out[k]=localStorage.getItem(k);
+  }
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,2)],{type:'application/json'}));
+  a.download='projekt-daten.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importData(inp){
+  var f=inp.files&&inp.files[0];
+  if(!f)return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var o=JSON.parse(r.result);
+      Object.keys(o).forEach(function(k){try{localStorage.setItem(k,String(o[k]));}catch(e){}});
+      location.reload();
+    }catch(e){alert('Import fehlgeschlagen: keine gültige JSON-Datei.');}
+  };
+  r.readAsText(f);
+  inp.value='';
+}
+// Tastatur-Shortcuts: t = Theme umschalten · / = Suchfeld fokussieren, falls die Seite eins hat (greift nicht in Eingabefeldern)
+document.addEventListener('keydown',function(e){
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  var t=e.target,tag=(t.tagName||'').toLowerCase();
+  if(tag==='input'||tag==='textarea'||tag==='select'||t.isContentEditable)return;
+  if(e.key==='t')toggleTheme();
+  else if(e.key==='/'){
+    var s=document.getElementById('sitesearch')||document.getElementById('fsearch');
+    if(s){e.preventDefault();s.focus();}
+  }
+});
+</script>
+<script>
+document.addEventListener('click',function(e){
+  var a=e.target.closest('a[href]');
+  if(!a)return;
+  var h=a.getAttribute('href');
+  if(!h||/^(https?:|\/\/|mailto:)/.test(h)||!h.includes('.html')||h.includes('?theme='))return;
+  e.preventDefault();
+  var t=document.documentElement.getAttribute('data-theme')||'dark';
+  var d=document.documentElement.getAttribute('data-design'); // DESIGN-AUSWAHL (nur Template): design-Teil in fertigen Projekten entfernen
+  location.href=h+(h.includes('?')?'&':'?')+'theme='+t+(d&&d!=='polar'?'&design='+d:'');
+});
+function toggleTheme(){var h=document.documentElement,n=h.getAttribute('data-theme')==='light'?'dark':'light';h.setAttribute('data-theme',n);localStorage.setItem('theme',n);var b=document.getElementById('theme-btn');if(b)b.textContent=n==='light'?'🌙':'☀️';}
+(function(){var b=document.getElementById('theme-btn');if(b)b.textContent=(document.documentElement.getAttribute('data-theme')||'dark')==='light'?'🌙':'☀️';})();
+// DESIGN-AUSWAHL (nur Template): in fertigen Projekten komplett entfernen
+function setDesign(v){document.documentElement.setAttribute('data-design',v);try{localStorage.setItem('design',v);}catch(e){}}
+(function(){var s=document.getElementById('design-select');if(s)s.value=document.documentElement.getAttribute('data-design')||'polar';})();
+</script>
+</body>
+</html>
