@@ -40,8 +40,8 @@ Zwei unabhängige Achsen am `<html>`-Tag: `data-theme` (dark/light) und `data-de
 | **Graphit** | neutral, entsättigt, dezent |
 | **Terminal** ⚡ | radikal: Monospace, null Radien, Phosphorgrün / „Papier-Terminal" im Light-Mode |
 | **Brutal** ⚡ | radikal: null Radien, 2px-Rahmen in Akzentfarbe, harte Offset-Schatten |
-| **Material 3** | Google Material Design 3: lila Primärfarbe, tonale Flächen, weiche Radien (28 px) |
-| **Liquid Glass** ⚡ | Apple Liquid Glass: Gradient-Body, `backdrop-filter:blur`, semi-transparente Glasflächen |
+| **Material 3** | Material Design 3: lila Primärfarbe, tonale Flächen, weiche Radien (28 px) |
+| **Liquid Glass** ⚡ | Liquid Glass: Gradient-Body, `backdrop-filter:blur`, semi-transparente Glasflächen |
 
 Möglich machen das **Struktur-Tokens**: Schrift, Eckenradien, Rahmenstärke und Schatten sind als CSS-Variablen definiert — ein Design kann damit weit mehr ändern als Farben, ohne eine einzige Komponente anzufassen. Der Dark/Light-Default folgt der OS-Einstellung (`prefers-color-scheme`), ein Anti-Flicker-Script verhindert Aufblitzen, und ein Link-Interceptor reicht Theme + Design per URL-Parameter an jede Seite weiter (nötig, weil Firefox/Safari den localStorage bei `file://` pro Datei isolieren).
 
