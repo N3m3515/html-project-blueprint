@@ -222,7 +222,7 @@ Funktioniert **nur auf HTTPS** (GitHub Pages, Netlify, eigener Server) — bei `
 1. `<link rel="manifest" href="manifest.json">` nach dem Favicon-Link im `<head>`
 2. `<meta name="theme-color" content="#0f1117" id="theme-color-meta">` danach (Farbe = Dark-Hintergrund)
 3. In `toggleTheme()`: `var mc=document.getElementById('theme-color-meta');if(mc)mc.content=n==='light'?'#f5f7fb':'#0f1117';` — hält die Browser-Chrome-Farbe mit dem Theme synchron.
-4. Am Ende des Theme-Script-Blocks: `if('serviceWorker' in navigator && location.protocol !== 'file:')navigator.serviceWorker.register('sw.js');`
+4. Am Ende des Theme-Script-Blocks: `if('serviceWorker' in navigator && location.protocol !== 'file:')navigator.serviceWorker.register('sw.js',{updateViaCache:'none'});` — `updateViaCache:'none'` ist wichtig: ohne diese Option cached der Browser `sw.js` selbst per HTTP-Cache und erkennt neue Versionen nicht zuverlässig.
 
 **SW-Strategie**: Cache-First mit dynamischer Befüllung — bekannte Seiten werden vorab gecacht (`PRECACHE`), unbekannte beim ersten Abruf ergänzt. `skipWaiting` + `clients.claim()` sorgen dafür, dass Updates sofort aktiv werden.
 

@@ -929,7 +929,7 @@ document.addEventListener('click',function(e){
 });
 function toggleTheme(){var h=document.documentElement,n=h.getAttribute('data-theme')==='light'?'dark':'light';h.setAttribute('data-theme',n);localStorage.setItem('theme',n);var b=document.getElementById('theme-btn');if(b)b.textContent=n==='light'?'🌙':'☀️';var mc=document.getElementById('theme-color-meta');if(mc)mc.content=n==='light'?'#f5f7fb':'#0f1117';}
 (function(){var b=document.getElementById('theme-btn');if(b)b.textContent=(document.documentElement.getAttribute('data-theme')||'dark')==='light'?'🌙':'☀️';var mc=document.getElementById('theme-color-meta');if(mc)mc.content=(document.documentElement.getAttribute('data-theme')||'dark')==='light'?'#f5f7fb':'#0f1117';})();
-if('serviceWorker' in navigator && location.protocol !== 'file:')navigator.serviceWorker.register('sw.js');
+if('serviceWorker' in navigator && location.protocol !== 'file:')navigator.serviceWorker.register('sw.js',{updateViaCache:'none'});
 // DESIGN-AUSWAHL (nur Template): in fertigen Projekten komplett entfernen
 function setDesign(v){document.documentElement.setAttribute('data-design',v);try{localStorage.setItem('design',v);}catch(e){}}
 (function(){var s=document.getElementById('design-select');if(s)s.value=document.documentElement.getAttribute('data-design')||'polar';})();
