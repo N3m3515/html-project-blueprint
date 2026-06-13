@@ -329,7 +329,7 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
 
 <div class="hero">
   <h1 class="hero-title">📊 IT-Dashboard</h1>
-  <div class="hero-sub">Infrastruktur-Übersicht · Stand: <span id="gen-ts">—</span></div>
+  <div class="hero-sub">Infrastruktur-Übersicht · <span id="gen-ts">—</span></div>
   <div class="meta-row">
     <span class="b b-teal" id="count-ok" style="display:none"></span>
     <span class="b b-amber" id="count-warn" style="display:none"></span>
@@ -538,13 +538,24 @@ document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('clic
   if(typeof DASH_DATA==='undefined')return;
   var D=DASH_DATA;
 
-  // ── Hero: Zeitstempel + Stale-Indikator ──────────────────────────────────
+  // ── Hero: Live-Clock + Stale-Indikator ───────────────────────────────────
   var genTs=document.getElementById('gen-ts');
-  if(genTs&&D.generated_at){
-    genTs.textContent=fmtTs(D.generated_at);
+  if(genTs){
+    function updateClock(){
+      var now=new Date();
+      genTs.textContent=now.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'})+', '+now.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr';
+    }
+    updateClock();
+    setInterval(updateClock,10000);
+  }
+  if(D.generated_at){
     var ageMin=Math.round((Date.now()-new Date(D.generated_at))/60000);
     var stale=document.getElementById('stale-badge');
-    if(stale&&ageMin>10){stale.textContent='⚠ Daten '+ageMin+' Min. alt';stale.hidden=false;}
+    if(stale&&ageMin>10){
+      var dataTime=fmtTs(D.generated_at).slice(11,16);
+      stale.textContent='⚠ Daten von '+dataTime+' ('+ageMin+' Min. alt)';
+      stale.hidden=false;
+    }
   }
 
   // ── Hero: Service-Zähler + Tab-Titel + Badge-Klick → erster CRIT ────────
