@@ -226,6 +226,8 @@ Funktioniert **nur auf HTTPS** (GitHub Pages, Netlify, eigener Server) — bei `
 
 **SW-Strategie**: Cache-First mit dynamischer Befüllung — bekannte Seiten werden vorab gecacht (`PRECACHE`), unbekannte beim ersten Abruf ergänzt. `skipWaiting` + `clients.claim()` sorgen dafür, dass Updates sofort aktiv werden.
 
+**⚠ Wichtig — Cache-Busting bei jedem Deploy**: Der SW bedient alle Requests Cache-First. Ohne Versions-Bump sehen Besucher nach einem Push weiterhin die alte Version, bis sie den Browser-Cache manuell leeren. **Regel: bei jedem Commit/Push, der Inhalte ändert, die `CACHE`-Konstante in `sw.js` erhöhen** (`'bp-v1'` → `'bp-v2'` → …). Erst dann erkennt der Browser beim nächsten Seitenaufruf, dass ein neuer Service Worker vorhanden ist, und lädt alle Seiten frisch.
+
 **Architektur-Ausnahme**: `sw.js`, `manifest.json` und `icon.svg` sind die einzigen Nicht-HTML-Dateien neben `search-index.js` — sie sind Web-Standards, keine Hilfsskripte, und müssen im Projektstamm liegen.
 
 ## Tab-Navigation (nur Index)
