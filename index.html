@@ -538,6 +538,30 @@ body{font-size:13px;}
 .print-cfg input[type=checkbox]{accent-color:var(--teal);width:14px;height:14px;flex-shrink:0;}
 mark{background:var(--amber-bg);color:var(--amber);border-radius:2px;padding:0 2px;}
 @media print{.print-cfg-btn,.print-cfg{display:none !important;}}
+/* === Baustein: Ankündigungs-Banner === */
+.ann-wrap{position:sticky;top:0;z-index:300;background:var(--amber-bg);border-bottom:var(--bw) solid var(--amber-bdr);padding:8px 16px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--tx);}
+.ann-wrap.hidden{display:none;}
+.ann-msg{flex:1;}
+.ann-close{background:none;border:none;cursor:pointer;font-size:16px;line-height:1;color:var(--tx2);padding:2px 4px;border-radius:var(--r-xs);}
+.ann-close:hover{color:var(--tx);}
+/* === Baustein: Sterne-Bewertung === */
+.star-rating{display:flex;gap:2px;align-items:center;}
+.star-rating .sr-btn{background:none;border:none;cursor:pointer;font-size:16px;padding:1px;line-height:1;color:var(--tx3);transition:color .1s,transform .1s;}
+.star-rating .sr-btn.on{color:var(--amber);}
+.star-rating .sr-btn:hover{color:var(--amber);transform:scale(1.15);}
+.star-rating-wrap{padding:6px 0 2px;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--tx3);}
+/* === Baustein: Tastatur-Shortcut-Übersicht === */
+.sc-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.sc-overlay.on{opacity:1;pointer-events:all;}
+.sc-panel{background:var(--bg2);border:var(--bw) solid var(--bdr2);border-radius:var(--r-xl);padding:24px 28px;min-width:300px;max-width:480px;width:90%;box-shadow:var(--shadow-lift);}
+.sc-panel h2{margin:0 0 16px;font-size:15px;font-weight:700;color:var(--tx);}
+.sc-table{width:100%;border-collapse:collapse;}
+.sc-table tr+tr td{border-top:var(--bw) solid var(--bdr);}
+.sc-table td{padding:6px 4px;font-size:12px;color:var(--tx2);}
+.sc-table td:first-child{white-space:nowrap;}
+kbd{display:inline-block;background:var(--bg3);border:var(--bw) solid var(--bdr2);border-radius:var(--r-xs);padding:1px 6px;font-size:11px;font-family:monospace;color:var(--tx);box-shadow:0 1px 0 var(--bdr2);}
+.sc-close{margin-top:16px;display:block;width:100%;padding:7px;background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-sm);cursor:pointer;font-size:12px;color:var(--tx2);}
+.sc-close:hover{background:var(--bg4);color:var(--tx);}
 /* === Reduced Motion === */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
@@ -560,7 +584,7 @@ mark{background:var(--amber-bg);color:var(--amber);border-radius:2px;padding:0 2
     --ok:#0e7a5c;--no:#b83a20;--maybe:#8a5c0a;
   }
   body{background:#fff;max-width:100%;padding-top:0;}
-  .theme-toggle,.design-select,.fold-btn,.tabs,.filterbar,.fav-btn,.ss-wrap,.cmp-overlay,.dt-q,.tagchip,.data-tools{display:none !important;}
+  .theme-toggle,.design-select,.fold-btn,.tabs,.filterbar,.fav-btn,.ss-wrap,.cmp-overlay,.dt-q,.tagchip,.data-tools,.ann-wrap,.sc-overlay,.star-rating{display:none !important;}
   .folded{display:block !important;}
   .sec-body.folded,.prefs.folded,.eh-grid.folded{max-height:none !important;opacity:1;pointer-events:auto;}
   .page{display:block !important;}
@@ -576,6 +600,11 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
 <noscript><style>.folded{display:block !important;}.sec-body.folded,.prefs.folded,.eh-grid.folded{max-height:none !important;opacity:1 !important;}.page{display:block;}.tabs,.fold-btn,.theme-toggle,.design-select,.filterbar,.fav-btn,.ss-wrap,.cmp-overlay,.dt-q,.dt-opt,.tagchip,.data-tools{display:none;}</style></noscript>
 </head>
 <body>
+<!-- Baustein: Ankündigungs-Banner — data-ann-key muss projektweit eindeutig sein -->
+<div class="ann-wrap" id="ann-main" role="alert" aria-live="polite">
+  <span class="ann-msg">📢 Dies ist ein Template-Blueprint — bitte vor Projektstart an eigene Inhalte anpassen. Alle drei Beispielseiten zeigen alle Bausteine im Einsatz.</span>
+  <button class="ann-close" onclick="dismissAnn('main')" aria-label="Banner schließen" title="Schließen">✕</button>
+</div>
 <!-- DESIGN-AUSWAHL — nur im Template! In fertigen Projekten: <select> löschen und data-design fest im <html>-Tag setzen -->
 <select class="design-select" id="design-select" onchange="setDesign(this.value)" title="Design wählen (nur im Template)" aria-label="Design auswählen">
   <option value="polar">🎨 Polar</option>
@@ -709,18 +738,20 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
       <option value="">↕ Standard-Reihenfolge</option>
       <option value="name">Name A–Z</option>
       <option value="val">Beste Kennzahl zuerst</option>
+      <option value="rating">⭐ Bewertung</option>
     </select>
   </div>
 
   <div class="park-grid" id="filter-grid">
     <a class="plink" href="detail.html" data-tags="tag-a tag-b" data-sort-val="1" data-cmp='{"Kennzahl":"gut","Status":"Detailseite fertig","Tags":"Tag A + Tag B"}'>
-      <div class="pcard hl">
+      <div class="pcard hl" id="alpha">
         <div class="pc-top">
           <div><div class="pc-name">Eintrag Alpha</div><div class="pc-op">Unterzeile — Ort, Betreiber, Quelle …</div></div>
           <button class="fav-btn" data-fav="alpha" aria-pressed="false" aria-label="Eintrag Alpha als Favorit merken" onclick="toggleFav(event,this)">☆</button>
         </div>
         <div class="pc-tags"><span class="b b-sm b-teal">🏷 Tag 1</span><span class="b b-sm b-blue">🏷 Tag 2</span><span class="b b-sm b-gray">🏷 Tag 3</span></div>
         <div class="pc-body">Zwei bis vier Sätze Teasertext: Was erwartet einen auf der Detailseite, was ist das Besondere an diesem Eintrag? Diese Karte ist die Top-Empfehlung (Modifier <em>hl</em>) und verlinkt auf detail.html.</div>
+        <div class="star-rating-wrap"><span>Bewertung:</span><div class="star-rating" id="sr-alpha" aria-label="Bewertung für Eintrag Alpha"></div></div>
         <div class="pc-footer">
           <span class="pc-drive drive-g">📊 Kennzahl gut</span>
           <span class="pc-action ready">✓ Detailseite →</span>
@@ -728,26 +759,28 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
       </div>
     </a>
     <a class="plink" href="dashboard.html" data-tags="tag-a tag-b" data-sort-val="2" data-cmp='{"Kennzahl":"gut","Status":"fertig","Tags":"Tag A + Tag B"}'>
-      <div class="pcard hl2">
+      <div class="pcard hl2" id="dashboard">
         <div class="pc-top">
           <div><div class="pc-name">📊 IT-Dashboard</div><div class="pc-op">Status-Matrix, Metriken, Logs, Inventar</div></div>
           <button class="fav-btn" data-fav="dashboard" aria-pressed="false" aria-label="IT-Dashboard als Favorit merken" onclick="toggleFav(event,this)">☆</button>
         </div>
         <div class="pc-tags"><span class="b b-sm b-blue">🏷 Dashboard</span><span class="b b-sm b-teal">🏷 IT</span></div>
         <div class="pc-body">Template für IT-Infrastruktur-Monitoring — Status-Matrix, Sparkline-Metriken, Log-Viewer und Inventar aus <code>data.js</code> befüllt.</div>
+        <div class="star-rating-wrap"><span>Bewertung:</span><div class="star-rating" id="sr-dashboard" aria-label="Bewertung für IT-Dashboard"></div></div>
         <div class="pc-footer">
           <span class="pc-drive drive-g">📡 Live-Daten</span>
           <span class="pc-action ready">✓ Dashboard →</span>
         </div>
       </div>
     </a>
-    <div class="pcard hl2" data-tags="tag-b" data-sort-val="3" data-cmp='{"Kennzahl":"mittel","Status":"in Arbeit","Tags":"Tag B"}'>
+    <div class="pcard hl2" id="beta" data-tags="tag-b" data-sort-val="3" data-cmp='{"Kennzahl":"mittel","Status":"in Arbeit","Tags":"Tag B"}'>
       <div class="pc-top">
         <div><div class="pc-name">Eintrag Beta</div><div class="pc-op">Unterzeile — Ort, Betreiber, Quelle …</div></div>
         <button class="fav-btn" data-fav="beta" aria-pressed="false" aria-label="Eintrag Beta als Favorit merken" onclick="toggleFav(event,this)">☆</button>
       </div>
       <div class="pc-tags"><span class="b b-sm b-amber">🏷 Zweite Wahl</span><span class="b b-sm b-gray">🏷 Tag</span></div>
       <div class="pc-body">Karte ohne Link (kein <em>plink</em>-Wrapper), weil die Detailseite noch nicht existiert — verlinkte Dateien müssen immer existieren, sonst stiller Fehler. Modifier <em>hl2</em> = zweite Wahl.</div>
+      <div class="star-rating-wrap"><span>Bewertung:</span><div class="star-rating" id="sr-beta" aria-label="Bewertung für Eintrag Beta"></div></div>
       <div class="pc-footer">
         <span class="pc-drive drive-a">📊 Kennzahl mittel</span>
         <span class="pc-action wip">⏳ In Arbeit</span>
@@ -860,6 +893,20 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
   <input type="file" id="imp-file" accept="application/json,.json" hidden onchange="importData(this)">
 </div>
 
+<!-- BAUSTEIN Tastatur-Shortcut-Übersicht -->
+<div class="sc-overlay" id="sc-overlay" role="dialog" aria-modal="true" aria-label="Tastatur-Shortcuts" onclick="if(event.target===this)closeShortcuts()">
+  <div class="sc-panel">
+    <h2>⌨️ Tastatur-Shortcuts</h2>
+    <table class="sc-table">
+      <tr><td><kbd>t</kbd></td><td>Light/Dark-Mode umschalten</td></tr>
+      <tr><td><kbd>/</kbd></td><td>Suchfeld fokussieren</td></tr>
+      <tr><td><kbd>?</kbd></td><td>Diese Übersicht öffnen/schließen</td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>Overlay schließen</td></tr>
+    </table>
+    <button class="sc-close" onclick="closeShortcuts()">Schließen</button>
+  </div>
+</div>
+
 <script>
 function show(id, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
@@ -931,6 +978,36 @@ function toggleFav(e, btn) {
     if (FAVS.indexOf(b.dataset.fav) > -1) { b.textContent = '⭐'; b.setAttribute('aria-pressed', 'true'); }
   });
 })();
+// Baustein: Sterne-Bewertung
+function initStars() {
+  document.querySelectorAll('.star-rating').forEach(function (wrap) {
+    var cardId = wrap.id.replace('sr-', '');
+    var cur = 0;
+    try { cur = parseInt(localStorage.getItem('rating-' + cardId) || '0', 10); } catch (e) {}
+    wrap.innerHTML = '';
+    for (var s = 1; s <= 5; s++) {
+      (function (n) {
+        var btn = document.createElement('button');
+        btn.className = 'sr-btn' + (n <= cur ? ' on' : '');
+        btn.textContent = '★';
+        btn.title = n + ' Stern' + (n > 1 ? 'e' : '');
+        btn.setAttribute('aria-label', n + ' Stern' + (n > 1 ? 'e' : '') + ' für ' + cardId);
+        btn.addEventListener('click', function (e) {
+          e.preventDefault(); e.stopPropagation();
+          var newVal = n;
+          try {
+            var old = parseInt(localStorage.getItem('rating-' + cardId) || '0', 10);
+            if (old === n) newVal = 0; // zweiter Klick auf denselben Stern = zurücksetzen
+            localStorage.setItem('rating-' + cardId, newVal);
+          } catch (ex) {}
+          initStars(); // neu rendern
+        });
+        wrap.appendChild(btn);
+      })(s);
+    }
+  });
+}
+initStars();
 var ACTIVE_TAGS = [], FAV_ONLY = false;
 function toggleTag(btn) {
   var t = btn.dataset.tag, i = ACTIVE_TAGS.indexOf(t);
@@ -1049,6 +1126,12 @@ function applySort(mode) {
       return an < bn ? -1 : an > bn ? 1 : 0;
     }
     if (mode === 'val') return (+a.dataset.sortVal || 99) - (+b.dataset.sortVal || 99);
+    if (mode === 'rating') {
+      var ac = a.querySelector('.pcard'), bc = b.querySelector('.pcard');
+      var ai = ac ? parseInt(localStorage.getItem('rating-' + ac.id) || '0', 10) : 0;
+      var bi = bc ? parseInt(localStorage.getItem('rating-' + bc.id) || '0', 10) : 0;
+      return bi - ai; // höchste Bewertung zuerst
+    }
     return (+a.dataset.orig) - (+b.dataset.orig);
   }).forEach(function (el) { g.appendChild(el); });
 }
@@ -1153,12 +1236,17 @@ function importData(inp){
   r.readAsText(f);
   inp.value='';
 }
-// Tastatur-Shortcuts: t = Theme umschalten · / = Suchfeld fokussieren, falls die Seite eins hat (greift nicht in Eingabefeldern)
+// Baustein: Tastatur-Shortcut-Übersicht
+function openShortcuts(){var o=document.getElementById('sc-overlay');if(o){o.classList.add('on');document.body.style.overflow='hidden';}}
+function closeShortcuts(){var o=document.getElementById('sc-overlay');if(o){o.classList.remove('on');document.body.style.overflow='';}}
+// Tastatur-Shortcuts: t = Theme umschalten · / = Suchfeld fokussieren · ? = Shortcut-Übersicht (greift nicht in Eingabefeldern)
 document.addEventListener('keydown',function(e){
   if(e.ctrlKey||e.metaKey||e.altKey)return;
   var t=e.target,tag=(t.tagName||'').toLowerCase();
+  if(e.key==='Escape'){var o=document.getElementById('sc-overlay');if(o&&o.classList.contains('on')){closeShortcuts();return;}}
   if(tag==='input'||tag==='textarea'||tag==='select'||t.isContentEditable)return;
   if(e.key==='t')toggleTheme();
+  else if(e.key==='?'){e.preventDefault();openShortcuts();}
   else if(e.key==='/'){
     var s=document.getElementById('sitesearch')||document.getElementById('fsearch');
     if(s){e.preventDefault();s.focus();}
@@ -1178,6 +1266,9 @@ document.addEventListener('click',function(e){
 });
 function toggleTheme(){var h=document.documentElement,n=h.getAttribute('data-theme')==='light'?'dark':'light';h.setAttribute('data-theme',n);localStorage.setItem('theme',n);var b=document.getElementById('theme-btn');if(b)b.textContent=n==='light'?'🌙':'☀️';var mc=document.getElementById('theme-color-meta');if(mc)mc.content=n==='light'?'#f5f7fb':'#0f1117';}
 (function(){var b=document.getElementById('theme-btn');if(b)b.textContent=(document.documentElement.getAttribute('data-theme')||'dark')==='light'?'🌙':'☀️';var mc=document.getElementById('theme-color-meta');if(mc)mc.content=(document.documentElement.getAttribute('data-theme')||'dark')==='light'?'#f5f7fb':'#0f1117';})();
+// Baustein: Ankündigungs-Banner
+function dismissAnn(key){var el=document.getElementById('ann-'+key);if(el)el.classList.add('hidden');try{localStorage.setItem('ann-'+key,'1');}catch(e){}}
+(function(){document.querySelectorAll('.ann-wrap[id]').forEach(function(el){var k=el.id.replace('ann-','');try{if(localStorage.getItem('ann-'+k)==='1')el.classList.add('hidden');}catch(e){}});})();
 if('serviceWorker' in navigator && location.protocol !== 'file:')navigator.serviceWorker.register('sw.js',{updateViaCache:'none'});
 // DESIGN-AUSWAHL (nur Template): in fertigen Projekten komplett entfernen
 function setDesign(v){document.documentElement.setAttribute('data-design',v);try{localStorage.setItem('design',v);}catch(e){}if(v==='material'&&!document.getElementById('mso-lnk')){var ml=document.createElement('link');ml.id='mso-lnk';ml.rel='stylesheet';ml.href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap';document.head.appendChild(ml);}}

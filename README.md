@@ -8,7 +8,7 @@ Entstanden ist das Template aus einem realen Projekt mit 31 Seiten (einem Famili
 
 - **Null Abhängigkeiten.** Keine npm-Installation, kein Bundler, kein Server. Klonen, `index.html` öffnen, fertig. Einzige externe Ressource ist ein Google Font — mit System-Font-Fallback.
 - **Jede Seite ist self-contained.** Kompletter eigener CSS- und JS-Block pro Datei. Eine Seite geht nie kaputt, weil eine andere geändert wurde — und einzelne Seiten lassen sich verschicken oder kopieren.
-- **Baukasten statt Framework.** Ein fester Kern (Theming, einklappbare Sektionen, Druckausgabe, Barrierefreiheit) plus über 25 optionale Bausteine, die sich einzeln übernehmen oder weglassen lassen. Die drei Beispielseiten zeigen bewusst *alles* im Einsatz — sie sind Schaukasten, nicht Mindestumfang.
+- **Baukasten statt Framework.** Ein fester Kern (Theming, einklappbare Sektionen, Druckausgabe, Barrierefreiheit) plus über 30 optionale Bausteine, die sich einzeln übernehmen oder weglassen lassen. Die drei Beispielseiten zeigen bewusst *alles* im Einsatz — sie sind Schaukasten, nicht Mindestumfang.
 - **Für die Arbeit mit KI-Agenten gebaut.** Die ausführliche `CLAUDE.md` dokumentiert jede Konvention, jeden Fallstrick und einen Fragenkatalog für den Projektstart — [Claude Code](https://claude.com/claude-code) (oder ein anderes Agenten-Tool) kann daraus direkt neue Projekte aufbauen.
 
 ## Live-Demo
@@ -53,12 +53,12 @@ Möglich machen das **Struktur-Tokens**: Schrift, Eckenradien, Rahmenstärke und
 
 | Kategorie | Bausteine |
 |---|---|
-| Navigation | Tab-Navigation mit `?tab=`-Rücksprung · TOC-Sprungleiste · Back-to-top |
-| Finden & Wählen | Live-Suche + Tag-Filter + Favoriten · seitenübergreifende Suche mit **Suchfeld-Highlighting** · Favoriten-Vergleichsansicht · Sortierung für Grids und Tabellen · interaktiver Entscheidungsbaum · Schnellauswahl-Box · **URL-State** (Filter/Tab in der URL — bookmarkbar und teilbar) |
+| Navigation | Tab-Navigation mit `?tab=`-Rücksprung · TOC-Sprungleiste · Back-to-top · **Scroll-Spy** (aktiver TOC-Chip beim Scrollen hervorgehoben) |
+| Finden & Wählen | Live-Suche + Tag-Filter + Favoriten · **Sterne-Bewertung** (1–5 pro Indexkarte) · seitenübergreifende Suche mit **Suchfeld-Highlighting** · Favoriten-Vergleichsansicht · Sortierung für Grids und Tabellen · interaktiver Entscheidungsbaum · Schnellauswahl-Box · **URL-State** (Filter/Tab in der URL — bookmarkbar und teilbar) |
 | Karten | Google-Maps-Routen ohne API-Key (Anreise-Karte + „🚗 Route"-Buttons) · OpenStreetMap-Embeds |
-| Inhalt | Cards, POI-Listen, Termin-Listen, Vergleichstabellen, Key-Value-Kacheln, Begriffstabellen · Zwei-Ansichten-Toggle · Timeline · Balkendiagramm (CSS-only) · FAQ-Akkordeon (komplett JS-frei) · **Abschnitts-Permalinks** (🔗-Button an jedem Sektions-Titel) |
-| Persistenz | abhakbare Checkliste mit Fortschrittsbalken · Notizfeld pro Seite · Termin-Intelligenz (vergangene Termine dimmen + Countdown) · Daten-Export/Import als JSON |
-| Komfort | Tastatur-Shortcuts (`t` Theme, `/` Suche) · Lightbox-Galerie **mit ←/→-Navigation** (Tastatur + Buttons) · **Druckauswahl** (🖨-Button wählt Sektionen vor dem Drucken) |
+| Inhalt | Cards, POI-Listen, Termin-Listen, Vergleichstabellen, Key-Value-Kacheln, Begriffstabellen · Zwei-Ansichten-Toggle · Timeline · Balkendiagramm (CSS-only) · FAQ-Akkordeon (komplett JS-frei) · **Abschnitts-Permalinks** (🔗-Button an jedem Sektions-Titel) · **Kalkulations-Widget** (Kostenfelder mit Summe + localStorage) |
+| Persistenz | abhakbare Checkliste mit Fortschrittsbalken · **Drag-&-Drop-Sortierung** (Checklisten-Reihenfolge per Maus/Touch) · Notizfeld pro Seite · Termin-Intelligenz (vergangene Termine dimmen + Countdown) · Daten-Export/Import als JSON |
+| Komfort | **Ankündigungs-Banner** (schließbarer Hinweisstreifen, Status in localStorage) · Tastatur-Shortcuts (`t` Theme, `/` Suche) · **Tastatur-Shortcut-Übersicht** (`?`-Taste) · Lightbox-Galerie **mit ←/→-Navigation** (Tastatur + Buttons) · **Druckauswahl** (🖨-Button wählt Sektionen vor dem Drucken) |
 | Offline & Mobil | **PWA-Baustein** (`manifest.json` + `sw.js`): installierbar als App, Offline-Nutzung via Service Worker — automatisch aktiv auf HTTPS, bei `file://` übersprungen |
 | IT-Monitoring | **IT-Dashboard** (`dashboard.html` + `data.js`): Status-Matrix mit Uptime-Badge + Latenz-Sparkline pro Service · Metric Cards mit SVG-Sparklines + Threshold-Balken · Log-Viewer mit Level-/Volltext-Filter und Pagination · Inventar-Grid · Wartungsfenster · Incident-Timeline mit proportionalem Dauer-Balken und MTTR · Tab-Titel-Ampel (❌/⚠/✅) · Auto-Refresh (HTTPS) |
 
