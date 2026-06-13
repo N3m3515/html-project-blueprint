@@ -1,7 +1,7 @@
 // data.js — IT-Dashboard Datendatei
 // Wird von einem Monitoring-Script erzeugt und per <script src="data.js"> geladen.
 // Funktioniert auch bei file:// (kein fetch() nötig).
-// Format-Version: 1.0
+// Format-Version: 1.1
 //
 // Minimal-Beispiel für ein Generator-Script (Python):
 //   data = {"generated_at": datetime.now().isoformat(timespec='seconds'), "services": [...], ...}
@@ -15,16 +15,18 @@ var DASH_DATA = {
 
   // Service-Status — Ampel-Matrix
   // status: "ok" | "warn" | "crit" | "unknown"
+  // uptime_pct: float (optional) — Uptime in % im Beobachtungszeitraum
+  // latency_history: number[] | null (optional) — Latenzen in ms, ältester zuerst (10 Werte)
   "services": [
-    { "id": "web",    "name": "Webserver",   "group": "Frontend",      "status": "ok",      "message": "HTTP 200 · 42 ms",            "checked_at": "2026-06-13T14:29:00" },
-    { "id": "cdn",    "name": "CDN",          "group": "Frontend",      "status": "ok",      "message": "Cache-Hit 94 %",              "checked_at": "2026-06-13T14:29:00" },
-    { "id": "api",    "name": "API Gateway",  "group": "Backend",       "status": "warn",    "message": "P95 > 800 ms",                "checked_at": "2026-06-13T14:28:00" },
-    { "id": "db",     "name": "PostgreSQL",   "group": "Backend",       "status": "ok",      "message": "Verbindungen 23/100",          "checked_at": "2026-06-13T14:29:00" },
-    { "id": "cache",  "name": "Redis",        "group": "Backend",       "status": "crit",    "message": "Connection refused",           "checked_at": "2026-06-13T14:27:00" },
-    { "id": "queue",  "name": "RabbitMQ",     "group": "Backend",       "status": "ok",      "message": "Queues: 3, Nachrichten: 12",  "checked_at": "2026-06-13T14:29:00" },
-    { "id": "nfs",    "name": "NFS",          "group": "Infrastruktur", "status": "ok",      "message": "Mount OK",                    "checked_at": "2026-06-13T14:29:00" },
-    { "id": "backup", "name": "Backup",       "group": "Infrastruktur", "status": "warn",    "message": "Letztes Backup vor 26 h",     "checked_at": "2026-06-13T14:29:00" },
-    { "id": "dns",    "name": "DNS",          "group": "Infrastruktur", "status": "ok",      "message": "Auflösung < 1 ms",            "checked_at": "2026-06-13T14:28:00" }
+    { "id": "web",    "name": "Webserver",   "group": "Frontend",      "status": "ok",      "message": "HTTP 200 · 42 ms",            "uptime_pct": 99.98, "latency_history": [38,41,40,39,42,40,43,41,38,42],  "checked_at": "2026-06-13T14:29:00" },
+    { "id": "cdn",    "name": "CDN",          "group": "Frontend",      "status": "ok",      "message": "Cache-Hit 94 %",              "uptime_pct": 100.0, "latency_history": [12,14,11,13,12,15,11,13,12,14],  "checked_at": "2026-06-13T14:29:00" },
+    { "id": "api",    "name": "API Gateway",  "group": "Backend",       "status": "warn",    "message": "P95 > 800 ms",                "uptime_pct": 99.20, "latency_history": [320,450,580,700,820,842,830,810,842,842], "checked_at": "2026-06-13T14:28:00" },
+    { "id": "db",     "name": "PostgreSQL",   "group": "Backend",       "status": "ok",      "message": "Verbindungen 23/100",          "uptime_pct": 99.99, "latency_history": [4,5,4,4,6,5,4,5,4,5],          "checked_at": "2026-06-13T14:29:00" },
+    { "id": "cache",  "name": "Redis",        "group": "Backend",       "status": "crit",    "message": "Connection refused",           "uptime_pct": 98.10, "latency_history": [1,2,1,1,2,80,null,null,null,null], "checked_at": "2026-06-13T14:27:00" },
+    { "id": "queue",  "name": "RabbitMQ",     "group": "Backend",       "status": "ok",      "message": "Queues: 3, Nachrichten: 12",  "uptime_pct": 99.95, "latency_history": [8,9,8,10,9,8,9,10,9,8],        "checked_at": "2026-06-13T14:29:00" },
+    { "id": "nfs",    "name": "NFS",          "group": "Infrastruktur", "status": "ok",      "message": "Mount OK",                    "uptime_pct": 100.0, "latency_history": null,                             "checked_at": "2026-06-13T14:29:00" },
+    { "id": "backup", "name": "Backup",       "group": "Infrastruktur", "status": "warn",    "message": "Letztes Backup vor 26 h",     "uptime_pct": 97.50, "latency_history": null,                             "checked_at": "2026-06-13T14:29:00" },
+    { "id": "dns",    "name": "DNS",          "group": "Infrastruktur", "status": "ok",      "message": "Auflösung < 1 ms",            "uptime_pct": 100.0, "latency_history": [0.8,0.9,0.7,0.8,0.9,0.8,0.7,0.9,0.8,0.8], "checked_at": "2026-06-13T14:28:00" }
   ],
 
   // Metriken — mit Verlaufsdaten für Sparklines (30 Werte, ältester zuerst)
@@ -50,6 +52,26 @@ var DASH_DATA = {
     { "ts": "2026-06-13T10:00:00", "level": "INFO", "source": "system", "message": "Monitoring-Agent gestartet (Neustart nach Patch)" },
     { "ts": "2026-06-13T09:45:00", "level": "INFO", "source": "system", "message": "Patch KB2026-06 installiert" },
     { "ts": "2026-06-13T09:00:00", "level": "DEBUG","source": "net",    "message": "MTU-Pfad-Discovery abgeschlossen: 1500 Byte" }
+  ],
+
+  // Wartungsfenster — geplante/laufende/abgeschlossene Downtimes
+  // status: "planned" | "running" | "completed" | "cancelled"
+  "maintenance": [
+    { "id": "m1", "title": "Redis Upgrade 7.2 → 7.4",          "start": "2026-06-15T22:00:00", "end": "2026-06-15T23:30:00", "status": "planned",   "services": ["redis"],      "note": "Kurzer Neustart ~5 Min. erwartet. Clients reconnecten automatisch." },
+    { "id": "m2", "title": "PostgreSQL Index-Rebuild (users)",  "start": "2026-06-14T02:00:00", "end": "2026-06-14T04:00:00", "status": "planned",   "services": ["postgresql"], "note": "Kein Ausfall erwartet — Index wird im Hintergrund gebaut (CONCURRENTLY)." },
+    { "id": "m3", "title": "API Gateway Deployment v2.4.2",     "start": "2026-06-13T12:00:00", "end": "2026-06-13T12:15:00", "status": "completed", "services": ["api"],        "note": "Erfolgreicher Rolling-Deploy. Keine Downtime." },
+    { "id": "m4", "title": "TLS-Zertifikat-Rotation (alle)",   "start": "2026-06-13T13:28:00", "end": "2026-06-13T13:31:00", "status": "completed", "services": ["web","cdn"],   "note": "Let's Encrypt Auto-Renewal — kein manueller Eingriff." }
+  ],
+
+  // Incident-Timeline — Ausfälle und Vorfälle, neueste zuerst
+  // status: "open" | "resolved"
+  // severity: "crit" | "warn"
+  // mttr_min: mittlere Zeit bis zur Lösung in Minuten (null wenn offen)
+  "incidents": [
+    { "id": "i1", "title": "Redis — Connection refused",  "start": "2026-06-13T14:27:00", "end": null,                    "status": "open",     "severity": "crit", "services": ["redis","cache"],  "mttr_min": null, "note": "Ursache unklar — Speicher-OOM untersucht" },
+    { "id": "i2", "title": "API — Latenz-Spike P95",      "start": "2026-06-13T14:20:00", "end": "2026-06-13T14:35:00",   "status": "resolved", "severity": "warn", "services": ["api"],            "mttr_min": 15,   "note": "Spike nach Deployment; mit Rollback behoben" },
+    { "id": "i3", "title": "Backup — Storage-Verzögerung","start": "2026-06-12T13:00:00", "end": "2026-06-12T15:00:00",   "status": "resolved", "severity": "warn", "services": ["backup","nfs"],   "mttr_min": 120,  "note": "NFS-Mount war langsam; NFS-Neustart hat geholfen" },
+    { "id": "i4", "title": "DB — Slow Query (users-Tabelle)","start":"2026-06-13T11:00:00","end": "2026-06-13T11:45:00",  "status": "resolved", "severity": "warn", "services": ["postgresql"],     "mttr_min": 45,   "note": "Fehlender Index gefunden; EXPLAIN ANALYZE durchgeführt, Fix eingeplant" }
   ],
 
   // Inventar — Hosts/Geräte

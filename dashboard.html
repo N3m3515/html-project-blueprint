@@ -241,6 +241,53 @@ body{padding-top:3.4rem;}
 .inv-role{font-size:12px;color:var(--tx2);}
 .inv-meta{font-size:11px;color:var(--tx3);font-family:ui-monospace,Consolas,monospace;}
 
+/* Status-Matrix — Uptime-Badge + Latenz-Sparkline */
+.sm-uptime{font-size:10px;font-weight:600;white-space:nowrap;min-width:4rem;text-align:right;flex-shrink:0;}
+.sm-uptime.ok{color:var(--ok);}
+.sm-uptime.warn{color:var(--maybe);}
+.sm-uptime.crit{color:var(--no);}
+.sm-spark-cell{flex-shrink:0;width:80px;height:18px;display:flex;align-items:center;}
+.sm-spark-cell svg{display:block;width:100%;height:18px;}
+@media(max-width:500px){.sm-msg,.sm-spark-cell{display:none;}}
+
+/* Log-Viewer — Pagination */
+.log-count{font-size:11px;color:var(--tx3);margin-left:auto;white-space:nowrap;}
+.log-more-wrap{padding:.6rem .75rem;text-align:center;border-top:1px solid var(--bdr);}
+.log-more-wrap .lb{cursor:pointer;font-family:inherit;}
+
+/* === Baustein: IT-Dashboard — Wartungsfenster === */
+.maint-list{display:flex;flex-direction:column;gap:.6rem;}
+.maint-item{display:flex;align-items:flex-start;gap:.75rem;padding:.75rem 1rem;background:var(--bg2);border:var(--bw) solid var(--bdr);border-radius:var(--r-md);box-shadow:var(--shadow);}
+.maint-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:.3rem;}
+.maint-dot.planned{background:var(--blue);box-shadow:0 0 5px var(--blue);}
+.maint-dot.running{background:var(--amber);box-shadow:0 0 5px var(--amber);}
+.maint-dot.completed{background:var(--ok);}
+.maint-dot.cancelled{background:var(--tx3);}
+.maint-body{flex:1;min-width:0;}
+.maint-title{font-weight:500;font-size:13px;color:var(--tx);}
+.maint-meta{font-size:11px;color:var(--tx3);margin-top:.2rem;}
+.maint-note{font-size:11px;color:var(--tx2);margin-top:.25rem;line-height:1.5;}
+.maint-services{display:flex;gap:4px;flex-wrap:wrap;margin-top:.4rem;}
+.maint-status{flex-shrink:0;align-self:flex-start;}
+
+/* === Baustein: IT-Dashboard — Incident-Timeline === */
+.incident-list{display:flex;flex-direction:column;gap:.75rem;}
+.incident-item{background:var(--bg2);border:var(--bw) solid var(--bdr);border-left:3px solid var(--bdr);border-radius:var(--r-md);padding:.75rem 1rem;display:flex;flex-direction:column;gap:.4rem;box-shadow:var(--shadow);}
+.incident-item.crit{border-left-color:var(--coral);}
+.incident-item.warn{border-left-color:var(--amber);}
+.incident-item.open{border-left-color:var(--no);}
+.inc-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;}
+.inc-title{font-weight:500;font-size:13px;color:var(--tx);flex:1;min-width:0;}
+.inc-meta{font-size:11px;color:var(--tx3);}
+.inc-note{font-size:11px;color:var(--tx2);line-height:1.5;}
+.inc-services{display:flex;gap:4px;flex-wrap:wrap;}
+.inc-bar-row{display:flex;align-items:center;gap:.6rem;}
+.inc-bar-wrap{flex:1;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+.inc-bar{height:100%;border-radius:2px;min-width:4px;}
+.inc-bar.crit,.inc-bar.open{background:var(--coral);}
+.inc-bar.warn{background:var(--amber);}
+.inc-bar.resolved{background:var(--ok);}
+
 /* === Reduced Motion === */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
@@ -254,7 +301,8 @@ body{padding-top:3.4rem;}
   .theme-toggle,.design-select,.back-btn,.fold-btn,.toc,.totop,.data-tools,.log-toolbar{display:none !important;}
   .folded{display:block !important;}
   .sec-body.folded{max-height:none !important;opacity:1;pointer-events:auto;}
-  .sm-wrap,.metric-card,.log-table-wrap,.inv-item{break-inside:avoid;box-shadow:none !important;}
+  .sm-wrap,.metric-card,.log-table-wrap,.inv-item,.maint-item,.incident-item{break-inside:avoid;box-shadow:none !important;}
+  .log-more-wrap,.log-count{display:none !important;}
 }
 </style>
 <script>(function(){var p=new URLSearchParams(location.search),t=p.get('theme')||localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');if(p.get('theme'))try{localStorage.setItem('theme',t);}catch(e){}document.documentElement.setAttribute('data-theme',t);
@@ -299,6 +347,8 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
   <a href="#metriken">📈 Metriken</a>
   <a href="#logs">📋 Logs</a>
   <a href="#inventar">🖥 Inventar</a>
+  <a href="#wartung">🔧 Wartung</a>
+  <a href="#incidents">🚨 Incidents</a>
 </nav>
 
 <!-- Status-Matrix -->
@@ -351,6 +401,7 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
         <option value="DEBUG">DEBUG</option>
       </select>
       <input class="fsearch" id="log-search" type="search" placeholder="Suchen in Quelle / Nachricht …" aria-label="Log-Einträge durchsuchen" style="flex:1;min-width:200px;">
+      <span class="log-count" id="log-count" aria-live="polite"></span>
     </div>
     <div class="log-table-wrap">
       <table class="log-table" role="table">
@@ -365,6 +416,9 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
         <tbody id="log-table-body"></tbody>
       </table>
       <div class="empty-hint" id="log-empty">Keine Einträge.</div>
+      <div class="log-more-wrap" id="log-more-wrap" hidden>
+        <button class="lb lb-blue" id="log-more-btn" onclick="window._logLoadMore()">Weitere laden …</button>
+      </div>
     </div>
   </div>
 </div>
@@ -381,6 +435,38 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
   <div class="sec-body" id="inventar-body">
     <div class="inv-grid" id="inv-grid">
       <div class="empty-hint" style="grid-column:1/-1">Keine Daten — data.js laden.</div>
+    </div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<!-- Wartungsfenster -->
+<div class="sec" id="wartung">
+  <div class="sec-hd">
+    <span class="sec-sym">🔧</span>
+    <h2 class="sec-title">Wartungsfenster</h2>
+    <button class="fold-btn" onclick="toggleFold('wartung-body',this)" aria-expanded="true" aria-controls="wartung-body">▾</button>
+  </div>
+  <div class="sec-body" id="wartung-body">
+    <div class="maint-list" id="maint-list">
+      <div class="empty-hint">Keine Wartungen — <code>maintenance</code>-Array in data.js ergänzen.</div>
+    </div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<!-- Incident-Timeline -->
+<div class="sec" id="incidents">
+  <div class="sec-hd">
+    <span class="sec-sym">🚨</span>
+    <h2 class="sec-title">Incident-Timeline</h2>
+    <button class="fold-btn" onclick="toggleFold('incidents-body',this)" aria-expanded="true" aria-controls="incidents-body">▾</button>
+  </div>
+  <div class="sec-body" id="incidents-body">
+    <div class="incident-list" id="incident-list">
+      <div class="empty-hint">Keine Incidents — <code>incidents</code>-Array in data.js ergänzen.</div>
     </div>
   </div>
 </div>
@@ -437,10 +523,13 @@ function toggleFold(id,btn){
 document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('click',function(){var sec=document.querySelector(a.getAttribute('href'));if(!sec)return;var b=sec.querySelector('.sec-body.folded');if(b){var fb=sec.querySelector('.fold-btn');if(fb)toggleFold(b.id,fb);}});});
 </script>
 
-<!-- SCRIPT-BLOCK 6: IT-Dashboard (Status-Matrix, Metriken, Log-Viewer, Inventar) -->
+<!-- SCRIPT-BLOCK 6: IT-Dashboard -->
 <script>
 (function(){
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);});}
+  function fmtDur(ms){return ms<60000?'< 1 Min.':ms<3600000?Math.round(ms/60000)+' Min.':Math.round(ms/3600000)+' h';}
+  function fmtTs(ts){return(ts||'').replace('T',' ').slice(0,16);}
+  function statusColor(s){return s==='crit'?'var(--coral)':s==='warn'?'var(--amber)':'var(--teal)';}
 
   // Back-to-top
   var totop=document.getElementById('totop');
@@ -449,26 +538,36 @@ document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('clic
   if(typeof DASH_DATA==='undefined')return;
   var D=DASH_DATA;
 
-  // Hero — Zeitstempel + Stale-Indikator
+  // ── Hero: Zeitstempel + Stale-Indikator ──────────────────────────────────
   var genTs=document.getElementById('gen-ts');
   if(genTs&&D.generated_at){
-    genTs.textContent=(D.generated_at+'').replace('T',' ').slice(0,16);
+    genTs.textContent=fmtTs(D.generated_at);
     var ageMin=Math.round((Date.now()-new Date(D.generated_at))/60000);
     var stale=document.getElementById('stale-badge');
     if(stale&&ageMin>10){stale.textContent='⚠ Daten '+ageMin+' Min. alt';stale.hidden=false;}
   }
 
-  // Hero — Service-Zusammenfassung
+  // ── Hero: Service-Zähler + Tab-Titel + Badge-Klick → erster CRIT ────────
   if(D.services){
     var cnt={ok:0,warn:0,crit:0,unknown:0};
     D.services.forEach(function(s){cnt[s.status]=(cnt[s.status]||0)+1;});
-    var ok=document.getElementById('count-ok'),w=document.getElementById('count-warn'),c=document.getElementById('count-crit');
-    if(ok&&cnt.ok){ok.textContent='✓ '+cnt.ok+' OK';ok.style.display='';}
-    if(w&&cnt.warn){w.textContent='⚠ '+cnt.warn+' Warnung'+(cnt.warn>1?'en':'');w.style.display='';}
-    if(c&&cnt.crit){c.textContent='✗ '+cnt.crit+' Kritisch';c.style.display='';}
+    var elOk=document.getElementById('count-ok'),elW=document.getElementById('count-warn'),elC=document.getElementById('count-crit');
+    if(elOk&&cnt.ok){elOk.textContent='✓ '+cnt.ok+' OK';elOk.style.display='';}
+    if(elW&&cnt.warn){elW.textContent='⚠ '+cnt.warn+' Warnung'+(cnt.warn>1?'en':'');elW.style.display='';}
+    if(elC&&cnt.crit){
+      elC.textContent='✗ '+cnt.crit+' Kritisch';elC.style.display='';
+      elC.style.cursor='pointer';elC.title='Zum ersten kritischen Service scrollen';
+      elC.onclick=function(){
+        var dot=document.querySelector('.sm-dot.crit');
+        var target=dot?dot.closest('.sm-group'):document.getElementById('services');
+        if(target)target.scrollIntoView({behavior:'smooth',block:'center'});
+      };
+    }
+    // Tab-Titel
+    document.title=(cnt.crit?'❌ '+cnt.crit+' CRIT — ':cnt.warn?'⚠ '+cnt.warn+' WARN — ':cnt.ok?'✅ OK — ':'')+' IT-Dashboard';
   }
 
-  // Status-Matrix
+  // ── Status-Matrix mit Uptime-Badge + Latenz-Sparkline ───────────────────
   var sm=document.getElementById('status-matrix');
   if(sm&&D.services&&D.services.length){
     var groups={},order=[];
@@ -478,7 +577,28 @@ document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('clic
       html+='<div class="sm-group"><div class="sm-group-label">'+esc(g)+'</div>';
       groups[g].forEach(function(s){
         var cls=s.status==='ok'?'ok':s.status==='warn'?'warn':s.status==='crit'?'crit':'unknown';
-        html+='<div class="sm-item"><span class="sm-dot '+cls+'" title="'+esc(s.status.toUpperCase())+'"></span><span class="sm-name">'+esc(s.name)+'</span><span class="sm-msg" title="'+esc(s.message||'')+'">'+esc(s.message||'')+'</span></div>';
+        var color=statusColor(cls);
+        // Latenz-Sparkline (nur wenn genug valide Werte vorhanden)
+        var sparkHtml='';
+        if(s.latency_history&&s.latency_history.length>1){
+          var valid=s.latency_history.filter(function(v){return v!=null;});
+          if(valid.length>1){
+            var W=80,H=18,n=valid.length;
+            var lo=Math.min.apply(null,valid),hi=Math.max.apply(null,valid),rng=hi-lo||1;
+            var pts=valid.map(function(v,i){return(i/(n-1)*W).toFixed(1)+','+(((1-(v-lo)/rng)*(H*.8))+(H*.1)).toFixed(1);}).join(' ');
+            sparkHtml='<span class="sm-spark-cell"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-label="Latenz-Verlauf"><polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+          }
+        }
+        // Uptime-Badge
+        var uptimeHtml='';
+        if(typeof s.uptime_pct==='number'){
+          var ucls=s.uptime_pct>=99.9?'ok':s.uptime_pct>=99?'warn':'crit';
+          uptimeHtml='<span class="sm-uptime '+ucls+'" title="Uptime">'+s.uptime_pct.toFixed(2)+' %</span>';
+        }
+        html+='<div class="sm-item"><span class="sm-dot '+cls+'" title="'+esc(s.status.toUpperCase())+'"></span>'
+          +'<span class="sm-name">'+esc(s.name)+'</span>'
+          +sparkHtml+uptimeHtml
+          +'<span class="sm-msg" title="'+esc(s.message||'')+'">'+esc(s.message||'')+'</span></div>';
       });
       html+='</div>';
     });
@@ -486,55 +606,80 @@ document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('clic
     sm.innerHTML=html;
   }
 
-  // Metric Cards + SVG-Sparklines
+  // ── Metric Cards + SVG-Sparklines ───────────────────────────────────────
   var mg=document.getElementById('metric-grid');
   if(mg&&D.metrics&&D.metrics.length){
     mg.innerHTML='';
     D.metrics.forEach(function(m){
-      var val=m.value,warn=m.warn,crit=m.crit,mx=m.max;
+      var val=m.value,mx=m.max;
       var pct=mx?Math.round(val/mx*100):val;
-      var threshVal=mx?Math.round(val/mx*100):val;
-      var status=threshVal>=(crit||Infinity)?'crit':threshVal>=(warn||Infinity)?'warn':'ok';
-      var color=status==='crit'?'var(--coral)':status==='warn'?'var(--amber)':'var(--teal)';
-
+      var threshVal=mx?pct:val;
+      var status=threshVal>=(m.crit||Infinity)?'crit':threshVal>=(m.warn||Infinity)?'warn':'ok';
+      var color=statusColor(status);
       var spark='';
       if(m.history&&m.history.length>1){
         var W=200,H=40,n=m.history.length;
         var lo=Math.min.apply(null,m.history),hi=Math.max.apply(null,m.history),rng=hi-lo||1;
         var pts=m.history.map(function(v,i){return(i/(n-1)*W).toFixed(1)+','+(((1-(v-lo)/rng)*(H*.85))+(H*.075)).toFixed(1);}).join(' ');
-        spark='<svg class="mc-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-hidden="true"><polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        spark='<svg class="mc-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-label="Verlauf '+esc(m.name)+'"><polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       }
       var bar=mx?'<div class="mc-bar-track"><div class="mc-bar-fill" style="width:'+Math.min(pct,100)+'%;background:'+color+'"></div></div>':'';
-
       var card=document.createElement('div');
       card.className='metric-card';
-      card.innerHTML='<div class="mc-name">'+esc(m.name)+'</div><div class="mc-value" style="color:'+color+'">'+esc(String(val))+'<span class="mc-unit">'+esc(m.unit||'')+'</span></div>'+spark+bar;
+      card.innerHTML='<div class="mc-name">'+esc(m.name)+'</div>'
+        +'<div class="mc-value" style="color:'+color+'">'+esc(String(val))+'<span class="mc-unit">'+esc(m.unit||'')+'</span></div>'
+        +spark+bar;
       mg.appendChild(card);
     });
   }
 
-  // Log-Viewer
+  // ── Log-Viewer mit Pagination ────────────────────────────────────────────
   var ltb=document.getElementById('log-table-body');
   var lf=document.getElementById('log-filter-level');
   var ls=document.getElementById('log-search');
   var lEmpty=document.getElementById('log-empty');
-  function renderLogs(){
-    if(!ltb||!D.logs)return;
+  var lCount=document.getElementById('log-count');
+  var lMoreWrap=document.getElementById('log-more-wrap');
+  var lMoreBtn=document.getElementById('log-more-btn');
+  var LOG_PAGE=50;
+  var _logRows=[],_logShown=0;
+
+  function renderLogRow(l){
+    var cls={'CRIT':'crit','ERROR':'crit','WARN':'warn','INFO':'info','DEBUG':'debug'}[l.level]||'debug';
+    return'<tr><td class="log-ts">'+esc(fmtTs(l.ts))+'</td>'
+      +'<td><span class="log-level '+cls+'">'+esc(l.level||'')+'</span></td>'
+      +'<td class="log-source">'+esc(l.source||'')+'</td>'
+      +'<td>'+esc(l.message||'')+'</td></tr>';
+  }
+
+  function logLoadMore(){
+    var batch=_logRows.slice(_logShown,_logShown+LOG_PAGE);
+    if(ltb)ltb.innerHTML+=batch.map(renderLogRow).join('');
+    _logShown+=batch.length;
+    if(lCount)lCount.textContent=_logShown+' / '+_logRows.length+' Eintr.';
+    if(lMoreWrap)lMoreWrap.hidden=_logShown>=_logRows.length;
+    if(lMoreBtn){var rem=_logRows.length-_logShown;lMoreBtn.textContent='Weitere '+(rem<LOG_PAGE?rem:LOG_PAGE)+' laden …';}
+  }
+  window._logLoadMore=logLoadMore; // expose für onclick
+
+  function applyLogFilter(){
+    if(!D.logs)return;
     var lvl=lf?lf.value:'',q=ls?ls.value.toLowerCase():'';
-    var rows=D.logs.filter(function(l){
+    _logRows=D.logs.filter(function(l){
       return(!lvl||l.level===lvl)&&(!q||(l.message||'').toLowerCase().indexOf(q)>=0||(l.source||'').toLowerCase().indexOf(q)>=0);
     });
-    if(lEmpty)lEmpty.style.display=rows.length?'none':'';
-    ltb.innerHTML=rows.map(function(l){
-      var cls={'CRIT':'crit','ERROR':'crit','WARN':'warn','INFO':'info','DEBUG':'debug'}[l.level]||'debug';
-      return'<tr><td class="log-ts">'+esc((l.ts||'').replace('T',' ').slice(0,16))+'</td><td><span class="log-level '+cls+'">'+esc(l.level||'')+'</span></td><td class="log-source">'+esc(l.source||'')+'</td><td>'+esc(l.message||'')+'</td></tr>';
-    }).join('');
+    _logShown=0;
+    if(ltb)ltb.innerHTML='';
+    if(lEmpty)lEmpty.style.display=_logRows.length?'none':'';
+    if(lMoreWrap)lMoreWrap.hidden=true;
+    logLoadMore();
   }
-  if(lf)lf.addEventListener('change',renderLogs);
-  if(ls)ls.addEventListener('input',renderLogs);
-  if(D.logs)renderLogs();
 
-  // Inventar-Grid
+  if(lf)lf.addEventListener('change',applyLogFilter);
+  if(ls)ls.addEventListener('input',applyLogFilter);
+  if(D.logs)applyLogFilter();
+
+  // ── Inventar-Grid ────────────────────────────────────────────────────────
   var ig=document.getElementById('inv-grid');
   if(ig&&D.hosts&&D.hosts.length){
     ig.innerHTML='';
@@ -554,7 +699,62 @@ document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('clic
     });
   }
 
-  // Auto-Refresh (nur HTTPS)
+  // ── Wartungsfenster ──────────────────────────────────────────────────────
+  var ml=document.getElementById('maint-list');
+  if(ml&&D.maintenance&&D.maintenance.length){
+    var MAINT_LABEL={planned:'<span class="b b-sm b-blue">● Geplant</span>',running:'<span class="b b-sm b-amber">↻ Läuft</span>',completed:'<span class="b b-sm b-teal">✓ Abgeschlossen</span>',cancelled:'<span class="b b-sm b-gray">✗ Abgebrochen</span>'};
+    ml.innerHTML='';
+    D.maintenance.forEach(function(m){
+      var cls=m.status||'planned';
+      var startStr=fmtTs(m.start).replace(/-/g,'.');
+      var endTime=m.end?(m.end||'').replace('T',' ').slice(11,16):'';
+      var svcHtml=m.services&&m.services.length?'<div class="maint-services">'+m.services.map(function(sv){return'<span class="b b-sm b-gray">'+esc(sv)+'</span>';}).join('')+'</div>':'';
+      var item=document.createElement('div');
+      item.className='maint-item';
+      item.innerHTML='<span class="maint-dot '+cls+'"></span>'
+        +'<div class="maint-body">'
+          +'<div class="maint-title">'+esc(m.title||'')+'</div>'
+          +'<div class="maint-meta">'+esc(startStr)+(endTime?' – '+esc(endTime):'')+'</div>'
+          +(m.note?'<div class="maint-note">'+esc(m.note)+'</div>':'')
+          +svcHtml
+        +'</div>'
+        +'<div class="maint-status">'+(MAINT_LABEL[cls]||'')+'</div>';
+      ml.appendChild(item);
+    });
+  }
+
+  // ── Incident-Timeline ────────────────────────────────────────────────────
+  var il=document.getElementById('incident-list');
+  if(il&&D.incidents&&D.incidents.length){
+    var now=Date.now();
+    var maxDur=0;
+    D.incidents.forEach(function(inc){
+      inc._dur=(inc.end?new Date(inc.end).getTime():now)-new Date(inc.start).getTime();
+      if(inc._dur>maxDur)maxDur=inc._dur;
+    });
+    il.innerHTML='';
+    D.incidents.forEach(function(inc){
+      var sev=inc.severity||'warn';
+      var isOpen=inc.status==='open';
+      var itemCls=isOpen?'open':sev;
+      var barCls=isOpen?'open':sev;
+      var barPct=maxDur?Math.max(2,Math.round(inc._dur/maxDur*100)):100;
+      var statusBadge=isOpen?'<span class="b b-sm b-coral">● offen</span>':'<span class="b b-sm b-teal">✓ gelöst</span>';
+      var mttr=inc.mttr_min?'<span class="inc-meta"> · MTTR '+esc(String(inc.mttr_min))+' Min.</span>':'';
+      var endPart=inc.end?fmtTs(inc.end).slice(11,16):'laufend';
+      var svcHtml=inc.services&&inc.services.length?'<div class="inc-services">'+inc.services.map(function(sv){return'<span class="b b-sm b-gray">'+esc(sv)+'</span>';}).join('')+'</div>':'';
+      var item=document.createElement('div');
+      item.className='incident-item '+itemCls;
+      item.innerHTML='<div class="inc-row"><span class="inc-title">'+esc(inc.title||'')+'</span>'+statusBadge+mttr+'</div>'
+        +'<div class="inc-meta">'+esc(fmtTs(inc.start))+' – '+esc(endPart)+' · '+esc(fmtDur(inc._dur))+'</div>'
+        +(inc.note?'<div class="inc-note">'+esc(inc.note)+'</div>':'')
+        +svcHtml
+        +'<div class="inc-bar-row"><div class="inc-bar-wrap"><div class="inc-bar '+barCls+'" style="width:'+barPct+'%"></div></div></div>';
+      il.appendChild(item);
+    });
+  }
+
+  // ── Auto-Refresh (nur HTTPS) ─────────────────────────────────────────────
   if(location.protocol!=='file:'){
     var arc=document.getElementById('auto-refresh-ctrl');
     if(arc)arc.hidden=false;

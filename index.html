@@ -730,17 +730,29 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
     <a class="plink" href="dashboard.html" data-tags="tag-a tag-b" data-sort-val="2" data-cmp='{"Kennzahl":"gut","Status":"fertig","Tags":"Tag A + Tag B"}'>
       <div class="pcard hl2">
         <div class="pc-top">
-          <div><div class="pc-name">📊 IT-Dashboard</div><div class="pc-op">Eintrag Beta — Status-Matrix, Metriken, Logs, Inventar</div></div>
-          <button class="fav-btn" data-fav="beta" aria-pressed="false" aria-label="IT-Dashboard als Favorit merken" onclick="toggleFav(event,this)">☆</button>
+          <div><div class="pc-name">📊 IT-Dashboard</div><div class="pc-op">Status-Matrix, Metriken, Logs, Inventar</div></div>
+          <button class="fav-btn" data-fav="dashboard" aria-pressed="false" aria-label="IT-Dashboard als Favorit merken" onclick="toggleFav(event,this)">☆</button>
         </div>
         <div class="pc-tags"><span class="b b-sm b-blue">🏷 Dashboard</span><span class="b b-sm b-teal">🏷 IT</span></div>
         <div class="pc-body">Template für IT-Infrastruktur-Monitoring — Status-Matrix, Sparkline-Metriken, Log-Viewer und Inventar aus <code>data.js</code> befüllt.</div>
         <div class="pc-footer">
           <span class="pc-drive drive-g">📡 Live-Daten</span>
-          <span class="pc-action ready">✓ Reiseführer →</span>
+          <span class="pc-action ready">✓ Dashboard →</span>
         </div>
       </div>
     </a>
+    <div class="pcard hl2" data-tags="tag-b" data-sort-val="3" data-cmp='{"Kennzahl":"mittel","Status":"in Arbeit","Tags":"Tag B"}'>
+      <div class="pc-top">
+        <div><div class="pc-name">Eintrag Beta</div><div class="pc-op">Unterzeile — Ort, Betreiber, Quelle …</div></div>
+        <button class="fav-btn" data-fav="beta" aria-pressed="false" aria-label="Eintrag Beta als Favorit merken" onclick="toggleFav(event,this)">☆</button>
+      </div>
+      <div class="pc-tags"><span class="b b-sm b-amber">🏷 Zweite Wahl</span><span class="b b-sm b-gray">🏷 Tag</span></div>
+      <div class="pc-body">Karte ohne Link (kein <em>plink</em>-Wrapper), weil die Detailseite noch nicht existiert — verlinkte Dateien müssen immer existieren, sonst stiller Fehler. Modifier <em>hl2</em> = zweite Wahl.</div>
+      <div class="pc-footer">
+        <span class="pc-drive drive-a">📊 Kennzahl mittel</span>
+        <span class="pc-action wip">⏳ In Arbeit</span>
+      </div>
+    </div>
   </div>
   <div class="filter-empty" id="filter-empty">Keine Treffer — Suchbegriff oder Filter anpassen.</div>
 </div></div>
