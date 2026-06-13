@@ -350,8 +350,8 @@ body{font-size:13px;}
 .fold-btn{cursor:pointer;font-family:inherit;font-size:11px;font-weight:500;line-height:1;padding:5px 10px;border-radius:var(--r-xs);border:var(--bw) solid var(--bdr2);background:var(--bg3);color:var(--tx2);flex-shrink:0;letter-spacing:normal;text-transform:none;}
 .fold-btn:hover{background:var(--bg4);color:var(--tx);}
 .folded{display:none !important;}
-.sec-body{overflow:hidden;transition:max-height .28s ease,opacity .22s ease;}
-.sec-body.folded{display:block !important;max-height:0 !important;opacity:0;pointer-events:none;}
+.sec-body,.prefs,.eh-grid{overflow:hidden;transition:max-height .28s ease,opacity .22s ease;}
+.sec-body.folded,.prefs.folded,.eh-grid.folded{display:block !important;max-height:0 !important;opacity:0;pointer-events:none;}
 
 /* === Baustein: Filter & Favoriten === */
 .filterbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
@@ -441,7 +441,7 @@ mark{background:var(--amber-bg);color:var(--amber);border-radius:2px;padding:0 2
   body{background:#fff;max-width:100%;padding-top:0;}
   .theme-toggle,.design-select,.fold-btn,.tabs,.filterbar,.fav-btn,.ss-wrap,.cmp-overlay,.dt-q,.tagchip,.data-tools{display:none !important;}
   .folded{display:block !important;}
-  .sec-body.folded{max-height:none !important;opacity:1;pointer-events:auto;}
+  .sec-body.folded,.prefs.folded,.eh-grid.folded{max-height:none !important;opacity:1;pointer-events:auto;}
   .page{display:block !important;}
   .pref{background:rgba(0,0,0,.03);}
   .pcard,.info-card,.eh-card,.tip,.pref{break-inside:avoid;box-shadow:none !important;}
@@ -452,7 +452,7 @@ mark{background:var(--amber-bg);color:var(--amber);border-radius:2px;padding:0 2
 /* DESIGN-AUSWAHL (nur Template): die folgenden zwei Zeilen in fertigen Projekten löschen und stattdessen data-design fest im <html>-Tag setzen */
 var d=p.get('design')||localStorage.getItem('design')||'polar';if(p.get('design'))try{localStorage.setItem('design',d);}catch(e){}
 document.documentElement.setAttribute('data-design',d);})();</script>
-<noscript><style>.folded{display:block !important;}.page{display:block;}.tabs,.fold-btn,.theme-toggle,.design-select,.filterbar,.fav-btn,.ss-wrap,.cmp-overlay,.dt-q,.dt-opt,.tagchip,.data-tools{display:none;}</style></noscript>
+<noscript><style>.folded{display:block !important;}.sec-body.folded,.prefs.folded,.eh-grid.folded{max-height:none !important;opacity:1 !important;}.page{display:block;}.tabs,.fold-btn,.theme-toggle,.design-select,.filterbar,.fav-btn,.ss-wrap,.cmp-overlay,.dt-q,.dt-opt,.tagchip,.data-tools{display:none;}</style></noscript>
 </head>
 <body>
 <!-- DESIGN-AUSWAHL — nur im Template! In fertigen Projekten: <select> löschen und data-design fest im <html>-Tag setzen -->
@@ -737,11 +737,7 @@ function toggleFold(id, btn) {
   var opening = el.classList.contains('folded');
   btn.textContent = opening ? '▾' : '▸';
   btn.setAttribute('aria-expanded', opening ? 'true' : 'false');
-  if (!el.classList.contains('sec-body')) {
-    el.classList.toggle('folded', !opening);
-    try { localStorage.setItem('fold-' + id, opening ? '0' : '1'); } catch (e) {}
-    return;
-  }
+  try { localStorage.setItem('fold-' + id, opening ? '0' : '1'); } catch (e) {}
   if (opening) {
     el.style.maxHeight = '0'; el.style.opacity = '0';
     el.classList.remove('folded');
