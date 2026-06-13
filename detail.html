@@ -376,6 +376,8 @@ body{font-size:13px;}
 .fold-btn{cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;line-height:1;padding:5px 10px;border-radius:var(--r-xs);border:var(--bw) solid var(--bdr2);background:var(--bg3);color:var(--tx2);flex-shrink:0;margin-left:auto;}
 .fold-btn:hover{background:var(--bg4);color:var(--tx);}
 .folded{display:none !important;}
+.sec-body{overflow:hidden;transition:max-height .28s ease,opacity .22s ease;}
+.sec-body.folded{display:block !important;max-height:0 !important;opacity:0;pointer-events:none;}
 .back-btn{position:fixed;top:.75rem;left:.75rem;z-index:200;margin:0;}
 body{padding-top:3.4rem;}
 
@@ -490,6 +492,7 @@ mark{background:var(--amber-bg);color:var(--amber);border-radius:2px;padding:0 2
   body{background:#fff;max-width:100%;padding-top:0;}
   .theme-toggle,.design-select,.back-btn,.fold-btn,.lb-btn,.toc,.map-embed,.wtoggle,.totop,.lightbox,.data-tools,.notes-status{display:none !important;}
   .folded{display:block !important;}
+  .sec-body.folded{max-height:none !important;opacity:1;pointer-events:auto;}
   .wsec{display:block !important;}
   .b-sun{background:#fff8e0;color:#7a5500;border-color:#d8a830;}
   .tip-sun{background:#fffbea;border-color:#d8a830;color:#7a5500;}
@@ -950,7 +953,25 @@ function showRoute(btn){
 </script>
 <!-- SCRIPT-BLOCK 5: Fold + TOC-Aufklapp-Listener -->
 <script>
-function toggleFold(id,btn){var f=document.getElementById(id).classList.toggle('folded');btn.textContent=f?'▸':'▾';btn.setAttribute('aria-expanded',f?'false':'true');}
+function toggleFold(id,btn){
+  var el=document.getElementById(id);
+  var opening=el.classList.contains('folded');
+  btn.textContent=opening?'▾':'▸';
+  btn.setAttribute('aria-expanded',opening?'true':'false');
+  if(!el.classList.contains('sec-body')){el.classList.toggle('folded',!opening);return;}
+  if(opening){
+    el.style.maxHeight='0';el.style.opacity='0';
+    el.classList.remove('folded');
+    var h=el.scrollHeight;
+    requestAnimationFrame(function(){el.style.maxHeight=h+'px';el.style.opacity='1';});
+    el.addEventListener('transitionend',function c(e){if(e.propertyName!=='max-height')return;el.removeEventListener('transitionend',c);el.style.maxHeight=el.style.opacity='';});
+  }else{
+    el.style.maxHeight=el.scrollHeight+'px';
+    el.offsetHeight;
+    el.style.maxHeight='0';el.style.opacity='0';
+    el.addEventListener('transitionend',function c(e){if(e.propertyName!=='max-height')return;el.removeEventListener('transitionend',c);el.classList.add('folded');el.style.maxHeight=el.style.opacity='';});
+  }
+}
 document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('click',function(){var sec=document.querySelector(a.getAttribute('href'));if(!sec)return;var b=sec.querySelector('.sec-body.folded');if(b){var fb=sec.querySelector('.fold-btn');toggleFold(b.id,fb);}});});
 // Permalink-Buttons: 🔗 hinter jedem Sektions-Titel mit ID
 (function(){

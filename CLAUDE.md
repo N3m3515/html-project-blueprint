@@ -242,7 +242,8 @@ Funktioniert **nur auf HTTPS** (GitHub Pages, Netlify, eigener Server) — bei `
 Alle Top-Level-Sektionen (`.sec`) sind einklappbar:
 
 - Inhalt nach der `.sec-hd` in `<div class="sec-body" id="<sec-id>-body">` wrappen (Sektionen ohne eigene `id`: fortlaufend `secbody-N`).
-- Rechts in der `.sec-hd` ein `.fold-btn` — **nur Pfeil** als Inhalt (`▾` offen / `▸` zu); `toggleFold(id,btn)` toggelt `.folded{display:none !important}` und tauscht den Pfeil.
+- Rechts in der `.sec-hd` ein `.fold-btn` — **nur Pfeil** als Inhalt (`▾` offen / `▸` zu); `toggleFold(id,btn)` animiert `.sec-body` per `max-height`-Transition (0.28s ease) + Opacity (0.22s ease) und tauscht den Pfeil.
+- **Animation**: `.sec-body` hat `overflow:hidden` + CSS-Transition; `.sec-body.folded` überschreibt `display:none` mit `display:block !important; max-height:0 !important; opacity:0`. `toggleFold` misst die echte Höhe via `scrollHeight`, setzt sie als Inline-`max-height` und animiert. Nicht-`.sec-body`-Elemente (z. B. `#prefs`, `#eh-grid` auf der Index) erhalten den klassischen `display:none/block`-Toggle ohne Animation. Print-Block setzt `.sec-body.folded{max-height:none !important;opacity:1}` — gedruckt werden alle Sektionen aufgeklappt. `prefers-reduced-motion` schaltet die Transition ab (globale `*{transition:none !important}`-Regel im Reduced-Motion-Block).
 - **Defaults**: Neue Sektionen starten offen (`▾`, ohne `folded`). Eingeklappt starten nur „Nachschlage-Sektionen" (Detailinfos, die man selten braucht). Auf der Index: alles eingeklappt außer den Haupt-Karten-Sektionen.
 - **Kein localStorage für Sektions-Fold** — nur die beiden Index-Kästen (`#prefs`, `#eh-grid`) merken sich ihren Zustand (`fold-<id>`-Keys). Wichtig gegen Aufblitzen: deren Default ist **eingeklappt direkt im Markup** (`folded`-Klasse), das Init-Script klappt nur auf, wenn localStorage explizit `'0'` enthält.
 - **TOC-Integration**: Ein Klick auf einen TOC-Chip klappt die Ziel-Sektion automatisch auf (Listener im Fold-Script).
@@ -280,7 +281,7 @@ Jede Seite ist druckbar (Strg+P), unabhängig vom aktiven Theme:
 - **Aufgeklappt**: alle `folded`-Sektionen, alle Tab-`.page`s und beide `wsec`-Ansichten — gedruckt wird immer der komplette Inhalt. FAQ-`<details>` lassen sich nicht per CSS öffnen — dafür öffnet ein `beforeprint`-Helfer in Script-Block 6 alle Einträge und setzt sie nach dem Druck zurück.
 - Interaktive Baustein-Elemente (Suchfeld, Filterbar, Sortier-Select, Entscheidungsbaum-Buttons, Vergleichs-Overlay, Daten-Leiste, Notiz-Status) sind im Druck ausgeblendet; das Notiz-Textfeld druckt seinen Inhalt mit.
 - `break-inside:avoid` auf Cards/POIs/Kacheln/Tabellenzeilen verhindert zerschnittene Kästen am Seitenumbruch; Schatten sind entfernt.
-- **Reihenfolge wichtig**: Der Print-Block muss der letzte CSS-Block bleiben, damit sein `.folded{display:block !important}` das `display:none !important` des Fold-Blocks überstimmt (gleiche Spezifität → letzter gewinnt).
+- **Reihenfolge wichtig**: Der Print-Block muss der letzte CSS-Block bleiben, damit sein `.folded{display:block !important}` das `display:none !important` des Fold-Blocks überstimmt (gleiche Spezifität → letzter gewinnt). Für animierte `.sec-body.folded`-Elemente ergänzt der Print-Block zusätzlich `max-height:none !important;opacity:1` — sonst bleiben sie trotz `display:block` auf Höhe 0 und unsichtbar.
 
 ## Wiederverwendbare Klassen (Katalog)
 
