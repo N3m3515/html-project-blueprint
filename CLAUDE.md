@@ -466,6 +466,73 @@ print('Kontrast-Check:', f'{issues} Verstöße' if issues else 'OK')
 EOF
 ```
 
+- **Vollständigkeits-Check** — prüft ob jede `.html`-Datei im Verzeichnis auch in der `sw.js`-PRECACHE-Liste und in `search-index.js` eingetragen ist. Läuft still durch, wenn die Dateien fehlen (PWA- bzw. Such-Baustein nicht aktiv):
+
+```bash
+python3 - <<'EOF'
+import re,glob,os
+html=sorted(glob.glob('*.html')); issues=0
+if os.path.exists('sw.js'):
+    sw=open('sw.js',encoding='utf-8').read()
+    m=re.search(r'const PRECACHE\s*=\s*\[(.*?)\]',sw,re.S)
+    pc=set(re.findall(r"'([^']+\.html)'",m.group(1))) if m else set()
+    for f in html:
+        if f not in pc: print(f'⚠ PRECACHE fehlt: {f}'); issues+=1
+if os.path.exists('search-index.js'):
+    si=open('search-index.js',encoding='utf-8').read()
+    idx=set(re.findall(r'\burl\s*:\s*"([^"]+\.html)"',si))
+    for f in html:
+        if f not in idx: print(f'⚠ search-index.js fehlt: {f}'); issues+=1
+print('Vollständigkeits-Check:',f'{issues} Verstöße' if issues else 'OK')
+EOF
+```
+
+- **`data-ck`-Eindeutigkeit** — prüft ob Checklisten-Keys projektweit wirklich eindeutig sind (`data-ck` darf nicht in mehreren Dateien oder mehrfach auf einer Seite vorkommen; Duplikate überschreiben sich im localStorage still):
+
+```bash
+python3 - <<'EOF'
+import re,glob
+from collections import defaultdict
+seen=defaultdict(list)
+for f in sorted(glob.glob('*.html')):
+    for ck in re.findall(r'data-ck="([^"]+)"',open(f,encoding='utf-8').read()):
+        seen[ck].append(f)
+issues=0
+for ck,files in sorted(seen.items()):
+    if len(files)>1: print(f'⚠ data-ck="{ck}" doppelt: {", ".join(files)}'); issues+=1
+print('data-ck-Eindeutigkeit:',f'{issues} Duplikate' if issues else 'OK')
+EOF
+```
+
+- **Fold-ARIA-Konsistenz** — prüft ob `aria-expanded` auf jedem `.fold-btn` mit dem tatsächlichen `folded`-Zustand des Ziel-Elements übereinstimmt. Typischer Fehler beim Kopieren: Button und Element geraten aus dem Takt:
+
+```bash
+python3 - <<'EOF'
+from html.parser import HTMLParser
+import glob
+
+class FC(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.btns={}; self.els={}
+    def handle_starttag(self,tag,attrs):
+        d=dict(attrs)
+        if 'fold-btn' in d.get('class',''):
+            c=d.get('aria-controls','')
+            if c: self.btns[c]=d.get('aria-expanded','')
+        if 'id' in d: self.els[d['id']]='folded' in d.get('class','').split()
+
+for f in sorted(glob.glob('*.html')):
+    p=FC(); p.feed(open(f,encoding='utf-8').read()); issues=0
+    for cid,exp in p.btns.items():
+        if cid not in p.els: print(f'{f}: Ziel fehlt: #{cid}'); issues+=1; continue
+        folded=p.els[cid]
+        if exp=='true' and folded: print(f'{f}: #{cid} aria-expanded=true, aber "folded" gesetzt'); issues+=1
+        elif exp=='false' and not folded: print(f'{f}: #{cid} aria-expanded=false, aber kein "folded"'); issues+=1
+    print(f'{f} — Fold-ARIA:','OK' if not issues else f'{issues} Inkonsistenz(en)')
+EOF
+```
+
 - **Links verifizieren** vor dem Einfügen: `curl -s -o /dev/null -w "%{http_code}" -L URL`. Faustregeln: `403` = meist Bot-Schutz, im Browser OK — behalten · `000` = tot — Link entfernen, ggf. Maps-Link behalten · Deep-Paths auf kleinen Sites oft `404` — auf Root kürzen. Tote Domains mit Ersatz in der Projekt-CLAUDE.md dokumentieren.
 - **Faktendaten nie schätzen** (Fahrzeiten, Preise, Öffnungszeiten) — immer gegen eine Quelle prüfen (z. B. OSRM `router.project-osrm.org` für Fahrzeiten).
 - Keine Script-/Hilfsdateien im Projektordner ablegen (Prüf-Snippets per Heredoc ausführen, siehe oben).

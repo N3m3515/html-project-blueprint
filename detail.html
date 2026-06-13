@@ -337,6 +337,7 @@ html[data-design="brutal"][data-theme="light"]{
   --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
 }
 
+
 /* — Design „material" — Material Design 3: Roboto, tonale Flächen, lila Primärfarbe, M3-Shape-Scale — */
 html[data-design="material"]{
   --r-xl:28px;--r-lg:16px;--r-md:12px;--r-sm:8px;--r-xs:4px;--r-pill:9999px;
@@ -374,12 +375,12 @@ html[data-design="material"][data-theme="light"]{
 /* M3 Typography — Body Medium 14sp/0.875rem/400; Title Large 22sp/400; Label 500wght */
 html[data-design="material"] body{font-size:.875rem;line-height:1.25rem;letter-spacing:.016em;}
 html[data-design="material"] .hero-title{font-size:2rem;line-height:2.5rem;font-weight:400;letter-spacing:0;}
-html[data-design="material"] .sec-title{font-size:1.375rem;line-height:1.75rem;font-weight:400;letter-spacing:0;}
+html[data-design="material"] .sec-title,html[data-design="material"] .eh-title{font-size:1.375rem;line-height:1.75rem;font-weight:400;letter-spacing:0;}
 html[data-design="material"] .lb,html[data-design="material"] .lb-btn{font-weight:500;letter-spacing:.00625em;}
 html[data-design="material"] .b,html[data-design="material"] .b-sm{font-weight:500;letter-spacing:.03125em;}
 html[data-design="material"] .tagchip{font-weight:500;letter-spacing:.00625em;}
 /* M3 Shapes — Buttons=Full(pill), Chips=Small(8px), Badges=pill */
-html[data-design="material"] .lb,html[data-design="material"] .lb-btn,html[data-design="material"] .back-btn{border-radius:var(--r-pill);}
+html[data-design="material"] .lb,html[data-design="material"] .lb-btn,html[data-design="material"] .pc-action,html[data-design="material"] .back-btn{border-radius:var(--r-pill);}
 html[data-design="material"] .b{border-radius:var(--r-pill);}
 html[data-design="material"] .tagchip{border-radius:var(--r-sm);}
 /* M3 Filled Text Field — top-only radius + bottom border indicator */
@@ -417,7 +418,8 @@ html[data-design="glass"] .hero,html[data-design="glass"] .card,
 html[data-design="glass"] .pcard,html[data-design="glass"] .info-card,
 html[data-design="glass"] .eh-box,html[data-design="glass"] .eh-card,
 html[data-design="glass"] .rt-wrap,html[data-design="glass"] .lang-wrap,
-html[data-design="glass"] .ti-wrap,html[data-design="glass"] .tip{
+html[data-design="glass"] .ti-wrap,html[data-design="glass"] .tip,
+html[data-design="glass"] .filterbar{
   backdrop-filter:blur(24px) saturate(1.8) brightness(1.05);
   -webkit-backdrop-filter:blur(24px) saturate(1.8) brightness(1.05);
 }
@@ -450,7 +452,8 @@ html[data-design="glass"][data-theme="light"] .eh-card,
 html[data-design="glass"][data-theme="light"] .rt-wrap,
 html[data-design="glass"][data-theme="light"] .lang-wrap,
 html[data-design="glass"][data-theme="light"] .ti-wrap,
-html[data-design="glass"][data-theme="light"] .tip{
+html[data-design="glass"][data-theme="light"] .tip,
+html[data-design="glass"][data-theme="light"] .filterbar{
   backdrop-filter:blur(24px) saturate(1.6) brightness(1.02);
   -webkit-backdrop-filter:blur(24px) saturate(1.6) brightness(1.02);
 }
