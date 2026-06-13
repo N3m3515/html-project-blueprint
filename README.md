@@ -28,7 +28,7 @@ start index.html           # Windows
 
 `index.html` ist die Übersichtsseite (Tabs, Karten-Grid, Suche, Filter), `detail.html` das Muster für beliebig viele Unterseiten.
 
-## Theming: 6 Farbwelten × Dark/Light
+## Theming: 8 Farbwelten × Dark/Light
 
 Zwei unabhängige Achsen am `<html>`-Tag: `data-theme` (dark/light) und `data-design` (Farbwelt). Im Template schaltet eine Auswahlbox live um; in fertigen Projekten wird das Design einmal fixiert.
 

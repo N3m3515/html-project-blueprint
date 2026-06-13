@@ -4,5 +4,6 @@
 // PFLICHT bei jeder neuen Seite: hier einen Eintrag ergänzen (Schritt in der „Neue Detailseite"-Checkliste der CLAUDE.md).
 var SEARCH_INDEX=[
   {title:"Übersicht", url:"index.html", desc:"Startseite mit Tabs, Schnellauswahl, Filter & Favoriten, Entscheidungsbaum", keywords:"start home index kategorien tabs schnellauswahl favoriten"},
-  {title:"Eintrag Alpha — Detailseite", url:"detail.html", desc:"Schaukasten aller Detail-Bausteine: Karten, Termine, Checkliste, Galerie, Timeline, FAQ, Notizen", keywords:"alpha detail beispiel musterstadt anreise termine vergleich checkliste galerie timeline faq notizen"}
+  {title:"Eintrag Alpha — Detailseite", url:"detail.html", desc:"Schaukasten aller Detail-Bausteine: Karten, Termine, Checkliste, Galerie, Timeline, FAQ, Notizen", keywords:"alpha detail beispiel musterstadt anreise termine vergleich checkliste galerie timeline faq notizen"},
+  {title:"IT-Dashboard", url:"dashboard.html", desc:"Monitoring-Template: Status-Matrix mit Sparklines, Metrik-Karten, Log-Viewer, Inventar, Wartungsfenster, Incidents", keywords:"dashboard monitoring status matrix metriken logs inventar wartung incidents infrastruktur"}
 ];
