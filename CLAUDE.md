@@ -92,9 +92,11 @@ Nicht jedes Projekt braucht jeden Baustein (eine Google-Maps-Anbindung ist z. B.
 
 **4. Bausteine** (pro Baustein nur fragen, wenn das Thema es nahelegt)
 - Gibt es Geo-Bezug (Orte, Anfahrten) → Google-Maps-Routen und/oder OSM-Ortskarten?
-- Viele gleichartige Einträge → Live-Suche, Tag-Filter, Favoriten, Schnellauswahl-Box?
-- Gibt es Abhakbares (Packliste, To-dos) → Checkliste? Bilder → Galerie? Abläufe/Tagespläne → Timeline? Vergleichswerte → Balkendiagramm oder `rt`-Tabelle?
+- Viele gleichartige Einträge → Live-Suche + Tag-Filter + Favoriten + Schnellauswahl-Box? Sollen Filter und aktiver Tab in der URL gespeichert werden (URL-State — sinnvoll wenn Links geteilt/bookmarkt werden)?
+- Gibt es Abhakbares (Packliste, To-dos) → Checkliste? Bilder → Galerie (mit ←/→-Navigation)? Abläufe/Tagespläne → Timeline? Vergleichswerte → Balkendiagramm oder `rt`-Tabelle?
 - Brauchen Inhalte zwei Sichten (z. B. Sonne/Regen, Einsteiger/Profi, Sommer/Winter) → Zwei-Ansichten-Toggle, und wie heißen die Sichten?
+- Werden Detailseiten-Sektionen direkt verlinkt (aus externen Quellen, per Teilen-Funktion) → Abschnitts-Permalinks aktivieren?
+- Wird die Seite auf HTTPS gehostet (GitHub Pages, Netlify, …) → PWA-Baustein aktivieren (installierbar als App, Offline-Nutzung); `manifest.json`/`icon.svg`/`sw.js` anpassen und `PRECACHE`-Liste aktualisieren.
 
 **5. Inhalte**
 - In welcher Sprache werden die Inhalte geschrieben?
@@ -104,8 +106,9 @@ Nicht jedes Projekt braucht jeden Baustein (eine Google-Maps-Anbindung ist z. B.
 
 **6. Pflege & Rahmen**
 - Einmaliges Projekt oder dauerhaft gepflegt? Wer pflegt es — wie ausführlich soll die Projekt-CLAUDE.md Konventionen festhalten?
-- Ist Drucken/PDF ein echter Anwendungsfall (Print-Block ist vorhanden, ggf. Inhalte druckfreundlich priorisieren)?
+- Ist Drucken/PDF ein echter Anwendungsfall? (Druckauswahl-Baustein erlaubt, Sektionen vor dem Drucken abzuwählen — sinnvoll bei langen Seiten.)
 - Gibt es Barrierefreiheits-Anforderungen über den eingebauten Standard (ARIA, Reduced Motion, noscript) hinaus?
+- Falls PWA aktiv: bei jeder neuen `.html`-Seite die `PRECACHE`-Liste in `sw.js` ergänzen und die `CACHE`-Versionsnummer erhöhen.
 
 ## Design-System
 
