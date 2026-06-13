@@ -337,6 +337,103 @@ html[data-design="brutal"][data-theme="light"]{
   --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
 }
 
+/* — Design „material" — Material Design 3: tonale Flächen, lila Primärfarbe, M3-Radien — */
+html[data-design="material"]{
+  --r-xl:28px;--r-lg:16px;--r-md:12px;--r-sm:8px;--r-xs:4px;--r-pill:9999px;
+  --bw:1px;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 1px 3px 1px rgba(0,0,0,.15);--shadow-hover:0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15);--shadow-lift:0 1px 3px rgba(0,0,0,.3),0 4px 8px 3px rgba(0,0,0,.15);
+  --bg:#141218;--bg2:#211f26;--bg3:#2b2930;--bg4:#36343b;
+  --bdr:#49454f;--bdr2:#79747e;
+  --tx:#e6e0e9;--tx2:#cac4d0;--tx3:#938f99;
+  --blue:#d0bcff;--blue-bg:#4f378b;--blue-dim:#381e72;--blue-bdr:#d0bcff;
+  --teal:#ccc2dc;--teal-bg:#4a4458;--teal-dim:#332d41;--teal-bdr:#ccc2dc;
+  --green:#b5cdb5;--green-bg:#354b35;--green-bdr:#b5cdb5;
+  --amber:#f0c070;--amber-bg:#3c2800;--amber-bdr:#f0c070;
+  --coral:#f2b8b5;--coral-bg:#8c1d18;--coral-bdr:#f2b8b5;
+  --purple:#d0bcff;--purple-bg:#4f378b;--purple-bdr:#d0bcff;
+  --gray-dim:#2b2930;
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+html[data-design="material"][data-theme="light"]{
+  --r-xl:28px;--r-lg:16px;--r-md:12px;--r-sm:8px;--r-xs:4px;--r-pill:9999px;
+  --bw:1px;
+  --shadow:0 1px 2px rgba(0,0,0,.12),0 1px 3px 1px rgba(0,0,0,.06);--shadow-hover:0 1px 2px rgba(0,0,0,.12),0 2px 6px 2px rgba(0,0,0,.08);--shadow-lift:0 1px 3px rgba(0,0,0,.12),0 4px 8px 3px rgba(0,0,0,.08);
+  --bg:#fffbff;--bg2:#ffffff;--bg3:#f3edf7;--bg4:#ece6f0;
+  --bdr:#cac4d0;--bdr2:#79747e;
+  --tx:#1d1b20;--tx2:#49454f;--tx3:#79747e;
+  --blue:#6750a4;--blue-bg:#eaddff;--blue-dim:#d9cdf5;--blue-bdr:#9882d9;
+  --teal:#625b71;--teal-bg:#e8def8;--teal-dim:#d8cdf5;--teal-bdr:#a093c0;
+  --green:#386238;--green-bg:#c8efc8;--green-bdr:#82c482;
+  --amber:#7a5c00;--amber-bg:#f8eed5;--amber-bdr:#d4b060;
+  --coral:#b3261e;--coral-bg:#f9dedc;--coral-bdr:#dc6b6b;
+  --purple:#6750a4;--purple-bg:#eaddff;--purple-bdr:#9882d9;
+  --gray-dim:#e6e0e9;
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+
+/* — Design „glass" — Apple Liquid Glass: Highlights+Shadows+Glow+Tint via backdrop-blur — */
+html[data-design="glass"]{
+  --r-xl:28px;--r-lg:22px;--r-md:18px;--r-sm:14px;--r-xs:10px;--r-pill:9999px;
+  --bw:1px;
+  --shadow:0 2px 16px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.16);--shadow-hover:0 4px 28px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.22);--shadow-lift:0 8px 40px rgba(0,0,0,.50),inset 0 1px 0 rgba(255,255,255,.28);
+  --bg:rgba(16,8,32,.01);--bg2:rgba(255,255,255,.07);--bg3:rgba(255,255,255,.12);--bg4:rgba(255,255,255,.18);
+  --bdr:rgba(255,255,255,.14);--bdr2:rgba(255,255,255,.26);
+  --tx:rgba(255,255,255,.96);--tx2:rgba(255,255,255,.65);--tx3:rgba(255,255,255,.40);
+  --blue:#a8d0ff;--blue-bg:rgba(88,156,255,.16);--blue-dim:rgba(88,156,255,.26);--blue-bdr:rgba(88,156,255,.45);
+  --teal:#5cf0c8;--teal-bg:rgba(40,210,168,.16);--teal-dim:rgba(40,210,168,.26);--teal-bdr:rgba(40,210,168,.45);
+  --green:#88f060;--green-bg:rgba(80,210,50,.16);--green-bdr:rgba(80,210,50,.45);
+  --amber:#ffd460;--amber-bg:rgba(255,196,32,.16);--amber-bdr:rgba(255,196,32,.45);
+  --coral:#ff8888;--coral-bg:rgba(255,80,70,.16);--coral-bdr:rgba(255,80,70,.45);
+  --purple:#cc9cff;--purple-bg:rgba(172,88,255,.16);--purple-bdr:rgba(172,88,255,.45);
+  --gray-dim:rgba(255,255,255,.08);
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+html[data-design="glass"] body{
+  background:linear-gradient(145deg,#1e0442 0%,#04112e 45%,#032a12 100%);
+  background-attachment:fixed;min-height:100vh;
+}
+html[data-design="glass"] .hero,html[data-design="glass"] .card,
+html[data-design="glass"] .pcard,html[data-design="glass"] .info-card,
+html[data-design="glass"] .eh-box,html[data-design="glass"] .eh-card,
+html[data-design="glass"] .rt-wrap,html[data-design="glass"] .lang-wrap,
+html[data-design="glass"] .ti-wrap,html[data-design="glass"] .tip{
+  backdrop-filter:blur(24px) saturate(1.8) brightness(1.05);
+  -webkit-backdrop-filter:blur(24px) saturate(1.8) brightness(1.05);
+}
+html[data-design="glass"][data-theme="light"]{
+  --r-xl:28px;--r-lg:22px;--r-md:18px;--r-sm:14px;--r-xs:10px;--r-pill:9999px;
+  --bw:1px;
+  --shadow:0 2px 14px rgba(0,0,0,.08),inset 0 1px 0 rgba(255,255,255,.85);--shadow-hover:0 4px 22px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.95);--shadow-lift:0 8px 32px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.98);
+  --bg:rgba(255,255,255,.01);--bg2:rgba(255,255,255,.62);--bg3:rgba(255,255,255,.40);--bg4:rgba(255,255,255,.78);
+  --bdr:rgba(0,0,0,.07);--bdr2:rgba(0,0,0,.15);
+  --tx:#180e2e;--tx2:#38285e;--tx3:#786898;
+  --blue:#2558cc;--blue-bg:rgba(37,88,204,.09);--blue-dim:rgba(37,88,204,.16);--blue-bdr:rgba(37,88,204,.30);
+  --teal:#0a7858;--teal-bg:rgba(10,120,88,.09);--teal-dim:rgba(10,120,88,.16);--teal-bdr:rgba(10,120,88,.30);
+  --green:#367820;--green-bg:rgba(54,120,32,.09);--green-bdr:rgba(54,120,32,.30);
+  --amber:#885e00;--amber-bg:rgba(136,94,0,.09);--amber-bdr:rgba(136,94,0,.30);
+  --coral:#be2c16;--coral-bg:rgba(190,44,22,.09);--coral-bdr:rgba(190,44,22,.30);
+  --purple:#6438b8;--purple-bg:rgba(100,56,184,.09);--purple-bdr:rgba(100,56,184,.30);
+  --gray-dim:rgba(0,0,0,.05);
+  --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
+}
+html[data-design="glass"][data-theme="light"] body{
+  background:linear-gradient(145deg,#ccd8f8 0%,#ecdcfc 48%,#baf0d8 100%);
+  background-attachment:fixed;min-height:100vh;
+}
+html[data-design="glass"][data-theme="light"] .hero,
+html[data-design="glass"][data-theme="light"] .card,
+html[data-design="glass"][data-theme="light"] .pcard,
+html[data-design="glass"][data-theme="light"] .info-card,
+html[data-design="glass"][data-theme="light"] .eh-box,
+html[data-design="glass"][data-theme="light"] .eh-card,
+html[data-design="glass"][data-theme="light"] .rt-wrap,
+html[data-design="glass"][data-theme="light"] .lang-wrap,
+html[data-design="glass"][data-theme="light"] .ti-wrap,
+html[data-design="glass"][data-theme="light"] .tip{
+  backdrop-filter:blur(24px) saturate(1.6) brightness(1.02);
+  -webkit-backdrop-filter:blur(24px) saturate(1.6) brightness(1.02);
+}
+
 .theme-toggle{position:fixed;top:.75rem;right:.75rem;z-index:200;background:var(--bg3);border:var(--bw) solid var(--bdr2);border-radius:var(--r-sm);padding:5px 10px;font-size:15px;cursor:pointer;color:var(--tx2);line-height:1;transition:background .15s,border-color .15s;}
 .theme-toggle:hover{background:var(--bg4);color:var(--tx);}
 
@@ -517,6 +614,8 @@ document.documentElement.setAttribute('data-design',d);})();</script>
   <option value="graphit">🎨 Graphit</option>
   <option value="terminal">🎨 Terminal</option>
   <option value="brutal">🎨 Brutal</option>
+  <option value="material">🎨 Material 3</option>
+  <option value="glass">🎨 Liquid Glass</option>
 </select>
 <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Light/Dark umschalten" aria-label="Zwischen hellem und dunklem Design umschalten">☀️</button>
 <a class="back-btn" href="index.html?tab=a">&#8592; Zurück zur Übersicht</a>

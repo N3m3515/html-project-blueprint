@@ -175,6 +175,8 @@ Neben `data-theme` (dark/light) trägt das `<html>`-Tag die Achse **`data-design
 | **Graphit** | `graphit` | neutral, entsättigte Akzente, dezent | `#101012` Anthrazit | `#f5f5f7` Hellgrau |
 | **Terminal** ⚡ | `terminal` | radikal: Monospace-Schrift, null Radien, keine Schatten, Phosphorgrün | `#0a0e0a` CRT-Schwarzgrün | `#f6f3ea` Papier-Terminal |
 | **Brutal** ⚡ | `brutal` | radikal: null Radien, 2px-Rahmen in Akzentfarbe, harte Offset-Schatten | `#141414` Hartschwarz | `#ffffff` Weiß + schwarze Rahmen |
+| **Material 3** | `material` | Google M3: lila Primärfarbe (primary80=#d0bcff/primary40=#6750a4), tonale Surfaces, exakte M3-Shape-Tokens (xl=28/lg=16/md=12/sm=8/xs=4px), M3-Elevation-Shadows | `#141218` neutral6 | `#fffbff` neutral99 |
+| **Liquid Glass** ⚡ | `glass` | Apple Liquid Glass: Highlights+Shadows+Glow+Tint via `backdrop-filter:blur(24px) saturate(1.8)`, innerer Specular-Highlight im Shadow-Token, sehr runde Radien (xl=28/lg=22), Gradient-Body | `#1e0442` → `#04112e` → `#032a12` | `#ccd8f8` → `#ecdcfc` → `#baf0d8` |
 
 ⚡ = nutzt die Struktur-Tokens (siehe unten) — Beleg, dass Designs weit über Farbwechsel hinausgehen können.
 
