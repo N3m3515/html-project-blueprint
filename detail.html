@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#0f1117" id="theme-color-meta">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg:#0f1117;--bg2:#181c27;--bg3:#1f2333;--bg4:#252a3a;
@@ -337,10 +337,11 @@ html[data-design="brutal"][data-theme="light"]{
   --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
 }
 
-/* — Design „material" — Material Design 3: tonale Flächen, lila Primärfarbe, M3-Radien — */
+/* — Design „material" — Material Design 3: Roboto, tonale Flächen, lila Primärfarbe, M3-Shape-Scale — */
 html[data-design="material"]{
   --r-xl:28px;--r-lg:16px;--r-md:12px;--r-sm:8px;--r-xs:4px;--r-pill:9999px;
   --bw:1px;
+  --font-body:'Roboto',system-ui,-apple-system,sans-serif;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 1px 3px 1px rgba(0,0,0,.15);--shadow-hover:0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15);--shadow-lift:0 1px 3px rgba(0,0,0,.3),0 4px 8px 3px rgba(0,0,0,.15);
   --bg:#141218;--bg2:#211f26;--bg3:#2b2930;--bg4:#36343b;
   --bdr:#49454f;--bdr2:#79747e;
@@ -370,6 +371,26 @@ html[data-design="material"][data-theme="light"]{
   --gray-dim:#e6e0e9;
   --ok:var(--teal);--no:var(--coral);--maybe:var(--amber);
 }
+/* M3 Typography — Body Medium 14sp/0.875rem/400; Title Large 22sp/400; Label 500wght */
+html[data-design="material"] body{font-size:.875rem;line-height:1.25rem;letter-spacing:.016em;}
+html[data-design="material"] .hero-title{font-size:2rem;line-height:2.5rem;font-weight:400;letter-spacing:0;}
+html[data-design="material"] .sec-title{font-size:1.375rem;line-height:1.75rem;font-weight:400;letter-spacing:0;}
+html[data-design="material"] .lb,html[data-design="material"] .lb-btn{font-weight:500;letter-spacing:.00625em;}
+html[data-design="material"] .b,html[data-design="material"] .b-sm{font-weight:500;letter-spacing:.03125em;}
+html[data-design="material"] .tagchip{font-weight:500;letter-spacing:.00625em;}
+/* M3 Shapes — Buttons=Full(pill), Chips=Small(8px), Badges=pill */
+html[data-design="material"] .lb,html[data-design="material"] .lb-btn,html[data-design="material"] .back-btn{border-radius:var(--r-pill);}
+html[data-design="material"] .b{border-radius:var(--r-pill);}
+html[data-design="material"] .tagchip{border-radius:var(--r-sm);}
+/* M3 Filled Text Field — top-only radius + bottom border indicator */
+html[data-design="material"] .fsearch{border-radius:var(--r-xs) var(--r-xs) 0 0;border:none;border-bottom:1px solid var(--bdr2);background:var(--bg3);}
+html[data-design="material"] .fsearch:focus{border-bottom:2px solid var(--blue);outline:none;}
+/* M3 State Layers — 8% primary tint on hover */
+html[data-design="material"] .card,html[data-design="material"] .pcard,html[data-design="material"] .poi{position:relative;overflow:hidden;}
+html[data-design="material"] .card::after,html[data-design="material"] .pcard::after,html[data-design="material"] .poi::after{content:'';position:absolute;inset:0;border-radius:inherit;background:var(--blue);opacity:0;pointer-events:none;transition:opacity .2s;}
+html[data-design="material"] .card:hover::after,html[data-design="material"] .plink:hover .pcard::after,html[data-design="material"] .poi:hover::after{opacity:.08;}
+/* Material Symbols Outlined defaults (loaded lazily via JS) */
+html[data-design="material"] .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;font-size:24px;line-height:1;vertical-align:middle;user-select:none;}
 
 /* — Design „glass" — Apple Liquid Glass: Highlights+Shadows+Glow+Tint via backdrop-blur — */
 html[data-design="glass"]{
@@ -602,7 +623,7 @@ mark{background:var(--amber-bg);color:var(--amber);border-radius:2px;padding:0 2
 <script>(function(){var p=new URLSearchParams(location.search),t=p.get('theme')||localStorage.getItem('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');if(p.get('theme'))try{localStorage.setItem('theme',t);}catch(e){}document.documentElement.setAttribute('data-theme',t);
 /* DESIGN-AUSWAHL (nur Template): die folgenden zwei Zeilen in fertigen Projekten löschen und stattdessen data-design fest im <html>-Tag setzen */
 var d=p.get('design')||localStorage.getItem('design')||'polar';if(p.get('design'))try{localStorage.setItem('design',d);}catch(e){}
-document.documentElement.setAttribute('data-design',d);})();</script>
+document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml=document.createElement('link');ml.id='mso-lnk';ml.rel='stylesheet';ml.href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap';document.head.appendChild(ml);}})();</script>
 <noscript><style>.folded{display:block !important;}.sec-body.folded{max-height:none !important;opacity:1 !important;}.wsec{display:block;}.wtoggle,.fold-btn,.theme-toggle,.design-select,.lb-btn,.totop,.data-tools,.notes-area,.notes-status{display:none;}.g-item{cursor:default;}.rt th{cursor:default;}</style></noscript>
 </head>
 <body>
@@ -1033,7 +1054,7 @@ function toggleTheme(){var h=document.documentElement,n=h.getAttribute('data-the
 (function(){var b=document.getElementById('theme-btn');if(b)b.textContent=(document.documentElement.getAttribute('data-theme')||'dark')==='light'?'🌙':'☀️';var mc=document.getElementById('theme-color-meta');if(mc)mc.content=(document.documentElement.getAttribute('data-theme')||'dark')==='light'?'#f5f7fb':'#0f1117';})();
 if('serviceWorker' in navigator && location.protocol !== 'file:')navigator.serviceWorker.register('sw.js',{updateViaCache:'none'});
 // DESIGN-AUSWAHL (nur Template): in fertigen Projekten komplett entfernen
-function setDesign(v){document.documentElement.setAttribute('data-design',v);try{localStorage.setItem('design',v);}catch(e){}}
+function setDesign(v){document.documentElement.setAttribute('data-design',v);try{localStorage.setItem('design',v);}catch(e){}if(v==='material'&&!document.getElementById('mso-lnk')){var ml=document.createElement('link');ml.id='mso-lnk';ml.rel='stylesheet';ml.href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap';document.head.appendChild(ml);}}
 (function(){var s=document.getElementById('design-select');if(s)s.value=document.documentElement.getAttribute('data-design')||'polar';})();
 </script>
 <!-- SCRIPT-BLOCK 4: Routen-Karten — OPTIONALER BAUSTEIN „Google-Maps-Routen" (MAP_ORIGIN = Basisort; ohne Geo-Bezug komplett weglassen) -->
