@@ -8,7 +8,7 @@ Entstanden ist das Template aus einem realen Projekt mit 31 Seiten (einem Famili
 
 - **Null Abhängigkeiten.** Keine npm-Installation, kein Bundler, kein Server. Klonen, `index.html` öffnen, fertig. Einzige externe Ressource ist ein Google Font — mit System-Font-Fallback.
 - **Jede Seite ist self-contained.** Kompletter eigener CSS- und JS-Block pro Datei. Eine Seite geht nie kaputt, weil eine andere geändert wurde — und einzelne Seiten lassen sich verschicken oder kopieren.
-- **Baukasten statt Framework.** Ein fester Kern (Theming, einklappbare Sektionen, Druckausgabe, Barrierefreiheit) plus über 25 optionale Bausteine, die sich einzeln übernehmen oder weglassen lassen. Die beiden Beispielseiten zeigen bewusst *alles* im Einsatz — sie sind Schaukasten, nicht Mindestumfang.
+- **Baukasten statt Framework.** Ein fester Kern (Theming, einklappbare Sektionen, Druckausgabe, Barrierefreiheit) plus über 25 optionale Bausteine, die sich einzeln übernehmen oder weglassen lassen. Die drei Beispielseiten zeigen bewusst *alles* im Einsatz — sie sind Schaukasten, nicht Mindestumfang.
 - **Für die Arbeit mit KI-Agenten gebaut.** Die ausführliche `CLAUDE.md` dokumentiert jede Konvention, jeden Fallstrick und einen Fragenkatalog für den Projektstart — [Claude Code](https://claude.com/claude-code) (oder ein anderes Agenten-Tool) kann daraus direkt neue Projekte aufbauen.
 
 ## Live-Demo
@@ -60,6 +60,7 @@ Möglich machen das **Struktur-Tokens**: Schrift, Eckenradien, Rahmenstärke und
 | Persistenz | abhakbare Checkliste mit Fortschrittsbalken · Notizfeld pro Seite · Termin-Intelligenz (vergangene Termine dimmen + Countdown) · Daten-Export/Import als JSON |
 | Komfort | Tastatur-Shortcuts (`t` Theme, `/` Suche) · Lightbox-Galerie **mit ←/→-Navigation** (Tastatur + Buttons) · **Druckauswahl** (🖨-Button wählt Sektionen vor dem Drucken) |
 | Offline & Mobil | **PWA-Baustein** (`manifest.json` + `sw.js`): installierbar als App, Offline-Nutzung via Service Worker — automatisch aktiv auf HTTPS, bei `file://` übersprungen |
+| IT-Monitoring | **IT-Dashboard** (`dashboard.html` + `data.js`): Status-Matrix mit Uptime-Badge + Latenz-Sparkline pro Service · Metric Cards mit SVG-Sparklines + Threshold-Balken · Log-Viewer mit Level-/Volltext-Filter und Pagination · Inventar-Grid · Wartungsfenster · Incident-Timeline mit proportionalem Dauer-Balken und MTTR · Tab-Titel-Ampel (❌/⚠/✅) · Auto-Refresh (HTTPS) |
 
 Jeder Baustein besteht aus einem markierten CSS-Block, optionalem Markup und einem benannten Script-Block — alles einzeln kopier- und entfernbar. Die `CLAUDE.md` dokumentiert pro Baustein, was dazugehört und wie man ihn sauber weglässt.
 
@@ -75,6 +76,8 @@ Jeder Baustein besteht aus einem markierten CSS-Block, optionalem Markup und ein
 ```
 ├── index.html        Übersichtsseite — Tabs, Karten-Grid, Suche, Filter, Entscheidungsbaum
 ├── detail.html       Detailseiten-Muster — alle Content- und Persistenz-Bausteine
+├── dashboard.html    IT-Dashboard — Status-Matrix, Metriken, Logs, Inventar, Wartung, Incidents
+├── data.js           Daten-Datei des IT-Dashboards (var DASH_DATA = {...}) — per Script erzeugen
 ├── search-index.js   Daten-Datei des Such-Bausteins (optional)
 ├── manifest.json     PWA-Manifest — bei Projektstart anpassen (Name, Icon, Farbe)
 ├── sw.js             Service Worker — cacht alle Seiten für Offline-Nutzung
