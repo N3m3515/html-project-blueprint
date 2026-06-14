@@ -661,7 +661,7 @@ kbd{display:inline-block;background:var(--bg3);border:var(--bw) solid var(--bdr2
 /* DESIGN-AUSWAHL (nur Template): die folgenden zwei Zeilen in fertigen Projekten löschen und stattdessen data-design fest im <html>-Tag setzen */
 var d=p.get('design')||localStorage.getItem('design')||'polar';if(p.get('design'))try{localStorage.setItem('design',d);}catch(e){}
 document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml=document.createElement('link');ml.id='mso-lnk';ml.rel='stylesheet';ml.href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap';document.head.appendChild(ml);}})();</script>
-<noscript><style>.folded{display:block !important;}.sec-body.folded{max-height:none !important;opacity:1 !important;}.wsec{display:block;}.wtoggle,.fold-btn,.theme-toggle,.design-select,.lb-btn,.totop,.data-tools,.notes-area,.notes-status{display:none;}.g-item{cursor:default;}.rt th{cursor:default;}</style></noscript>
+<noscript><style>.folded{display:block !important;}.sec-body.folded{max-height:none !important;opacity:1 !important;}.wsec{display:block;}.wtoggle,.fold-btn,.theme-toggle,.design-select,.lb-btn,.totop,.data-tools,.notes-area,.notes-status,.print-cfg-btn{display:none;}.g-item{cursor:default;}.rt th{cursor:default;}</style></noscript>
 </head>
 <body>
 <!-- Baustein: Ankündigungs-Banner — data-ann-key muss projektweit eindeutig sein -->
@@ -1426,7 +1426,7 @@ function updateCalc(){
     try{localStorage.setItem('calc-'+inp.dataset.calcKey,inp.value);}catch(e){}
   });
   var tv=document.getElementById('calc-total');
-  if(tv)tv.textContent=total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,'.')+'  €';
+  if(tv)tv.textContent=total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,'.')+' €';
 }
 function resetCalc(){
   document.querySelectorAll('.calc-input[data-calc-key]').forEach(function(inp){
@@ -1449,7 +1449,7 @@ function exportData(){
   var out={};
   for(var i=0;i<localStorage.length;i++){
     var k=localStorage.key(i);
-    if(k==='theme'||k==='design'||k==='favs'||/^(fold|ck|note|calc|ann)-/.test(k))out[k]=localStorage.getItem(k);
+    if(k==='theme'||k==='design'||k==='favs'||/^(fold|ck|note|calc|ann|rating)-/.test(k))out[k]=localStorage.getItem(k);
   }
   var a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,2)],{type:'application/json'}));
@@ -1466,7 +1466,7 @@ function importData(inp){
       var o=JSON.parse(r.result);
       if(typeof o!=='object'||Array.isArray(o)||!o)throw new Error('no object');
       Object.keys(o).forEach(function(k){
-        if(k==='theme'||k==='design'||k==='favs'||/^(fold|ck|note|calc|ann)-/.test(k))
+        if(k==='theme'||k==='design'||k==='favs'||/^(fold|ck|note|calc|ann|rating)-/.test(k))
           try{localStorage.setItem(k,String(o[k]));}catch(e){}
       });
       location.reload();

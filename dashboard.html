@@ -1078,7 +1078,7 @@ var _LS_KEYS=['theme','design','fold-prefs','fold-eh-grid','favs'];
 function exportData(){
   var out={};
   _LS_KEYS.forEach(function(k){var v=localStorage.getItem(k);if(v!==null)out[k]=v;});
-  for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&(k.startsWith('ck-')||k.startsWith('note-')))out[k]=localStorage.getItem(k);}
+  for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&(k.startsWith('ck-')||k.startsWith('note-')||k.startsWith('ann-')||k.startsWith('rating-')||k.startsWith('calc-')))out[k]=localStorage.getItem(k);}
   var a=document.createElement('a');a.href='data:application/json,'+encodeURIComponent(JSON.stringify(out,null,2));a.download='dashboard-export.json';a.click();
 }
 function importData(inp){
@@ -1088,7 +1088,7 @@ function importData(inp){
     try{
       var d=JSON.parse(e.target.result),allowed=new Set(_LS_KEYS),imp=0;
       Object.keys(d).forEach(function(k){
-        if(allowed.has(k)||k.startsWith('ck-')||k.startsWith('note-')){try{localStorage.setItem(k,d[k]);imp++;}catch(ex){}}
+        if(allowed.has(k)||k.startsWith('ck-')||k.startsWith('note-')||k.startsWith('ann-')||k.startsWith('rating-')||k.startsWith('calc-')){try{localStorage.setItem(k,d[k]);imp++;}catch(ex){}}
       });
       var di=document.getElementById('data-info');if(di)di.textContent=imp+' Einträge importiert.';
       setTimeout(function(){location.reload();},600);
