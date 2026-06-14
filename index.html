@@ -545,10 +545,12 @@ mark{background:var(--amber-bg);color:var(--amber);border-radius:2px;padding:0 2
 .ann-close{background:none;border:none;cursor:pointer;font-size:16px;line-height:1;color:var(--tx2);padding:2px 4px;border-radius:var(--r-xs);}
 .ann-close:hover{color:var(--tx);}
 /* === Baustein: Sterne-Bewertung === */
-.star-rating{display:flex;gap:2px;align-items:center;}
+.star-rating{display:flex;flex-direction:row-reverse;gap:2px;align-items:center;}
 .star-rating .sr-btn{background:none;border:none;cursor:pointer;font-size:16px;padding:1px;line-height:1;color:var(--tx3);transition:color .1s,transform .1s;}
 .star-rating .sr-btn.on{color:var(--amber);}
-.star-rating .sr-btn:hover{color:var(--amber);transform:scale(1.15);}
+.star-rating:hover .sr-btn.on{color:var(--tx3);}
+.star-rating:hover .sr-btn:hover~.sr-btn,.star-rating:hover .sr-btn:hover{color:var(--amber);}
+.star-rating .sr-btn:hover{transform:scale(1.15);}
 .star-rating-wrap{padding:6px 0 2px;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--tx3);}
 /* === Baustein: Tastatur-Shortcut-Übersicht === */
 .sc-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
@@ -985,7 +987,7 @@ function initStars() {
     var cur = 0;
     try { cur = parseInt(localStorage.getItem('rating-' + cardId) || '0', 10); } catch (e) {}
     wrap.innerHTML = '';
-    for (var s = 1; s <= 5; s++) {
+    for (var s = 5; s >= 1; s--) {
       (function (n) {
         var btn = document.createElement('button');
         btn.className = 'sr-btn' + (n <= cur ? ' on' : '');
