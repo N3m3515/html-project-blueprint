@@ -1,7 +1,7 @@
 // Service Worker — Baustein „PWA / Offline"
 // PFLEGE: CACHE-Version erhöhen nach jeder Inhaltsänderung (z. B. 'bp-v2') → zwingt alle Clients zum Update.
 // PFLEGE: PRECACHE-Liste aktualisieren wenn neue .html-Seiten hinzukommen.
-const CACHE = 'bp-v15';
+const CACHE = 'bp-v16';
 const PRECACHE = [
   'index.html',
   'detail.html',

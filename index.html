@@ -1129,7 +1129,8 @@ function applySort(mode) {
     }
     if (mode === 'val') return (+a.dataset.sortVal || 99) - (+b.dataset.sortVal || 99);
     if (mode === 'rating') {
-      var ac = a.querySelector('.pcard'), bc = b.querySelector('.pcard');
+      var ac = a.classList.contains('pcard') ? a : a.querySelector('.pcard');
+      var bc = b.classList.contains('pcard') ? b : b.querySelector('.pcard');
       var ai = ac ? parseInt(localStorage.getItem('rating-' + ac.id) || '0', 10) : 0;
       var bi = bc ? parseInt(localStorage.getItem('rating-' + bc.id) || '0', 10) : 0;
       return bi - ai; // höchste Bewertung zuerst
