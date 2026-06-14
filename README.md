@@ -11,6 +11,14 @@ Entstanden ist das Template aus einem realen Projekt mit 31 Seiten (einem Famili
 - **Baukasten statt Framework.** Ein fester Kern (Theming, einklappbare Sektionen, Druckausgabe, Barrierefreiheit) plus über 30 optionale Bausteine, die sich einzeln übernehmen oder weglassen lassen. Die drei Beispielseiten zeigen bewusst *alles* im Einsatz — sie sind Schaukasten, nicht Mindestumfang.
 - **Für die Arbeit mit KI-Agenten gebaut.** Die ausführliche `CLAUDE.md` dokumentiert jede Konvention, jeden Fallstrick und einen Fragenkatalog für den Projektstart — [Claude Code](https://claude.com/claude-code) (oder ein anderes Agenten-Tool) kann daraus direkt neue Projekte aufbauen.
 
+## Einordnung
+
+**Gibt es das schon?** Ähnliche Ansätze existieren teils: No-build CSS-Frameworks wie [Pico.css](https://picocss.com/) oder Simple.css sind schlank und abhängigkeitsfrei, aber ohne Dark/Light-System, Fold-Mechanismus oder Baukasten-Konzept. HTML5 Boilerplate ist build-orientiert. KI-Generatoren wie v0, Lovable oder Bolt.new erzeugen Seiten auf Abruf, speichern aber keine Konventionen, die über Gespräche hinweg gelten. Die `CLAUDE.md` als persistentes KI-Gedächtnis — eine Datei, die Claude Code bei jedem Gespräch automatisch als Kontext lädt und die Fallstricke, Klassen-Konventionen und QS-Werkzeuge eines gewachsenen Projekts festhält — ist der eigentlich neue Ansatz.
+
+**Spart es Token bei KI-Agenten?** Ja, aber erst ab einer gewissen Projektgröße. Die `CLAUDE.md` selbst kostet ~15–20k Zeichen Kontext pro Gespräch. Dieser Overhead rechnet sich durch verhinderte Fehler-Korrektur-Runden: Jeder nicht dokumentierte Fallstrick kostet typischerweise eine ganze Iteration (Fehlerbericht → Analyse → Fix → Verifikation). Im Ursprungsprojekt traten beim ersten Code-Review allein 8 solche Fälle auf, dazu Design-Drift zwischen Seiten, der ohne das Block-Sync-Skript unsichtbar geblieben wäre. Faustregel: **ab 5+ Seiten** oder bei Projekten, die über mehrere Gespräche gepflegt werden, überwiegt der Nutzen deutlich.
+
+**Wann lohnt es sich nicht?** Für React-, Vue- oder Next.js-Projekte bietet das Template nichts — dort gibt es ausgereifte Ökosysteme mit besseren Werkzeugen. Wenn ein Build-Schritt kein Problem ist, sind Static-Site-Generatoren wie Eleventy oder Astro die durchdachtere Wahl. Das Template ist für einen spezifischen Raum: persönliche Projekte, lokale Werkzeuge und kleine Informationsseiten, die einfach funktionieren sollen — ohne Toolchain, ohne Server, per Doppelklick.
+
 ## Live-Demo
 
 👉 **[n3m3515.github.io/html-project-blueprint](https://n3m3515.github.io/html-project-blueprint/)** — direkt im Browser ausprobieren, alle Designs und Bausteine live testen. Auf der Demo-Seite lässt sich die App auch als PWA installieren (Chrome/Edge: Installieren-Symbol in der Adresszeile).
