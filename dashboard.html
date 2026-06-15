@@ -540,6 +540,65 @@ body{padding-top:3.4rem;}
 kbd{display:inline-block;background:var(--bg3);border:var(--bw) solid var(--bdr2);border-radius:var(--r-xs);padding:1px 6px;font-size:11px;font-family:monospace;color:var(--tx);box-shadow:0 1px 0 var(--bdr2);}
 .sc-close{margin-top:16px;display:block;width:100%;padding:7px;background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-sm);cursor:pointer;font-size:12px;color:var(--tx2);}
 .sc-close:hover{background:var(--bg4);color:var(--tx);}
+/* === Baustein: API-Connector === */
+.api-form{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem 1rem;margin-top:0.75rem;}
+@media(max-width:600px){.api-form{grid-template-columns:1fr;}}
+.api-form label{font-size:12px;color:var(--tx2);display:flex;flex-direction:column;gap:4px;}
+.api-form input,.api-form select{background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-sm);color:var(--tx);padding:6px 10px;font:inherit;font-size:13px;width:100%;box-sizing:border-box;}
+.api-form input:focus,.api-form select:focus{outline:none;border-color:var(--blue-bdr);}
+.api-status{margin-top:0.75rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;}
+.api-dot{width:10px;height:10px;border-radius:50%;background:var(--bdr2);flex-shrink:0;}
+.api-dot.ok{background:var(--ok);}
+.api-dot.err{background:var(--no);}
+.api-msg{font-size:12px;color:var(--tx2);}
+/* === Baustein: Toast-Notifications === */
+#toast-container{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;display:flex;flex-direction:column;gap:0.5rem;pointer-events:none;max-width:300px;}
+.toast{background:var(--bg3);border:var(--bw) solid var(--bdr2);border-radius:var(--r-md);padding:0.6rem 1rem;font-size:13px;color:var(--tx);box-shadow:var(--shadow-lift);pointer-events:auto;opacity:1;transition:opacity 0.4s;}
+.toast.toast-ok{border-color:var(--teal-bdr);background:var(--teal-bg);color:var(--teal);}
+.toast.toast-err{border-color:var(--coral-bdr);background:var(--coral-bg);color:var(--coral);}
+.toast.toast-info{border-color:var(--blue-bdr);background:var(--blue-bg);color:var(--blue);}
+.toast.toast-hide{opacity:0;}
+/* === Baustein: Editierbare Datentabelle === */
+.edt-toolbar{display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;margin-bottom:0.75rem;}
+.edt-toolbar .fsearch{flex:1;min-width:180px;}
+.edt-wrap{overflow-x:auto;border-radius:var(--r-md);border:var(--bw) solid var(--bdr);}
+.edt-table{width:100%;border-collapse:collapse;font-size:12px;}
+.edt-table th{background:var(--bg3);color:var(--tx2);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;text-align:left;border-bottom:var(--bw) solid var(--bdr2);}
+.edt-table td{padding:7px 10px;border-bottom:var(--bw) solid var(--bdr);vertical-align:middle;}
+.edt-table tr:last-child td{border-bottom:none;}
+.edt-table tr:hover td{background:var(--bg2);}
+.ep-attr-input{background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-xs);padding:4px 6px;font:inherit;font-size:11px;color:var(--tx);width:100%;min-width:180px;box-sizing:border-box;}
+.ep-attr-input:focus{outline:none;border-color:var(--blue-bdr);}
+.edt-empty{text-align:center;color:var(--tx3);padding:2rem;font-size:13px;}
+/* === Baustein: Multi-Step-Wizard === */
+.wiz-indicator{display:flex;align-items:flex-start;gap:0;margin-bottom:1.5rem;}
+.wi-col{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.wi-dot{width:28px;height:28px;border-radius:50%;border:var(--bw) solid var(--bdr2);background:var(--bg3);color:var(--tx3);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,color .2s,border-color .2s;}
+.wi-dot.wi-active{background:var(--blue);border-color:var(--blue);color:#fff;}
+.wi-dot.wi-done{background:var(--teal);border-color:var(--teal);color:#fff;}
+.wi-line{flex:1;height:2px;background:var(--bdr);margin-top:14px;}
+.wi-label{font-size:11px;color:var(--tx3);text-align:center;white-space:nowrap;}
+.wiz-step{display:none;}
+.wiz-step.wiz-active{display:block;}
+.wiz-fields{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem 1rem;margin:0.75rem 0;}
+@media(max-width:600px){.wiz-fields{grid-template-columns:1fr;}}
+.wiz-fields label{font-size:12px;color:var(--tx2);display:flex;flex-direction:column;gap:4px;}
+.wiz-fields input,.wiz-fields select{background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-sm);color:var(--tx);padding:6px 10px;font:inherit;font-size:13px;width:100%;box-sizing:border-box;}
+.wiz-fields input:focus,.wiz-fields select:focus{outline:none;border-color:var(--blue-bdr);}
+.wiz-csr-out{background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-md);padding:0.75rem;font-family:monospace;font-size:11px;white-space:pre-wrap;word-break:break-all;max-height:200px;overflow-y:auto;color:var(--tx2);margin:0.75rem 0;}
+.wiz-nav{display:flex;gap:0.5rem;margin-top:1rem;}
+/* === Baustein: Confirmation-Dialog === */
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:8000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.confirm-overlay.on{opacity:1;pointer-events:auto;}
+.confirm-panel{background:var(--bg2);border:var(--bw) solid var(--bdr2);border-radius:var(--r-lg);padding:1.5rem;max-width:420px;width:90%;box-shadow:var(--shadow-lift);}
+.confirm-panel h3{margin:0 0 0.75rem;font-size:15px;font-weight:600;color:var(--tx);}
+.confirm-msg{font-size:13px;color:var(--tx2);margin-bottom:1.25rem;line-height:1.5;}
+.confirm-actions{display:flex;gap:0.5rem;justify-content:flex-end;}
+/* === Baustein: NetEdit Backup Manager === */
+.backup-list{display:flex;flex-direction:column;gap:0.5rem;}
+.backup-item{display:flex;align-items:center;gap:0.75rem;background:var(--bg2);border:var(--bw) solid var(--bdr);border-radius:var(--r-md);padding:0.6rem 0.75rem;flex-wrap:wrap;}
+.backup-name{font-size:13px;color:var(--tx);font-family:monospace;flex:1;min-width:0;word-break:break-all;}
+.backup-date{font-size:11px;color:var(--tx3);white-space:nowrap;}
 /* === Reduced Motion === */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
@@ -550,7 +609,7 @@ kbd{display:inline-block;background:var(--bg3);border:var(--bw) solid var(--bdr2
 @media print{
   :root{--bg:#ffffff;--bg2:#ffffff;--bg3:#eef1f8;--bg4:#e5e9f5;--bdr:#d0d5e8;--bdr2:#b8bfd4;--tx:#1a1d2e;--tx2:#50587a;--tx3:#7c88a8;--blue:#1857a0;--blue-bg:#ddeaf8;--blue-dim:#c8dcf5;--blue-bdr:#8ab8e0;--teal:#0e7a5c;--teal-bg:#d0ece6;--teal-dim:#b5dfd5;--teal-bdr:#68b89a;--green:#3d7e1c;--green-bg:#dff0c8;--green-bdr:#8ec850;--amber:#8a5c0a;--amber-bg:#fdf2d8;--amber-bdr:#dca840;--coral:#b83a20;--coral-bg:#fde6e0;--coral-bdr:#dc8870;--purple:#4848a8;--purple-bg:#e8e8f8;--purple-bdr:#9898d5;--gray-dim:#e5e9f5;--ok:#0e7a5c;--no:#b83a20;--maybe:#8a5c0a;}
   body{background:#fff;max-width:100%;padding-top:0;}
-  .theme-toggle,.design-select,.back-btn,.fold-btn,.toc,.totop,.data-tools,.log-toolbar,.ann-wrap,.sc-overlay{display:none !important;}
+  .theme-toggle,.design-select,.back-btn,.fold-btn,.toc,.totop,.data-tools,.log-toolbar,.ann-wrap,.sc-overlay,.confirm-overlay,#toast-container,.api-status button,.edt-toolbar button,.wiz-nav button{display:none !important;}
   .folded{display:block !important;}
   .sec-body.folded{max-height:none !important;opacity:1;pointer-events:auto;}
   .sm-wrap,.metric-card,.log-table-wrap,.inv-item,.maint-item,.incident-item{break-inside:avoid;box-shadow:none !important;}
@@ -561,7 +620,7 @@ kbd{display:inline-block;background:var(--bg3);border:var(--bw) solid var(--bdr2
 /* DESIGN-AUSWAHL (nur Template): die folgenden zwei Zeilen in fertigen Projekten löschen und stattdessen data-design fest im <html>-Tag setzen */
 var d=p.get('design')||localStorage.getItem('design')||'polar';if(p.get('design'))try{localStorage.setItem('design',d);}catch(e){}
 document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml=document.createElement('link');ml.id='mso-lnk';ml.rel='stylesheet';ml.href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap';document.head.appendChild(ml);}})();</script>
-<noscript><style>.folded{display:block !important;}.sec-body.folded{max-height:none !important;opacity:1 !important;}.fold-btn,.theme-toggle,.design-select,.totop,.data-tools{display:none;}</style></noscript>
+<noscript><style>.folded{display:block !important;}.sec-body.folded{max-height:none !important;opacity:1 !important;}.fold-btn,.theme-toggle,.design-select,.totop,.data-tools,.confirm-overlay,#toast-container,.api-status button,.edt-toolbar button,.wiz-nav button{display:none;}</style></noscript>
 </head>
 <body>
 <!-- Baustein: Ankündigungs-Banner — data-ann-key muss projektweit eindeutig sein -->
@@ -606,6 +665,10 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
   <a href="#inventar">🖥 Inventar</a>
   <a href="#wartung">🔧 Wartung</a>
   <a href="#incidents">🚨 Incidents</a>
+  <a href="#api-config">🔑 API-Konfig</a>
+  <a href="#clearpass-endpoints">🖧 Endpoints</a>
+  <a href="#csr-generator">📜 CSR</a>
+  <a href="#netedit-backups">💾 Backups</a>
 </nav>
 
 <!-- Status-Matrix -->
@@ -727,6 +790,190 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
     </div>
   </div>
 </div>
+
+<div class="div"></div>
+
+<!-- API-Konfiguration -->
+<div class="sec" id="api-config">
+  <div class="sec-hd">
+    <span class="sec-sym">🔑</span>
+    <h2 class="sec-title">API-Konfiguration</h2>
+    <button class="fold-btn" onclick="toggleFold('api-config-body',this)" aria-expanded="true" aria-controls="api-config-body">▾</button>
+  </div>
+  <div class="sec-body" id="api-config-body">
+    <div class="tip tip-amber"><span class="s">⚠</span> Das Client-Secret wird <strong>nicht gespeichert</strong> — es muss nach jedem Browser-Neustart erneut eingegeben werden. Base-URL und Client-ID bleiben für die Sitzung im sessionStorage.</div>
+    <div class="api-form">
+      <label>ClearPass Base-URL
+        <input id="api-base-url" type="url" placeholder="https://clearpass.example.com" autocomplete="off">
+      </label>
+      <label>Client-ID
+        <input id="api-client-id" type="text" placeholder="aruba-toolbox" autocomplete="off">
+      </label>
+      <label>Client-Secret
+        <input id="api-client-secret" type="password" placeholder="••••••••" autocomplete="new-password">
+      </label>
+      <label>NetEdit-Proxy-URL
+        <input id="netedit-proxy-url" type="url" placeholder="http://localhost:8080" autocomplete="off">
+      </label>
+    </div>
+    <div class="api-status">
+      <span class="api-dot" id="api-dot"></span>
+      <span class="api-msg" id="api-msg">Nicht verbunden</span>
+      <button class="lb lb-blue" onclick="apiLogin()">Verbinden</button>
+      <button class="lb" id="api-logout-btn" style="display:none" onclick="apiLogout()">Abmelden</button>
+    </div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<!-- ClearPass Endpoints -->
+<div class="sec" id="clearpass-endpoints">
+  <div class="sec-hd">
+    <span class="sec-sym">🖧</span>
+    <h2 class="sec-title">ClearPass Endpoints</h2>
+    <button class="fold-btn" onclick="toggleFold('clearpass-endpoints-body',this)" aria-expanded="true" aria-controls="clearpass-endpoints-body">▾</button>
+  </div>
+  <div class="sec-body" id="clearpass-endpoints-body">
+    <div class="edt-toolbar">
+      <input class="fsearch" id="ep-search" type="search" placeholder="MAC-Adresse filtern (Enter) …" aria-label="Endpoints suchen">
+      <button class="lb lb-blue" onclick="loadEndpoints()">🔄 Laden</button>
+      <span id="ep-status" style="font-size:12px;color:var(--tx3)"></span>
+    </div>
+    <div class="edt-wrap">
+      <table class="edt-table" role="table">
+        <thead>
+          <tr>
+            <th style="width:13em">MAC-Adresse</th>
+            <th style="width:7em">Status</th>
+            <th>Attribute (JSON)</th>
+            <th style="width:7em"></th>
+          </tr>
+        </thead>
+        <tbody id="endpoint-tbody">
+          <tr><td colspan="4" class="edt-empty">Nicht geladen — verbinden und „Laden" klicken.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.75rem;align-items:center;flex-wrap:wrap;">
+      <button class="lb" id="ep-prev-btn" style="display:none" onclick="epPrevPage()">← Zurück</button>
+      <span id="ep-page-info" style="font-size:12px;color:var(--tx3);flex:1"></span>
+      <button class="lb" id="ep-next-btn" style="display:none" onclick="epNextPage()">Weiter →</button>
+    </div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<!-- CSR-Generator -->
+<div class="sec" id="csr-generator">
+  <div class="sec-hd">
+    <span class="sec-sym">📜</span>
+    <h2 class="sec-title">CSR-Generator</h2>
+    <button class="fold-btn" onclick="toggleFold('csr-generator-body',this)" aria-expanded="true" aria-controls="csr-generator-body">▾</button>
+  </div>
+  <div class="sec-body" id="csr-generator-body">
+    <div class="wiz-indicator" role="list" aria-label="Wizard-Schritte">
+      <div class="wi-col" role="listitem"><div class="wi-dot wi-active" id="wi-1">1</div><div class="wi-label">Service</div></div>
+      <div class="wi-line" aria-hidden="true"></div>
+      <div class="wi-col" role="listitem"><div class="wi-dot" id="wi-2">2</div><div class="wi-label">Felder</div></div>
+      <div class="wi-line" aria-hidden="true"></div>
+      <div class="wi-col" role="listitem"><div class="wi-dot" id="wi-3">3</div><div class="wi-label">Download</div></div>
+    </div>
+    <!-- Schritt 1: Service wählen -->
+    <div class="wiz-step wiz-active" id="csr-step-1">
+      <div class="wiz-fields" style="grid-template-columns:1fr;">
+        <label>ClearPass-Service / Server-ID
+          <select id="csr-service">
+            <option value="">— bitte wählen —</option>
+            <option value="https">HTTPS-Service (Port 443)</option>
+            <option value="radius">RADIUS-Service</option>
+            <option value="other">Andere (ID manuell eingeben)</option>
+          </select>
+        </label>
+        <label id="csr-service-manual-wrap" style="display:none;">Manuelle Service-ID
+          <input id="csr-service-manual" type="text" placeholder="z. B. radius-internal">
+        </label>
+      </div>
+      <div class="wiz-nav">
+        <button class="lb lb-blue" onclick="csrNext1()">Weiter →</button>
+      </div>
+    </div>
+    <!-- Schritt 2: CSR-Felder ausfüllen -->
+    <div class="wiz-step" id="csr-step-2">
+      <div class="wiz-fields">
+        <label>Common Name (CN) <span style="color:var(--coral)">*</span>
+          <input id="csr-cn" type="text" placeholder="clearpass.example.com" required>
+        </label>
+        <label>Subject Alternative Names (kommagetrennt)
+          <input id="csr-san" type="text" placeholder="clearpass.example.com, cp.internal">
+        </label>
+        <label>Organisationseinheit (OU)
+          <input id="csr-ou" type="text" placeholder="IT-Security">
+        </label>
+        <label>Land (C, 2-stellig ISO 3166)
+          <input id="csr-c" type="text" maxlength="2" placeholder="DE">
+        </label>
+        <label>Bundesland / Kanton (ST)
+          <input id="csr-st" type="text" placeholder="Bayern">
+        </label>
+        <label>Stadt (L)
+          <input id="csr-l" type="text" placeholder="München">
+        </label>
+      </div>
+      <div class="wiz-nav">
+        <button class="lb" onclick="csrSetStep(1)">← Zurück</button>
+        <button class="lb lb-blue" id="csr-gen-btn" onclick="csrGenerate()">CSR generieren</button>
+      </div>
+    </div>
+    <!-- Schritt 3: Download -->
+    <div class="wiz-step" id="csr-step-3">
+      <div class="tip tip-teal"><span class="s">✓</span> CSR erfolgreich generiert. Datei herunterladen und der CA einreichen. Das fertige Zertifikat bitte manuell in ClearPass hochladen.</div>
+      <pre class="wiz-csr-out" id="csr-result" aria-label="CSR-Inhalt (PEM-Format)"></pre>
+      <div class="wiz-nav">
+        <button class="lb" onclick="csrSetStep(1)">Neu starten</button>
+        <button class="lb lb-teal" onclick="csrDownload()">⬇ CSR herunterladen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<!-- NetEdit Backups -->
+<div class="sec" id="netedit-backups">
+  <div class="sec-hd">
+    <span class="sec-sym">💾</span>
+    <h2 class="sec-title">NetEdit Backups</h2>
+    <button class="fold-btn" onclick="toggleFold('netedit-backups-body',this)" aria-expanded="true" aria-controls="netedit-backups-body">▾</button>
+  </div>
+  <div class="sec-body" id="netedit-backups-body">
+    <div class="tip tip-blue"><span class="s">ℹ</span> Erfordert einen laufenden Proxy, der SSH-Verbindungen zu NetEdit herstellt. Proxy-URL im Abschnitt <a href="#api-config" style="color:var(--blue)">API-Konfiguration</a> eintragen.</div>
+    <div style="display:flex;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap;align-items:center;">
+      <button class="lb lb-blue" onclick="loadNetEditBackups()">🔄 Backups laden</button>
+      <button class="lb lb-teal" onclick="createNetEditBackup()">+ Backup erstellen</button>
+      <span id="backup-status" style="font-size:12px;color:var(--tx3)"></span>
+    </div>
+    <div id="backup-list" class="backup-list">
+      <div class="edt-empty">Nicht geladen — Proxy konfigurieren und „Backups laden" klicken.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Baustein: Confirmation-Dialog -->
+<div class="confirm-overlay" id="confirm-overlay" role="dialog" aria-modal="true" aria-label="Bestätigung erforderlich" onclick="if(event.target===this)closeConfirm()">
+  <div class="confirm-panel">
+    <h3>⚠ Bestätigung</h3>
+    <div class="confirm-msg" id="confirm-msg"></div>
+    <div class="confirm-actions">
+      <button class="lb" id="confirm-cancel" onclick="closeConfirm()">Abbrechen</button>
+      <button class="lb lb-coral" id="confirm-ok">Bestätigen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Baustein: Toast-Notifications -->
+<div id="toast-container" aria-live="polite" aria-atomic="false"></div>
 
 <div class="data-tools">
   <span>Daten:</span>
@@ -1057,6 +1304,233 @@ document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('clic
     });
   }
 })();
+</script>
+
+<!-- Baustein: API-Connector · Editierbare Datentabelle · Multi-Step-Wizard · Confirmation-Dialog · Toast · NetEdit Backup Manager -->
+<script>
+// Sicherheitshinweis: clientSecret darf NIEMALS in sessionStorage/localStorage gespeichert werden.
+// baseUrl + clientId bleiben für die Browsersitzung im sessionStorage; Token wird bei Ablauf neu angefordert.
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);});}
+
+// ── Toast-Notifications ──────────────────────────────────────────────────────
+function showToast(msg,type){
+  var c=document.getElementById('toast-container');if(!c)return;
+  var t=document.createElement('div');
+  t.className='toast toast-'+(type||'info');t.textContent=msg;t.setAttribute('role','status');
+  c.appendChild(t);
+  setTimeout(function(){t.classList.add('toast-hide');},3500);
+  setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},4000);
+}
+
+// ── Confirmation-Dialog ──────────────────────────────────────────────────────
+var _confirmCb=null;
+function confirmDialog(msg,onConfirm){
+  var overlay=document.getElementById('confirm-overlay'),msgEl=document.getElementById('confirm-msg'),okBtn=document.getElementById('confirm-ok');
+  if(!overlay||!msgEl||!okBtn){if(window.confirm(msg))onConfirm();return;}
+  msgEl.textContent=msg;_confirmCb=onConfirm;
+  overlay.classList.add('on');document.body.style.overflow='hidden';okBtn.focus();
+}
+function closeConfirm(){
+  var overlay=document.getElementById('confirm-overlay');
+  if(overlay)overlay.classList.remove('on');
+  document.body.style.overflow='';_confirmCb=null;
+}
+(function(){
+  var ok=document.getElementById('confirm-ok');
+  if(ok)ok.addEventListener('click',function(){var cb=_confirmCb;closeConfirm();if(cb)cb();});
+  // Capture-Phase: Esc schließt Confirm-Dialog vor sc-overlay-Handler
+  document.addEventListener('keydown',function(e){
+    var o=document.getElementById('confirm-overlay');
+    if(o&&o.classList.contains('on')&&e.key==='Escape'){e.stopPropagation();closeConfirm();}
+  },true);
+})();
+
+// ── API-Connector (ClearPass OAuth2 Client Credentials) ─────────────────────
+(function(){
+  var bi=document.getElementById('api-base-url'),ci=document.getElementById('api-client-id'),pi=document.getElementById('netedit-proxy-url');
+  if(bi)bi.value=sessionStorage.getItem('aruba_base_url')||'';
+  if(ci)ci.value=sessionStorage.getItem('aruba_client_id')||'';
+  if(pi)pi.value=sessionStorage.getItem('netedit_proxy_url')||'';
+  updateApiStatus();
+})();
+function updateApiStatus(){
+  var dot=document.getElementById('api-dot'),msg=document.getElementById('api-msg'),logoutBtn=document.getElementById('api-logout-btn');
+  var token=null;try{token=JSON.parse(sessionStorage.getItem('aruba_token')||'null');}catch(e){}
+  var ok=token&&Date.now()<token.expires_at;
+  if(dot)dot.className='api-dot'+(ok?' ok':' err');
+  if(msg)msg.textContent=ok?'Verbunden — Token gültig bis '+new Date(token.expires_at).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr':'Nicht verbunden';
+  if(logoutBtn)logoutBtn.style.display=ok?'':'none';
+}
+async function apiLogin(){
+  var baseUrl=(document.getElementById('api-base-url')||{}).value||'',clientId=(document.getElementById('api-client-id')||{}).value||'',clientSecret=(document.getElementById('api-client-secret')||{}).value||'',proxyUrl=(document.getElementById('netedit-proxy-url')||{}).value||'';
+  if(!baseUrl||!clientId||!clientSecret){showToast('Bitte Base-URL, Client-ID und Client-Secret ausfüllen.','err');return;}
+  try{
+    var res=await fetch(baseUrl.replace(/\/$/,'')+'/api/oauth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({grant_type:'client_credentials',client_id:clientId,client_secret:clientSecret})});
+    if(!res.ok){var txt=await res.text();throw new Error('HTTP '+res.status+': '+txt.slice(0,200));}
+    var data=await res.json();
+    var tokenData={access_token:data.access_token,expires_at:Date.now()+((data.expires_in||3600)*1000)-60000};
+    sessionStorage.setItem('aruba_base_url',baseUrl.replace(/\/$/,''));
+    sessionStorage.setItem('aruba_client_id',clientId);
+    if(proxyUrl)sessionStorage.setItem('netedit_proxy_url',proxyUrl.replace(/\/$/,''));
+    sessionStorage.setItem('aruba_token',JSON.stringify(tokenData));
+    var si=document.getElementById('api-client-secret');if(si)si.value='';
+    showToast('Verbunden! Token läuft um '+new Date(tokenData.expires_at).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr ab.','ok');
+    updateApiStatus();
+  }catch(e){showToast('Verbindung fehlgeschlagen: '+e.message,'err');}
+}
+function apiLogout(){sessionStorage.removeItem('aruba_token');updateApiStatus();showToast('Abgemeldet.','info');}
+async function apiFetch(method,path,body){
+  var baseUrl=sessionStorage.getItem('aruba_base_url'),tokenData=null;
+  try{tokenData=JSON.parse(sessionStorage.getItem('aruba_token')||'null');}catch(e){}
+  if(!baseUrl)throw new Error('Kein API-Server konfiguriert');
+  if(!tokenData||Date.now()>tokenData.expires_at)throw new Error('Nicht authentifiziert — bitte erneut verbinden');
+  var opts={method:method,headers:{'Authorization':'Bearer '+tokenData.access_token,'Content-Type':'application/json'}};
+  if(body!==undefined)opts.body=JSON.stringify(body);
+  var res=await fetch(baseUrl+path,opts);
+  if(!res.ok){var txt=await res.text();throw new Error('API-Fehler '+res.status+': '+txt.slice(0,200));}
+  if(res.status===204)return null;
+  return await res.json();
+}
+
+// ── Editierbare Datentabelle (ClearPass Endpoints) ───────────────────────────
+var _epOffset=0,_epLimit=25,_epTotal=0;
+async function loadEndpoints(){
+  var q=(document.getElementById('ep-search')||{}).value||'',statusEl=document.getElementById('ep-status');
+  if(statusEl)statusEl.textContent='Lädt …';
+  try{
+    var path='/api/endpoint?calculate_count=true&offset='+_epOffset+'&limit='+_epLimit;
+    if(q)path+='&filter='+encodeURIComponent(JSON.stringify({'mac_address':{'$contains':q}}));
+    var data=await apiFetch('GET',path);
+    var items=(data._embedded&&data._embedded.items)||[];
+    _epTotal=data.count||items.length;
+    renderEndpointTable(items);
+    var info=document.getElementById('ep-page-info');
+    if(info)info.textContent=(_epOffset+1)+'–'+Math.min(_epOffset+items.length,_epTotal)+' von '+_epTotal;
+    var pb=document.getElementById('ep-prev-btn'),nb=document.getElementById('ep-next-btn');
+    if(pb)pb.style.display=_epOffset>0?'':'none';
+    if(nb)nb.style.display=(_epOffset+_epLimit)<_epTotal?'':'none';
+    if(statusEl)statusEl.textContent=_epTotal+' Einträge';
+  }catch(e){showToast('Fehler beim Laden: '+e.message,'err');if(statusEl)statusEl.textContent='';}
+}
+function epPrevPage(){if(_epOffset>=_epLimit){_epOffset-=_epLimit;loadEndpoints();}}
+function epNextPage(){_epOffset+=_epLimit;loadEndpoints();}
+(function(){var s=document.getElementById('ep-search');if(s)s.addEventListener('keydown',function(e){if(e.key==='Enter'){_epOffset=0;loadEndpoints();}});})();
+function renderEndpointTable(items){
+  var tbody=document.getElementById('endpoint-tbody');if(!tbody)return;
+  if(!items.length){tbody.innerHTML='<tr><td colspan="4" class="edt-empty">Keine Einträge gefunden.</td></tr>';return;}
+  var html='';
+  items.forEach(function(ep){
+    var attrs=ep.attributes?JSON.stringify(ep.attributes):'{}';
+    var statusCls=ep.status==='Known'?'b-teal':ep.status==='Unknown'?'b-gray':'b-amber';
+    html+='<tr data-id="'+esc(String(ep.id||''))+'"><td>'+esc(ep.mac_address||'')+'</td>'
+      +'<td><span class="b b-sm '+statusCls+'">'+esc(ep.status||'')+'</span></td>'
+      +'<td><input class="ep-attr-input" value="'+esc(attrs)+'" aria-label="Attribute (JSON)"></td>'
+      +'<td><button class="lb lb-teal" onclick="saveEndpoint(this)">Speichern</button></td></tr>';
+  });
+  tbody.innerHTML=html;
+}
+async function saveEndpoint(btn){
+  var tr=btn.closest('tr'),id=tr.dataset.id,input=tr.querySelector('.ep-attr-input'),orig=btn.textContent;
+  try{
+    var attrs=JSON.parse(input.value);btn.disabled=true;btn.textContent='…';
+    await apiFetch('PATCH','/api/endpoint/'+id,{attributes:attrs});
+    showToast('Endpoint gespeichert.','ok');btn.textContent='✓';
+    setTimeout(function(){btn.disabled=false;btn.textContent=orig;},2000);
+  }catch(e){showToast('Fehler: '+e.message,'err');btn.disabled=false;btn.textContent=orig;}
+}
+
+// ── Multi-Step-Wizard (CSR-Generator) ────────────────────────────────────────
+var _csrStep=1;
+function csrSetStep(n){
+  _csrStep=n;
+  [1,2,3].forEach(function(i){
+    var step=document.getElementById('csr-step-'+i),dot=document.getElementById('wi-'+i);
+    if(step)step.classList.toggle('wiz-active',i===n);
+    if(dot){dot.classList.toggle('wi-active',i===n);dot.classList.toggle('wi-done',i<n);}
+  });
+}
+function csrNext1(){
+  var svc=document.getElementById('csr-service'),manual=document.getElementById('csr-service-manual');
+  if(!svc||!svc.value){showToast('Bitte einen Service auswählen.','err');return;}
+  if(svc.value==='other'&&(!manual||!manual.value.trim())){showToast('Bitte manuelle Service-ID eingeben.','err');return;}
+  csrSetStep(2);
+}
+(function(){
+  var svc=document.getElementById('csr-service'),wrap=document.getElementById('csr-service-manual-wrap');
+  if(svc&&wrap)svc.addEventListener('change',function(){wrap.style.display=svc.value==='other'?'':'none';});
+})();
+async function csrGenerate(){
+  var cn=(document.getElementById('csr-cn')||{}).value||'';
+  if(!cn){showToast('Common Name (CN) ist Pflicht.','err');return;}
+  var svcEl=document.getElementById('csr-service'),manualEl=document.getElementById('csr-service-manual');
+  var serviceId=svcEl&&svcEl.value==='other'?(manualEl&&manualEl.value.trim()||''):(svcEl&&svcEl.value||'');
+  var sanRaw=(document.getElementById('csr-san')||{}).value||'';
+  var fields={common_name:cn,subject_alternative_names:sanRaw.split(',').map(function(s){return s.trim();}).filter(Boolean),organization_unit:(document.getElementById('csr-ou')||{}).value||'',country:(document.getElementById('csr-c')||{}).value||'',state:(document.getElementById('csr-st')||{}).value||'',locality:(document.getElementById('csr-l')||{}).value||''};
+  var btn=document.getElementById('csr-gen-btn');if(btn){btn.disabled=true;btn.textContent='…';}
+  try{
+    var result=await apiFetch('POST','/api/server-cert-action/'+serviceId,{action:'generate_csr',certificate_info:fields});
+    var pem=(result&&(result.csr||result.certificate_signing_request||result.pem||JSON.stringify(result,null,2)))||'(leer)';
+    var out=document.getElementById('csr-result');if(out)out.textContent=pem;
+    csrSetStep(3);showToast('CSR generiert.','ok');
+  }catch(e){showToast('CSR-Fehler: '+e.message,'err');}
+  finally{if(btn){btn.disabled=false;btn.textContent='CSR generieren';}}
+}
+function csrDownload(){
+  var pem=(document.getElementById('csr-result')||{}).textContent||'';
+  if(!pem||pem==='(leer)'){showToast('Kein CSR vorhanden.','err');return;}
+  var cn=((document.getElementById('csr-cn')||{}).value||'server').replace(/[^a-zA-Z0-9._-]/g,'_');
+  var blob=new Blob([pem],{type:'application/pkcs10'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=cn+'.csr';
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);
+}
+
+// ── NetEdit Backup Manager ────────────────────────────────────────────────────
+async function loadNetEditBackups(){
+  var proxyUrl=sessionStorage.getItem('netedit_proxy_url');
+  if(!proxyUrl){showToast('NetEdit-Proxy-URL nicht konfiguriert — in API-Konfiguration eintragen.','err');return;}
+  var statusEl=document.getElementById('backup-status');if(statusEl)statusEl.textContent='Lädt …';
+  try{
+    var res=await fetch(proxyUrl+'/backups');if(!res.ok)throw new Error('HTTP '+res.status);
+    var data=await res.json();var backups=data.backups||data||[];
+    renderBackupList(backups);
+    if(statusEl)statusEl.textContent=backups.length+' Backup(s) gefunden';
+  }catch(e){showToast('Fehler beim Laden: '+e.message,'err');if(statusEl)statusEl.textContent='';}
+}
+async function createNetEditBackup(){
+  var proxyUrl=sessionStorage.getItem('netedit_proxy_url');
+  if(!proxyUrl){showToast('NetEdit-Proxy-URL nicht konfiguriert.','err');return;}
+  try{
+    var res=await fetch(proxyUrl+'/backup',{method:'POST',headers:{'Content-Type':'application/json'}});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    showToast('Backup erstellt.','ok');setTimeout(loadNetEditBackups,1500);
+  }catch(e){showToast('Fehler: '+e.message,'err');}
+}
+function renderBackupList(backups){
+  var list=document.getElementById('backup-list');if(!list)return;
+  if(!backups.length){list.innerHTML='<div class="edt-empty">Keine Backups vorhanden.</div>';return;}
+  var html='';
+  backups.forEach(function(b){
+    var name=typeof b==='string'?b:(b.name||b.id||'');
+    var date=typeof b==='object'?(b.date||b.created_at||''):'';
+    html+='<div class="backup-item"><span class="backup-name">'+esc(name)+'</span>'
+      +(date?'<span class="backup-date">'+esc(date)+'</span>':'')
+      +'<button class="lb lb-amber" onclick="restoreBackup('+JSON.stringify(name)+')">↩ Wiederherstellen</button></div>';
+  });
+  list.innerHTML=html;
+}
+function restoreBackup(name){
+  confirmDialog('Backup „'+name+'" wiederherstellen? Die aktuelle NetEdit-Konfiguration wird überschrieben.',async function(){
+    var proxyUrl=sessionStorage.getItem('netedit_proxy_url');
+    var statusEl=document.getElementById('backup-status');if(statusEl)statusEl.textContent='Stellt wieder her …';
+    try{
+      var res=await fetch(proxyUrl+'/restore',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({backup:name})});
+      if(!res.ok)throw new Error('HTTP '+res.status);
+      showToast('Backup „'+name+'" erfolgreich wiederhergestellt.','ok');
+    }catch(e){showToast('Fehler: '+e.message,'err');}
+    if(statusEl)statusEl.textContent='';
+  });
+}
 </script>
 
 <!-- BAUSTEIN Tastatur-Shortcut-Übersicht -->
