@@ -594,11 +594,22 @@ kbd{display:inline-block;background:var(--bg3);border:var(--bw) solid var(--bdr2
 .confirm-panel h3{margin:0 0 0.75rem;font-size:15px;font-weight:600;color:var(--tx);}
 .confirm-msg{font-size:13px;color:var(--tx2);margin-bottom:1.25rem;line-height:1.5;}
 .confirm-actions{display:flex;gap:0.5rem;justify-content:flex-end;}
-/* === Baustein: NetEdit Backup Manager === */
+/* === Baustein: SSH-Backup-Manager === */
 .backup-list{display:flex;flex-direction:column;gap:0.5rem;}
 .backup-item{display:flex;align-items:center;gap:0.75rem;background:var(--bg2);border:var(--bw) solid var(--bdr);border-radius:var(--r-md);padding:0.6rem 0.75rem;flex-wrap:wrap;}
 .backup-name{font-size:13px;color:var(--tx);font-family:monospace;flex:1;min-width:0;word-break:break-all;}
 .backup-date{font-size:11px;color:var(--tx3);white-space:nowrap;}
+/* === Baustein: Zertifikatsüberwachung === */
+.cert-table-wrap{overflow-x:auto;border-radius:var(--r-md);border:var(--bw) solid var(--bdr);background:var(--bg2);}
+.cert-table{width:100%;border-collapse:collapse;font-size:12px;}
+.cert-table th{background:var(--bg3);color:var(--tx2);font-weight:600;padding:0.5rem 0.75rem;text-align:left;white-space:nowrap;}
+.cert-table td{padding:0.5rem 0.75rem;border-top:var(--bw) solid var(--bdr);vertical-align:middle;color:var(--tx);}
+.cert-table tr:hover td{background:var(--bg3);}
+.cert-days{font-weight:700;font-size:13px;}
+.cert-days.ok{color:var(--ok);}
+.cert-days.warn{color:var(--maybe);}
+.cert-days.crit{color:var(--no);}
+.cert-check-btn{padding:0.2rem 0.5rem;font-size:12px;}
 /* === Reduced Motion === */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
@@ -612,7 +623,7 @@ kbd{display:inline-block;background:var(--bg3);border:var(--bw) solid var(--bdr2
   .theme-toggle,.design-select,.back-btn,.fold-btn,.toc,.totop,.data-tools,.log-toolbar,.ann-wrap,.sc-overlay,.confirm-overlay,#toast-container,.api-status button,.edt-toolbar button,.wiz-nav button{display:none !important;}
   .folded{display:block !important;}
   .sec-body.folded{max-height:none !important;opacity:1;pointer-events:auto;}
-  .sm-wrap,.metric-card,.log-table-wrap,.inv-item,.maint-item,.incident-item{break-inside:avoid;box-shadow:none !important;}
+  .sm-wrap,.metric-card,.log-table-wrap,.inv-item,.maint-item,.incident-item,.cert-table-wrap{break-inside:avoid;box-shadow:none !important;}
   .log-more-wrap,.log-count{display:none !important;}
 }
 </style>
@@ -665,10 +676,11 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
   <a href="#inventar">🖥 Inventar</a>
   <a href="#wartung">🔧 Wartung</a>
   <a href="#incidents">🚨 Incidents</a>
+  <a href="#cert-monitor">🔒 Zertifikate</a>
   <a href="#api-config">🔑 API-Konfig</a>
-  <a href="#clearpass-endpoints">🖧 Endpoints</a>
+  <a href="#rest-endpoints">🖧 Endpoints</a>
   <a href="#csr-generator">📜 CSR</a>
-  <a href="#netedit-backups">💾 Backups</a>
+  <a href="#system-backups">💾 Backups</a>
 </nav>
 
 <!-- Status-Matrix -->
@@ -793,6 +805,37 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
 
 <div class="div"></div>
 
+<!-- Zertifikats-Monitor -->
+<div class="sec" id="cert-monitor">
+  <div class="sec-hd">
+    <span class="sec-sym">🔒</span>
+    <h2 class="sec-title">Zertifikate</h2>
+    <button class="fold-btn" onclick="toggleFold('cert-monitor-body',this)" aria-expanded="true" aria-controls="cert-monitor-body">▾</button>
+  </div>
+  <div class="sec-body" id="cert-monitor-body">
+    <div class="cert-table-wrap">
+      <table class="cert-table" role="table">
+        <thead>
+          <tr>
+            <th style="width:13em">Host</th>
+            <th style="width:4em">Port</th>
+            <th>Betreff (CN)</th>
+            <th style="width:10em">Aussteller</th>
+            <th style="width:8em">Ablauf</th>
+            <th style="width:6em">Tage</th>
+            <th style="width:5em"></th>
+          </tr>
+        </thead>
+        <tbody id="cert-tbody">
+          <tr><td colspan="7" class="edt-empty">Keine Daten — <code>certificates</code>-Array in data.js ergänzen.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="div"></div>
+
 <!-- API-Konfiguration -->
 <div class="sec" id="api-config">
   <div class="sec-hd">
@@ -803,17 +846,17 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
   <div class="sec-body" id="api-config-body">
     <div class="tip tip-amber"><span class="s">⚠</span> Das Client-Secret wird <strong>nicht gespeichert</strong> — es muss nach jedem Browser-Neustart erneut eingegeben werden. Base-URL und Client-ID bleiben für die Sitzung im sessionStorage.</div>
     <div class="api-form">
-      <label>ClearPass Base-URL
-        <input id="api-base-url" type="url" placeholder="https://clearpass.example.com" autocomplete="off">
+      <label>API-Server-URL
+        <input id="api-base-url" type="url" placeholder="https://api.example.com" autocomplete="off">
       </label>
       <label>Client-ID
-        <input id="api-client-id" type="text" placeholder="aruba-toolbox" autocomplete="off">
+        <input id="api-client-id" type="text" placeholder="my-app" autocomplete="off">
       </label>
       <label>Client-Secret
         <input id="api-client-secret" type="password" placeholder="••••••••" autocomplete="new-password">
       </label>
-      <label>NetEdit-Proxy-URL
-        <input id="netedit-proxy-url" type="url" placeholder="http://localhost:8080" autocomplete="off">
+      <label>Proxy-URL
+        <input id="proxy-url" type="url" placeholder="http://localhost:8080" autocomplete="off">
       </label>
     </div>
     <div class="api-status">
@@ -827,16 +870,16 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
 
 <div class="div"></div>
 
-<!-- ClearPass Endpoints -->
-<div class="sec" id="clearpass-endpoints">
+<!-- REST-Endpoints -->
+<div class="sec" id="rest-endpoints">
   <div class="sec-hd">
     <span class="sec-sym">🖧</span>
-    <h2 class="sec-title">ClearPass Endpoints</h2>
-    <button class="fold-btn" onclick="toggleFold('clearpass-endpoints-body',this)" aria-expanded="true" aria-controls="clearpass-endpoints-body">▾</button>
+    <h2 class="sec-title">REST-Endpoints</h2>
+    <button class="fold-btn" onclick="toggleFold('rest-endpoints-body',this)" aria-expanded="true" aria-controls="rest-endpoints-body">▾</button>
   </div>
-  <div class="sec-body" id="clearpass-endpoints-body">
+  <div class="sec-body" id="rest-endpoints-body">
     <div class="edt-toolbar">
-      <input class="fsearch" id="ep-search" type="search" placeholder="MAC-Adresse filtern (Enter) …" aria-label="Endpoints suchen">
+      <input class="fsearch" id="ep-search" type="search" placeholder="ID / Name filtern (Enter) …" aria-label="Endpoints suchen">
       <button class="lb lb-blue" onclick="loadEndpoints()">🔄 Laden</button>
       <span id="ep-status" style="font-size:12px;color:var(--tx3)"></span>
     </div>
@@ -844,7 +887,7 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
       <table class="edt-table" role="table">
         <thead>
           <tr>
-            <th style="width:13em">MAC-Adresse</th>
+            <th style="width:13em">ID / Name</th>
             <th style="width:7em">Status</th>
             <th>Attribute (JSON)</th>
             <th style="width:7em"></th>
@@ -883,7 +926,7 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
     <!-- Schritt 1: Service wählen -->
     <div class="wiz-step wiz-active" id="csr-step-1">
       <div class="wiz-fields" style="grid-template-columns:1fr;">
-        <label>ClearPass-Service / Server-ID
+        <label>Dienst / Server-ID
           <select id="csr-service">
             <option value="">— bitte wählen —</option>
             <option value="https">HTTPS-Service (Port 443)</option>
@@ -903,7 +946,7 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
     <div class="wiz-step" id="csr-step-2">
       <div class="wiz-fields">
         <label>Common Name (CN) <span style="color:var(--coral)">*</span>
-          <input id="csr-cn" type="text" placeholder="clearpass.example.com" required>
+          <input id="csr-cn" type="text" placeholder="server.example.com" required>
         </label>
         <label>Subject Alternative Names (kommagetrennt)
           <input id="csr-san" type="text" placeholder="clearpass.example.com, cp.internal">
@@ -928,7 +971,7 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
     </div>
     <!-- Schritt 3: Download -->
     <div class="wiz-step" id="csr-step-3">
-      <div class="tip tip-teal"><span class="s">✓</span> CSR erfolgreich generiert. Datei herunterladen und der CA einreichen. Das fertige Zertifikat bitte manuell in ClearPass hochladen.</div>
+      <div class="tip tip-teal"><span class="s">✓</span> CSR erfolgreich generiert. Datei herunterladen und der CA einreichen. Das fertige Zertifikat bitte manuell im Zielsystem hochladen.</div>
       <pre class="wiz-csr-out" id="csr-result" aria-label="CSR-Inhalt (PEM-Format)"></pre>
       <div class="wiz-nav">
         <button class="lb" onclick="csrSetStep(1)">Neu starten</button>
@@ -940,18 +983,18 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
 
 <div class="div"></div>
 
-<!-- NetEdit Backups -->
-<div class="sec" id="netedit-backups">
+<!-- System Backups -->
+<div class="sec" id="system-backups">
   <div class="sec-hd">
     <span class="sec-sym">💾</span>
-    <h2 class="sec-title">NetEdit Backups</h2>
-    <button class="fold-btn" onclick="toggleFold('netedit-backups-body',this)" aria-expanded="true" aria-controls="netedit-backups-body">▾</button>
+    <h2 class="sec-title">System Backups</h2>
+    <button class="fold-btn" onclick="toggleFold('system-backups-body',this)" aria-expanded="true" aria-controls="system-backups-body">▾</button>
   </div>
-  <div class="sec-body" id="netedit-backups-body">
-    <div class="tip tip-blue"><span class="s">ℹ</span> Erfordert einen laufenden Proxy, der SSH-Verbindungen zu NetEdit herstellt. Proxy-URL im Abschnitt <a href="#api-config" style="color:var(--blue)">API-Konfiguration</a> eintragen.</div>
+  <div class="sec-body" id="system-backups-body">
+    <div class="tip tip-blue"><span class="s">ℹ</span> Erfordert einen laufenden Proxy, der SSH-Verbindungen zum Zielsystem herstellt. Proxy-URL im Abschnitt <a href="#api-config" style="color:var(--blue)">API-Konfiguration</a> eintragen.</div>
     <div style="display:flex;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap;align-items:center;">
-      <button class="lb lb-blue" onclick="loadNetEditBackups()">🔄 Backups laden</button>
-      <button class="lb lb-teal" onclick="createNetEditBackup()">+ Backup erstellen</button>
+      <button class="lb lb-blue" onclick="loadSystemBackups()">🔄 Backups laden</button>
+      <button class="lb lb-teal" onclick="createSystemBackup()">+ Backup erstellen</button>
       <span id="backup-status" style="font-size:12px;color:var(--tx3)"></span>
     </div>
     <div id="backup-list" class="backup-list">
@@ -1293,6 +1336,28 @@ document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('clic
     });
   }
 
+  // ── Zertifikats-Monitor ──────────────────────────────────────────────────
+  var ctb=document.getElementById('cert-tbody');
+  if(ctb&&D.certificates&&D.certificates.length){
+    var certNow=new Date();
+    var certHtml='';
+    D.certificates.forEach(function(cert){
+      var exp=new Date(cert.expires);
+      var days=Math.round((exp-certNow)/(1000*60*60*24));
+      var cls=days<14?'crit':days<30?'warn':'ok';
+      certHtml+='<tr>'
+        +'<td>'+esc(cert.host||'')+'</td>'
+        +'<td>'+esc(String(cert.port||443))+'</td>'
+        +'<td>'+esc(cert.subject||'')+'</td>'
+        +'<td>'+esc(cert.issuer||'')+'</td>'
+        +'<td style="white-space:nowrap">'+esc(cert.expires||'')+'</td>'
+        +'<td><span class="cert-days '+cls+'">'+(days<0?String(days)+' ⚠':days+' d')+'</span></td>'
+        +'<td><button class="lb cert-check-btn" data-host="'+esc(cert.host||'')+'" data-port="'+esc(String(cert.port||443))+'" onclick="checkCert(this)" title="Zertifikat jetzt prüfen" aria-label="Prüfen: '+esc(cert.host||'')+'">🔍</button></td>'
+        +'</tr>';
+    });
+    ctb.innerHTML=certHtml;
+  }
+
   // ── Auto-Refresh (nur HTTPS) ─────────────────────────────────────────────
   if(location.protocol!=='file:'){
     var arc=document.getElementById('auto-refresh-ctrl');
@@ -1306,7 +1371,7 @@ document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('clic
 })();
 </script>
 
-<!-- Baustein: API-Connector · Editierbare Datentabelle · Multi-Step-Wizard · Confirmation-Dialog · Toast · NetEdit Backup Manager -->
+<!-- Baustein: API-Connector · Editierbare Datentabelle · Multi-Step-Wizard · Confirmation-Dialog · Toast · SSH-Backup-Manager · Zertifikatsüberwachung -->
 <script>
 // Sicherheitshinweis: clientSecret darf NIEMALS in sessionStorage/localStorage gespeichert werden.
 // baseUrl + clientId bleiben für die Browsersitzung im sessionStorage; Token wird bei Ablauf neu angefordert.
@@ -1345,43 +1410,44 @@ function closeConfirm(){
   },true);
 })();
 
-// ── API-Connector (ClearPass OAuth2 Client Credentials) ─────────────────────
+// ── API-Connector (OAuth2 Client Credentials) ───────────────────────────────
 (function(){
-  var bi=document.getElementById('api-base-url'),ci=document.getElementById('api-client-id'),pi=document.getElementById('netedit-proxy-url');
-  if(bi)bi.value=sessionStorage.getItem('aruba_base_url')||'';
-  if(ci)ci.value=sessionStorage.getItem('aruba_client_id')||'';
-  if(pi)pi.value=sessionStorage.getItem('netedit_proxy_url')||'';
+  var bi=document.getElementById('api-base-url'),ci=document.getElementById('api-client-id'),pi=document.getElementById('proxy-url');
+  if(bi)bi.value=sessionStorage.getItem('api_base_url')||'';
+  if(ci)ci.value=sessionStorage.getItem('api_client_id')||'';
+  if(pi)pi.value=sessionStorage.getItem('proxy_url')||'';
   updateApiStatus();
 })();
 function updateApiStatus(){
   var dot=document.getElementById('api-dot'),msg=document.getElementById('api-msg'),logoutBtn=document.getElementById('api-logout-btn');
-  var token=null;try{token=JSON.parse(sessionStorage.getItem('aruba_token')||'null');}catch(e){}
+  var token=null;try{token=JSON.parse(sessionStorage.getItem('api_token')||'null');}catch(e){}
   var ok=token&&Date.now()<token.expires_at;
   if(dot)dot.className='api-dot'+(ok?' ok':' err');
   if(msg)msg.textContent=ok?'Verbunden — Token gültig bis '+new Date(token.expires_at).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr':'Nicht verbunden';
   if(logoutBtn)logoutBtn.style.display=ok?'':'none';
 }
 async function apiLogin(){
-  var baseUrl=(document.getElementById('api-base-url')||{}).value||'',clientId=(document.getElementById('api-client-id')||{}).value||'',clientSecret=(document.getElementById('api-client-secret')||{}).value||'',proxyUrl=(document.getElementById('netedit-proxy-url')||{}).value||'';
+  var baseUrl=(document.getElementById('api-base-url')||{}).value||'',clientId=(document.getElementById('api-client-id')||{}).value||'',clientSecret=(document.getElementById('api-client-secret')||{}).value||'',proxyUrl=(document.getElementById('proxy-url')||{}).value||'';
   if(!baseUrl||!clientId||!clientSecret){showToast('Bitte Base-URL, Client-ID und Client-Secret ausfüllen.','err');return;}
   try{
+    // OAuth2-Pfad (/api/oauth) an das eigene System anpassen
     var res=await fetch(baseUrl.replace(/\/$/,'')+'/api/oauth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({grant_type:'client_credentials',client_id:clientId,client_secret:clientSecret})});
     if(!res.ok){var txt=await res.text();throw new Error('HTTP '+res.status+': '+txt.slice(0,200));}
     var data=await res.json();
     var tokenData={access_token:data.access_token,expires_at:Date.now()+((data.expires_in||3600)*1000)-60000};
-    sessionStorage.setItem('aruba_base_url',baseUrl.replace(/\/$/,''));
-    sessionStorage.setItem('aruba_client_id',clientId);
-    if(proxyUrl)sessionStorage.setItem('netedit_proxy_url',proxyUrl.replace(/\/$/,''));
-    sessionStorage.setItem('aruba_token',JSON.stringify(tokenData));
+    sessionStorage.setItem('api_base_url',baseUrl.replace(/\/$/,''));
+    sessionStorage.setItem('api_client_id',clientId);
+    if(proxyUrl)sessionStorage.setItem('proxy_url',proxyUrl.replace(/\/$/,''));
+    sessionStorage.setItem('api_token',JSON.stringify(tokenData));
     var si=document.getElementById('api-client-secret');if(si)si.value='';
     showToast('Verbunden! Token läuft um '+new Date(tokenData.expires_at).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr ab.','ok');
     updateApiStatus();
   }catch(e){showToast('Verbindung fehlgeschlagen: '+e.message,'err');}
 }
-function apiLogout(){sessionStorage.removeItem('aruba_token');updateApiStatus();showToast('Abgemeldet.','info');}
+function apiLogout(){sessionStorage.removeItem('api_token');updateApiStatus();showToast('Abgemeldet.','info');}
 async function apiFetch(method,path,body){
-  var baseUrl=sessionStorage.getItem('aruba_base_url'),tokenData=null;
-  try{tokenData=JSON.parse(sessionStorage.getItem('aruba_token')||'null');}catch(e){}
+  var baseUrl=sessionStorage.getItem('api_base_url'),tokenData=null;
+  try{tokenData=JSON.parse(sessionStorage.getItem('api_token')||'null');}catch(e){}
   if(!baseUrl)throw new Error('Kein API-Server konfiguriert');
   if(!tokenData||Date.now()>tokenData.expires_at)throw new Error('Nicht authentifiziert — bitte erneut verbinden');
   var opts={method:method,headers:{'Authorization':'Bearer '+tokenData.access_token,'Content-Type':'application/json'}};
@@ -1392,14 +1458,14 @@ async function apiFetch(method,path,body){
   return await res.json();
 }
 
-// ── Editierbare Datentabelle (ClearPass Endpoints) ───────────────────────────
+// ── Editierbare Datentabelle (REST-Endpoints) ───────────────────────────────
 var _epOffset=0,_epLimit=25,_epTotal=0;
 async function loadEndpoints(){
   var q=(document.getElementById('ep-search')||{}).value||'',statusEl=document.getElementById('ep-status');
   if(statusEl)statusEl.textContent='Lädt …';
   try{
     var path='/api/endpoint?calculate_count=true&offset='+_epOffset+'&limit='+_epLimit;
-    if(q)path+='&filter='+encodeURIComponent(JSON.stringify({'mac_address':{'$contains':q}}));
+    if(q)path+='&filter='+encodeURIComponent(JSON.stringify({'name':{'$contains':q}})); // Filterpfad an eigene API anpassen
     var data=await apiFetch('GET',path);
     var items=(data._embedded&&data._embedded.items)||[];
     _epTotal=data.count||items.length;
@@ -1422,7 +1488,7 @@ function renderEndpointTable(items){
   items.forEach(function(ep){
     var attrs=ep.attributes?JSON.stringify(ep.attributes):'{}';
     var statusCls=ep.status==='Known'?'b-teal':ep.status==='Unknown'?'b-gray':'b-amber';
-    html+='<tr data-id="'+esc(String(ep.id||''))+'"><td>'+esc(ep.mac_address||'')+'</td>'
+    html+='<tr data-id="'+esc(String(ep.id||''))+'"><td>'+esc(ep.name||ep.id||'')+'</td>'
       +'<td><span class="b b-sm '+statusCls+'">'+esc(ep.status||'')+'</span></td>'
       +'<td><input class="ep-attr-input" value="'+esc(attrs)+'" aria-label="Attribute (JSON)"></td>'
       +'<td><button class="lb lb-teal" onclick="saveEndpoint(this)">Speichern</button></td></tr>';
@@ -1485,10 +1551,10 @@ function csrDownload(){
   setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);
 }
 
-// ── NetEdit Backup Manager ────────────────────────────────────────────────────
-async function loadNetEditBackups(){
-  var proxyUrl=sessionStorage.getItem('netedit_proxy_url');
-  if(!proxyUrl){showToast('NetEdit-Proxy-URL nicht konfiguriert — in API-Konfiguration eintragen.','err');return;}
+// ── SSH-Backup-Manager ────────────────────────────────────────────────────────
+async function loadSystemBackups(){
+  var proxyUrl=sessionStorage.getItem('proxy_url');
+  if(!proxyUrl){showToast('Proxy-URL nicht konfiguriert — in API-Konfiguration eintragen.','err');return;}
   var statusEl=document.getElementById('backup-status');if(statusEl)statusEl.textContent='Lädt …';
   try{
     var res=await fetch(proxyUrl+'/backups');if(!res.ok)throw new Error('HTTP '+res.status);
@@ -1497,13 +1563,13 @@ async function loadNetEditBackups(){
     if(statusEl)statusEl.textContent=backups.length+' Backup(s) gefunden';
   }catch(e){showToast('Fehler beim Laden: '+e.message,'err');if(statusEl)statusEl.textContent='';}
 }
-async function createNetEditBackup(){
-  var proxyUrl=sessionStorage.getItem('netedit_proxy_url');
-  if(!proxyUrl){showToast('NetEdit-Proxy-URL nicht konfiguriert.','err');return;}
+async function createSystemBackup(){
+  var proxyUrl=sessionStorage.getItem('proxy_url');
+  if(!proxyUrl){showToast('Proxy-URL nicht konfiguriert.','err');return;}
   try{
     var res=await fetch(proxyUrl+'/backup',{method:'POST',headers:{'Content-Type':'application/json'}});
     if(!res.ok)throw new Error('HTTP '+res.status);
-    showToast('Backup erstellt.','ok');setTimeout(loadNetEditBackups,1500);
+    showToast('Backup erstellt.','ok');setTimeout(loadSystemBackups,1500);
   }catch(e){showToast('Fehler: '+e.message,'err');}
 }
 function renderBackupList(backups){
@@ -1520,8 +1586,8 @@ function renderBackupList(backups){
   list.innerHTML=html;
 }
 function restoreBackup(name){
-  confirmDialog('Backup „'+name+'" wiederherstellen? Die aktuelle NetEdit-Konfiguration wird überschrieben.',async function(){
-    var proxyUrl=sessionStorage.getItem('netedit_proxy_url');
+  confirmDialog('Backup „'+name+'" wiederherstellen? Die aktuelle Systemkonfiguration wird überschrieben.',async function(){
+    var proxyUrl=sessionStorage.getItem('proxy_url');
     var statusEl=document.getElementById('backup-status');if(statusEl)statusEl.textContent='Stellt wieder her …';
     try{
       var res=await fetch(proxyUrl+'/restore',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({backup:name})});
@@ -1530,6 +1596,27 @@ function restoreBackup(name){
     }catch(e){showToast('Fehler: '+e.message,'err');}
     if(statusEl)statusEl.textContent='';
   });
+}
+
+// ── Zertifikatsüberwachung ────────────────────────────────────────────────────
+async function checkCert(btn){
+  var proxyUrl=sessionStorage.getItem('proxy_url');
+  if(!proxyUrl){showToast('Proxy-URL nicht konfiguriert — in API-Konfiguration eintragen.','err');return;}
+  var host=btn.dataset.host,port=btn.dataset.port;
+  var orig=btn.textContent;btn.disabled=true;btn.textContent='…';
+  try{
+    // Proxy-Endpunkt: GET /cert-check?host=HOST&port=PORT → {days_remaining:N, expires:"YYYY-MM-DD"}
+    var res=await fetch(proxyUrl+'/cert-check?host='+encodeURIComponent(host)+'&port='+encodeURIComponent(port));
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    var data=await res.json();
+    if(typeof data.days_remaining==='number'){
+      var d=data.days_remaining;
+      var tr=btn.closest('tr'),daysTd=tr&&tr.querySelector('.cert-days');
+      if(daysTd){daysTd.className='cert-days '+(d<14?'crit':d<30?'warn':'ok');daysTd.textContent=d<0?String(d)+' ⚠':d+' d';}
+      showToast('Zertifikat '+host+': '+d+' Tage verbleibend.','ok');
+    }else{showToast('Prüfung abgeschlossen.','info');}
+  }catch(e){showToast('Prüfung fehlgeschlagen: '+e.message,'err');}
+  finally{btn.disabled=false;btn.textContent=orig;}
 }
 </script>
 

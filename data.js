@@ -74,6 +74,16 @@ var DASH_DATA = {
     { "id": "i4", "title": "DB — Slow Query (users-Tabelle)","start":"2026-06-13T11:00:00","end": "2026-06-13T11:45:00",  "status": "resolved", "severity": "warn", "services": ["postgresql"],     "mttr_min": 45,   "note": "Fehlender Index gefunden; EXPLAIN ANALYZE durchgeführt, Fix eingeplant" }
   ],
 
+  // Zertifikate — TLS-Ablaufdaten
+  // host: Hostname · port: Port (Standard 443) · subject: CN= · issuer: CA-Name
+  // expires: "YYYY-MM-DD" · checked_at: ISO-Zeitstempel der letzten Prüfung
+  "certificates": [
+    { "id": "web-tls",    "host": "example.com",        "port": 443, "subject": "CN=example.com",        "issuer": "Let's Encrypt", "expires": "2026-09-15", "checked_at": "2026-06-13T14:00:00" },
+    { "id": "api-tls",    "host": "api.example.com",    "port": 443, "subject": "CN=api.example.com",    "issuer": "Internal CA",   "expires": "2026-07-10", "checked_at": "2026-06-13T14:00:00" },
+    { "id": "smtp-tls",   "host": "mail.example.com",   "port": 587, "subject": "CN=mail.example.com",   "issuer": "Let's Encrypt", "expires": "2026-08-22", "checked_at": "2026-06-13T14:00:00" },
+    { "id": "legacy-tls", "host": "legacy.example.com", "port": 443, "subject": "CN=legacy.example.com", "issuer": "DigiCert",      "expires": "2026-06-20", "checked_at": "2026-06-13T14:00:00" }
+  ],
+
   // Inventar — Hosts/Geräte
   // status: "ok" | "warn" | "crit" | "unknown"
   "hosts": [
