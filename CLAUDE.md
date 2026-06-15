@@ -200,7 +200,7 @@ Neben `data-theme` (dark/light) trägt das `<html>`-Tag die Achse **`data-design
 | **Brutal** ⚡ | `brutal` | radikal: null Radien, 2px-Rahmen in Akzentfarbe, harte Offset-Schatten | `#141414` Hartschwarz | `#ffffff` Weiß + schwarze Rahmen |
 | **Material 3** | `material` | M3: Roboto-Typeface, lila Primärfarbe (primary80=#d0bcff/primary40=#6750a4), tonale Surfaces, M3-Shape-Scale (xl=28/lg=16/md=12/sm=8/xs=4px), M3-Elevation-Shadows, M3-Typescale (Body 14sp, Title Large 22sp/400, Label 500wght), Buttons=pill/Chips=8px/Badges=pill, State Layer 8% auf Hover, Filled-Text-Field-Style, Material Symbols lazy-geladen (nur bei `design=material`) | `#141218` neutral6 | `#fffbff` neutral99 |
 | **Liquid Glass** ⚡ | `glass` | Liquid Glass: Highlights+Shadows+Glow+Tint via `backdrop-filter:blur(24px) saturate(1.8)`, innerer Specular-Highlight im Shadow-Token, sehr runde Radien (xl=28/lg=22), Gradient-Body | `#1e0442` → `#04112e` → `#032a12` | `#ccd8f8` → `#ecdcfc` → `#baf0d8` |
-| **Orange** | `orange` | Enterprise: tiefes Navy (`#041320`), kräftiges Orange (`#ff7a00`) als Primärfarbe im Dark-Mode, gedämpft zu `#8f4600` (WCAG AA ≥ 4,5:1) im Light-Mode; blau-getönte Borders (`#1a3d5c`), reduzierte Radien (xl=12/lg=10) | `#041320` Navy | `#eef2f8` Blaugrau |
+| **Orange** | `orange` | Enterprise-Charcoal: neutrales Dunkelgrau (`#212326`) statt Navy, kräftiges Orange (`#ff7700`) als Primärfarbe (Dark); gedämpft zu `#8f4600` (WCAG AA ≥ 4,5:1) im Light-Mode; neutrale Grau-Borders, reduzierte Radien (xl=12/lg=10) | `#212326` Charcoal | `#f0f2f4` Hellgrau |
 
 ⚡ = nutzt die Struktur-Tokens (siehe unten) — Beleg, dass Designs weit über Farbwechsel hinausgehen können.
 
