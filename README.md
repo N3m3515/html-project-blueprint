@@ -36,7 +36,7 @@ start index.html           # Windows
 
 `index.html` ist die Übersichtsseite (Tabs, Karten-Grid, Suche, Filter), `detail.html` das Muster für beliebig viele Unterseiten.
 
-## Theming: 8 Farbwelten × Dark/Light
+## Theming: 9 Farbwelten × Dark/Light
 
 Zwei unabhängige Achsen am `<html>`-Tag: `data-theme` (dark/light) und `data-design` (Farbwelt). Im Template schaltet eine Auswahlbox live um; in fertigen Projekten wird das Design einmal fixiert.
 
@@ -50,6 +50,7 @@ Zwei unabhängige Achsen am `<html>`-Tag: `data-theme` (dark/light) und `data-de
 | **Brutal** ⚡ | radikal: null Radien, 2px-Rahmen in Akzentfarbe, harte Offset-Schatten |
 | **Material 3** | Material Design 3: lila Primärfarbe, tonale Flächen, weiche Radien (28 px) |
 | **Liquid Glass** ⚡ | Liquid Glass: Gradient-Body, `backdrop-filter:blur`, semi-transparente Glasflächen |
+| **Orange** | Enterprise: tiefes Navy, kräftiges Orange als Primärfarbe, blau-getönte Borders, reduzierte Radien |
 
 Möglich machen das **Struktur-Tokens**: Schrift, Eckenradien, Rahmenstärke und Schatten sind als CSS-Variablen definiert — ein Design kann damit weit mehr ändern als Farben, ohne eine einzige Komponente anzufassen. Der Dark/Light-Default folgt der OS-Einstellung (`prefers-color-scheme`), ein Anti-Flicker-Script verhindert Aufblitzen, und ein Link-Interceptor reicht Theme + Design per URL-Parameter an jede Seite weiter (nötig, weil Firefox/Safari den localStorage bei `file://` pro Datei isolieren).
 
