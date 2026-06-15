@@ -580,13 +580,20 @@ kbd{display:inline-block;background:var(--bg3);border:var(--bw) solid var(--bdr2
 .wi-label{font-size:11px;color:var(--tx3);text-align:center;white-space:nowrap;}
 .wiz-step{display:none;}
 .wiz-step.wiz-active{display:block;}
-.wiz-fields{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem 1rem;margin:0.75rem 0;}
+.wiz-fields{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem 1rem;margin:0.75rem 0;}
 @media(max-width:600px){.wiz-fields{grid-template-columns:1fr;}}
-.wiz-fields label{font-size:12px;color:var(--tx2);display:flex;flex-direction:column;gap:4px;}
+.wiz-fields label{font-size:12px;color:var(--tx2);display:flex;flex-direction:column;gap:5px;}
 .wiz-fields input,.wiz-fields select{background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-sm);color:var(--tx);padding:6px 10px;font:inherit;font-size:13px;width:100%;box-sizing:border-box;}
 .wiz-fields input:focus,.wiz-fields select:focus{outline:none;border-color:var(--blue-bdr);}
 .wiz-csr-out{background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-md);padding:0.75rem;font-family:monospace;font-size:11px;white-space:pre-wrap;word-break:break-all;max-height:200px;overflow-y:auto;color:var(--tx2);margin:0.75rem 0;}
 .wiz-nav{display:flex;gap:0.5rem;margin-top:1rem;}
+.wiz-import{display:flex;align-items:center;gap:0.5rem 0.75rem;flex-wrap:wrap;padding:0.5rem 0.75rem;background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-sm);margin-bottom:1rem;}
+.wiz-import-label{font-size:12px;color:var(--tx2);white-space:nowrap;}
+.wiz-import-sep{font-size:12px;color:var(--tx3);}
+.wiz-import-file{cursor:pointer;position:relative;}
+.wiz-import-select{font-size:12px;background:var(--bg2);border:var(--bw) solid var(--bdr);border-radius:var(--r-xs);color:var(--tx);padding:3px 8px;cursor:pointer;font:inherit;}
+.wiz-import-select:focus{outline:none;border-color:var(--blue-bdr);}
+.wiz-required-note{font-size:11px;color:var(--tx3);margin:0.25rem 0 0;}
 /* === Baustein: Confirmation-Dialog === */
 .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:8000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
 .confirm-overlay.on{opacity:1;pointer-events:auto;}
@@ -620,7 +627,7 @@ kbd{display:inline-block;background:var(--bg3);border:var(--bw) solid var(--bdr2
 @media print{
   :root{--bg:#ffffff;--bg2:#ffffff;--bg3:#eef1f8;--bg4:#e5e9f5;--bdr:#d0d5e8;--bdr2:#b8bfd4;--tx:#1a1d2e;--tx2:#50587a;--tx3:#7c88a8;--blue:#1857a0;--blue-bg:#ddeaf8;--blue-dim:#c8dcf5;--blue-bdr:#8ab8e0;--teal:#0e7a5c;--teal-bg:#d0ece6;--teal-dim:#b5dfd5;--teal-bdr:#68b89a;--green:#3d7e1c;--green-bg:#dff0c8;--green-bdr:#8ec850;--amber:#8a5c0a;--amber-bg:#fdf2d8;--amber-bdr:#dca840;--coral:#b83a20;--coral-bg:#fde6e0;--coral-bdr:#dc8870;--purple:#4848a8;--purple-bg:#e8e8f8;--purple-bdr:#9898d5;--gray-dim:#e5e9f5;--ok:#0e7a5c;--no:#b83a20;--maybe:#8a5c0a;}
   body{background:#fff;max-width:100%;padding-top:0;}
-  .theme-toggle,.design-select,.back-btn,.fold-btn,.toc,.totop,.data-tools,.log-toolbar,.ann-wrap,.sc-overlay,.confirm-overlay,#toast-container,.api-status button,.edt-toolbar button,.wiz-nav button{display:none !important;}
+  .theme-toggle,.design-select,.back-btn,.fold-btn,.toc,.totop,.data-tools,.log-toolbar,.ann-wrap,.sc-overlay,.confirm-overlay,#toast-container,.api-status button,.edt-toolbar button,.wiz-nav button,.wiz-import{display:none !important;}
   .folded{display:block !important;}
   .sec-body.folded{max-height:none !important;opacity:1;pointer-events:auto;}
   .sm-wrap,.metric-card,.log-table-wrap,.inv-item,.maint-item,.incident-item,.cert-table-wrap{break-inside:avoid;box-shadow:none !important;}
@@ -823,7 +830,7 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
             <th style="width:10em">Aussteller</th>
             <th style="width:8em">Ablauf</th>
             <th style="width:6em">Tage</th>
-            <th style="width:5em"></th>
+            <th style="width:7em"></th>
           </tr>
         </thead>
         <tbody id="cert-tbody">
@@ -944,12 +951,23 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
     </div>
     <!-- Schritt 2: CSR-Felder ausfüllen -->
     <div class="wiz-step" id="csr-step-2">
+      <div class="wiz-import" role="group" aria-label="Felder aus vorhandenem Zertifikat übernehmen">
+        <span class="wiz-import-label">📥 Übernehmen aus:</span>
+        <label class="lb wiz-import-file" title="PEM- oder DER-Datei auswählen">
+          📂 Zertifikat-Datei
+          <input type="file" id="csr-pem-file" accept=".pem,.crt,.cer,.der" aria-label="Zertifikat-Datei auswählen" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;">
+        </label>
+        <span class="wiz-import-sep">oder</span>
+        <select id="csr-cert-select" class="wiz-import-select" aria-label="Zertifikat aus Überwachungstabelle wählen">
+          <option value="">— Überwachungstabelle —</option>
+        </select>
+      </div>
       <div class="wiz-fields">
-        <label>Common Name (CN) <span style="color:var(--coral)">*</span>
-          <input id="csr-cn" type="text" placeholder="server.example.com" required>
+        <label>Common Name (CN) <span style="color:var(--coral)" aria-hidden="true">*</span>
+          <input id="csr-cn" type="text" placeholder="server.example.com" required aria-required="true">
         </label>
         <label>Subject Alternative Names (kommagetrennt)
-          <input id="csr-san" type="text" placeholder="clearpass.example.com, cp.internal">
+          <input id="csr-san" type="text" placeholder="server.example.com, www.example.com">
         </label>
         <label>Organisationseinheit (OU)
           <input id="csr-ou" type="text" placeholder="IT-Security">
@@ -964,6 +982,7 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
           <input id="csr-l" type="text" placeholder="München">
         </label>
       </div>
+      <p class="wiz-required-note"><span style="color:var(--coral)">*</span> Pflichtfeld</p>
       <div class="wiz-nav">
         <button class="lb" onclick="csrSetStep(1)">← Zurück</button>
         <button class="lb lb-blue" id="csr-gen-btn" onclick="csrGenerate()">CSR generieren</button>
@@ -1352,7 +1371,8 @@ document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('clic
         +'<td>'+esc(cert.issuer||'')+'</td>'
         +'<td style="white-space:nowrap">'+esc(cert.expires||'')+'</td>'
         +'<td><span class="cert-days '+cls+'">'+(days<0?String(days)+' ⚠':days+' d')+'</span></td>'
-        +'<td><button class="lb cert-check-btn" data-host="'+esc(cert.host||'')+'" data-port="'+esc(String(cert.port||443))+'" onclick="checkCert(this)" title="Zertifikat jetzt prüfen" aria-label="Prüfen: '+esc(cert.host||'')+'">🔍</button></td>'
+        +'<td style="white-space:nowrap"><button class="lb cert-check-btn" data-host="'+esc(cert.host||'')+'" data-port="'+esc(String(cert.port||443))+'" onclick="checkCert(this)" title="Prüfen" aria-label="Prüfen: '+esc(cert.host||'')+'">🔍</button>'
+        +' <button class="lb lb-teal cert-check-btn" data-id="'+esc(cert.id||cert.host||'')+'" onclick="csrFromCert(this.dataset.id)" title="CSR generieren" aria-label="CSR für '+esc(cert.host||'')+'">📜</button></td>'
         +'</tr>';
     });
     ctb.innerHTML=certHtml;
@@ -1550,6 +1570,84 @@ function csrDownload(){
   document.body.appendChild(a);a.click();
   setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);
 }
+
+// ── CSR-Prefill ───────────────────────────────────────────────────────────────
+function csrPrefillFrom(f){
+  var set=function(id,v){var el=document.getElementById(id);if(el)el.value=v||'';};
+  set('csr-cn',f.cn);
+  set('csr-san',Array.isArray(f.san)?f.san.join(', '):f.san||'');
+  set('csr-ou',f.ou);set('csr-c',f.c);set('csr-st',f.st);set('csr-l',f.l);
+}
+function csrFromCert(certId){
+  if(!window.DASH_DATA||!DASH_DATA.certificates)return;
+  var cert=DASH_DATA.certificates.find(function(c){return(c.id||c.host)===certId;});
+  if(!cert){showToast('Zertifikat nicht gefunden.','err');return;}
+  csrPrefillFrom({cn:(cert.subject||'').replace(/^CN=/i,'')||cert.host||'',san:cert.host||''});
+  var body=document.getElementById('csr-generator-body');
+  if(body&&body.classList.contains('folded')){var fb=document.querySelector('[aria-controls="csr-generator-body"]');if(fb)toggleFold('csr-generator-body',fb);}
+  csrSetStep(2);
+  var sec=document.getElementById('csr-generator');if(sec)sec.scrollIntoView({behavior:'smooth',block:'start'});
+  showToast('Felder aus Zertifikatsüberwachung übernommen.','ok');
+}
+// Minimal X.509 DER parser — extrahiert CN, OU, O, C, ST, L, SAN aus PEM-Zertifikat
+function csrFromPem(text){
+  var m=text.match(/-----BEGIN CERTIFICATE-----([\s\S]*?)-----END CERTIFICATE-----/);
+  if(!m)throw new Error('Kein PEM-Zertifikat gefunden');
+  var bin=atob(m[1].replace(/\s+/g,'')),b=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);
+  function gl(p){var l=b[p++];if(l<0x80)return{l:l,p:p};var n=l&0x7f,v=0;while(n--)v=(v<<8)|b[p++];return{l:v,p:p};}
+  function tlv(p){var tag=b[p++],r=gl(p);return{tag:tag,s:r.p,l:r.l,e:r.p+r.l};}
+  function ch(s,e){var a=[];while(s<e){var t=tlv(s);a.push(t);s=t.e;}return a;}
+  function ds(t){if(t.tag===0x1e){var s='';for(var i=t.s+1;i<t.e;i+=2)s+=String.fromCharCode((b[i]<<8)|b[i+1]);return s;}return new TextDecoder().decode(b.slice(t.s,t.e));}
+  function oid(t){var s='',i=t.s,f=1;while(i<t.e){var v=0;while(b[i]&0x80)v=((v|(b[i++]&0x7f))<<7);v|=b[i++];if(f){s=Math.floor(v/40)+'.'+v%40;f=0;}else s+='.'+v;}return s;}
+  var RDN={'2.5.4.3':'cn','2.5.4.11':'ou','2.5.4.10':'o','2.5.4.6':'c','2.5.4.8':'st','2.5.4.7':'l'};
+  function rdns(t){var r={};ch(t.s,t.e).forEach(function(set){ch(set.s,set.e).forEach(function(seq){var p=ch(seq.s,seq.e);if(p.length>=2&&p[0].tag===0x06){var k=RDN[oid(p[0])];if(k)r[k]=ds(p[1]);}});});return r;}
+  var cert=tlv(0),tbs=tlv(cert.s),kids=ch(tbs.s,tbs.e),ci=0;
+  if(kids[0]&&kids[0].tag===0xa0)ci++;   // optionale Version [0]
+  ci+=4;                                  // serial, sigAlg, issuer, validity überspringen
+  var res=Object.assign({san:[]},kids[ci]&&kids[ci].tag===0x30?rdns(kids[ci]):{});
+  for(var ei=ci+2;ei<kids.length;ei++){
+    if(kids[ei].tag!==0xa3)continue;
+    var extSeq=tlv(kids[ei].s);
+    ch(extSeq.s,extSeq.e).forEach(function(ext){
+      var ep=ch(ext.s,ext.e);
+      if(ep.length>=2&&ep[0].tag===0x06&&oid(ep[0])==='2.5.29.17'){
+        var oc=ep[ep.length-1],ss=tlv(oc.s);
+        ch(ss.s,ss.e).forEach(function(gn){if(gn.tag===0x82)res.san.push(ds(gn));});
+      }
+    });
+  }
+  return res;
+}
+(function(){
+  // Datei-Upload → PEM-Parse
+  var fi=document.getElementById('csr-pem-file');
+  if(fi)fi.addEventListener('change',function(e){
+    var file=e.target.files[0];if(!file)return;
+    var reader=new FileReader();
+    reader.onload=function(ev){
+      try{var r=csrFromPem(ev.target.result);csrPrefillFrom(r);showToast('Felder aus Zertifikat übernommen.','ok');}
+      catch(err){showToast('Lesen fehlgeschlagen: '+err.message,'err');}
+      fi.value='';
+    };
+    reader.readAsText(file);
+  });
+  // Cert-Select aus Überwachungstabelle befüllen
+  var sel=document.getElementById('csr-cert-select');
+  if(sel&&window.DASH_DATA&&DASH_DATA.certificates&&DASH_DATA.certificates.length){
+    DASH_DATA.certificates.forEach(function(cert){
+      var opt=document.createElement('option');
+      opt.value=cert.id||cert.host||'';
+      opt.textContent=cert.host+(cert.subject?' · '+cert.subject:'');
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change',function(){
+      if(!sel.value)return;
+      csrFromCert(sel.value);
+      sel.selectedIndex=0;
+    });
+  }
+})();
 
 // ── SSH-Backup-Manager ────────────────────────────────────────────────────────
 async function loadSystemBackups(){
