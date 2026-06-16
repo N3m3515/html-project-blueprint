@@ -780,7 +780,7 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
 </div>
 
 <!-- SPRUNGLEISTE (TOC): ein Chip pro Sektion, ids = Kebab-Case -->
-<nav class="toc"><a href="#anreise-karte">🗺 Anreise-Route</a><a href="#basis-infos">ℹ️ Basis-Infos</a><a href="#eintraege">🗂 Einträge mit Ansicht-Toggle</a><a href="#guide-musterstadt">🏙 Guide Musterstadt</a><a href="#termine">📅 Termine</a><a href="#vergleich">📊 Vergleichstabelle</a><a href="#auswahl-grid">🏆 Auswahl-Grid</a><a href="#eckdaten">💶 Eckdaten &amp; Kosten</a><a href="#checkliste">✅ Checkliste</a><a href="#galerie">🖼 Galerie</a><a href="#timeline-diagramm">📈 Timeline &amp; Diagramm</a><a href="#faq">❓ FAQ</a><a href="#kalkulation">💶 Kalkulation</a><a href="#notizen">📝 Notizen</a></nav>
+<nav class="toc"><a href="#anreise-karte">🗺 Anreise-Route</a><a href="#basis-infos">ℹ️ Basis-Infos</a><a href="#eintraege">🗂 Einträge mit Ansicht-Toggle</a><a href="#guide-musterstadt">🏙 Guide Musterstadt</a><a href="#termine">📅 Termine</a><a href="#vergleich">📊 Vergleichstabelle</a><a href="#auswahl-grid">🏆 Auswahl-Grid</a><a href="#eckdaten">💶 Eckdaten &amp; Kosten</a><a href="#checkliste">✅ Checkliste</a><a href="#formular">📝 Formular-System</a><a href="#datentabelle">📋 Datentabelle</a><a href="#galerie">🖼 Galerie</a><a href="#timeline-diagramm">📈 Timeline &amp; Diagramm</a><a href="#faq">❓ FAQ</a><a href="#kalkulation">💶 Kalkulation</a><a href="#notizen">📝 Notizen</a></nav>
 
 <!-- SEKTION 1: ANREISE-KARTE — OPTIONALER BAUSTEIN „Google-Maps-Routen", nur bei Geo-Bezug (gehört zu Script-Block 4) -->
 <div class="sec" id="anreise-karte">
@@ -1043,7 +1043,85 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
 
 <div class="div"></div>
 
-<!-- SEKTION 10: GALERIE — OPTIONALER BAUSTEIN mit Lightbox (gehört zu Script-Block 6; Platzhalter sind Inline-SVGs) -->
+<!-- SEKTION 10a: FORMULAR-SYSTEM — OPTIONALER BAUSTEIN -->
+<div class="sec" id="formular">
+  <div class="sec-hd"><span class="sec-sym">📝</span><h2 class="sec-title">Formular-System — Eingabemasken</h2><button class="fold-btn" data-fold="formular-body" aria-controls="formular-body" aria-expanded="true" onclick="toggleFold('formular-body',this)" title="Ein-/Ausklappen">▾</button></div>
+<div class="sec-body" id="formular-body">
+  <div class="tip tip-blue"><span class="s">📌</span><span><code>.form-section</code> gruppiert Felder in Card-artige Abschnitte. <code>.form-grid</code> ordnet in zwei Spalten, <code>.form-group.full</code> erstreckt sich über beide. <code>.form-row</code> für Aktions-Buttons am Ende.</span></div>
+  <form onsubmit="return false;">
+    <div class="form-section">
+      <div class="form-section-title">Allgemeine Angaben</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="demo-name">Name</label>
+          <input type="text" id="demo-name" placeholder="Max Mustermann">
+        </div>
+        <div class="form-group">
+          <label for="demo-email">E-Mail</label>
+          <input type="email" id="demo-email" placeholder="max@beispiel.de">
+        </div>
+        <div class="form-group">
+          <label for="demo-type">Typ</label>
+          <select id="demo-type">
+            <option value="">— wählen —</option>
+            <option value="a">Option A</option>
+            <option value="b">Option B</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="demo-disabled">Deaktiviertes Feld</label>
+          <input type="text" id="demo-disabled" value="Nicht editierbar" disabled>
+        </div>
+        <div class="form-group full">
+          <label for="demo-note">Notiz <span style="color:var(--tx3)">(optional)</span></label>
+          <textarea id="demo-note" rows="2" placeholder="Beliebiger Text …"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">Priorität</div>
+      <div class="radio-group">
+        <label><input type="radio" name="prio" value="low"> Niedrig</label>
+        <label><input type="radio" name="prio" value="mid" checked> Mittel</label>
+        <label><input type="radio" name="prio" value="high"> Hoch</label>
+      </div>
+    </div>
+    <div class="form-row">
+      <button class="lb lb-teal" type="submit">✓ Speichern</button>
+      <button class="lb" type="reset">↺ Zurücksetzen</button>
+    </div>
+  </form>
+</div></div>
+
+<div class="div"></div>
+
+<!-- SEKTION 10b: DATENTABELLE + LEER-ZUSTAND — OPTIONALE BAUSTEINE -->
+<div class="sec" id="datentabelle">
+  <div class="sec-hd"><span class="sec-sym">📋</span><h2 class="sec-title">Datentabelle &amp; Leer-Zustand</h2><button class="fold-btn" data-fold="datentabelle-body" aria-controls="datentabelle-body" aria-expanded="true" onclick="toggleFold('datentabelle-body',this)" title="Ein-/Ausklappen">▾</button></div>
+<div class="sec-body" id="datentabelle-body">
+  <div class="tip tip-blue"><span class="s">📌</span><span><code>.tbl-wrap</code> + <code>.tbl</code> für read-only Datentabellen. <code>td.mono</code> = Monospace (IP/IDs), <code>td.actions</code> = kompakte Button-Zelle. Ergänzt <code>.rt</code> (Vergleich) und <code>.edt-table</code> (Inline-Edit) ohne diese zu ersetzen.</span></div>
+  <div class="tbl-wrap">
+    <table class="tbl" role="table">
+      <thead><tr><th>Service</th><th>Host</th><th style="width:90px">Status</th><th style="width:100px">IP</th><th style="width:80px">Aktionen</th></tr></thead>
+      <tbody>
+        <tr><td>Webserver</td><td>srv01.local</td><td><span class="b b-teal">ok</span></td><td class="mono">192.168.1.10</td><td class="actions"><button class="lb" onclick="">✏ Edit</button></td></tr>
+        <tr><td>Datenbank</td><td>srv02.local</td><td><span class="b b-amber">warn</span></td><td class="mono">192.168.1.11</td><td class="actions"><button class="lb" onclick="">✏ Edit</button></td></tr>
+        <tr><td>Cache</td><td>srv03.local</td><td><span class="b b-coral">crit</span></td><td class="mono">192.168.1.12</td><td class="actions"><button class="lb" onclick="">✏ Edit</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin:1rem 0 .5rem;font-size:12px;color:var(--tx2)">Leer-Zustand <code>.empty</code> — wenn noch keine Daten vorhanden:</p>
+  <div style="border:var(--bw) solid var(--bdr);border-radius:var(--r-md);background:var(--bg2)">
+    <div class="empty">
+      <span class="ei">🔍</span>
+      Keine Einträge gefunden — Filter anpassen oder zuerst Daten laden.
+    </div>
+  </div>
+</div></div>
+
+<div class="div"></div>
+
+<!-- SEKTION 10c: GALERIE — OPTIONALER BAUSTEIN mit Lightbox (gehört zu Script-Block 6; Platzhalter sind Inline-SVGs) -->
 <div class="sec" id="galerie">
   <div class="sec-hd"><span class="sec-sym">🖼</span><h2 class="sec-title">Galerie — mit Lightbox</h2><button class="fold-btn" data-fold="galerie-body" aria-controls="galerie-body" aria-expanded="true" onclick="toggleFold('galerie-body',this)" title="Ein-/Ausklappen">▾</button></div>
 <div class="sec-body" id="galerie-body">

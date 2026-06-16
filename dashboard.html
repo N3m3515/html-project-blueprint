@@ -1209,6 +1209,8 @@ document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('clic
   function fmtDur(ms){return ms<60000?'< 1 Min.':ms<3600000?Math.round(ms/60000)+' Min.':Math.round(ms/3600000)+' h';}
   function fmtTs(ts){return(ts||'').replace('T',' ').slice(0,16);}
   function statusColor(s){return s==='crit'?'var(--coral)':s==='warn'?'var(--amber)':'var(--teal)';}
+  function certDaysBadge(days){if(typeof days!=='number'||isNaN(days))return null;var cls=days<14?'crit':days<30?'warn':'ok';return'<span class="cert-days '+cls+'">'+(days<0?String(days)+' ⚠':days+' d')+'</span>';}
+  function statusBadge(label,statusMap){if(!label)return'<span class="b b-gray">—</span>';var cls=(statusMap&&statusMap[label])||'b-gray';return'<span class="b '+esc(cls)+'">'+esc(label)+'</span>';}
 
   // Back-to-top
   var totop=document.getElementById('totop');
