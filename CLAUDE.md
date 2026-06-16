@@ -564,6 +564,8 @@ for f in sorted(glob.glob('*.html')):
 EOF
 ```
 
+- **`certDaysBadge` / `statusBadge` / `downloadText` müssen in der IT-Dashboard-IIFE lokal verfügbar sein** — diese Helpers sind zwar global in Script-Block 7 definiert, aber die IIFE in Block 6 läuft, bevor Block 7 geparst wird. JavaScript-Funktionsdeklarationen werden nur innerhalb desselben `<script>`-Blocks gehoisted, **nicht** über Block-Grenzen. Lösung: die Helpers lokal in der IIFE duplizieren (wie im Dashboard-Template umgesetzt). Symptom: Cert-Monitor-Sektion bleibt leer, keine JS-Fehlermeldung in der Konsole (die IIFE beendet sich still mit `undefined is not a function`).
+- **Bulk-Leiste `body{padding-bottom:4rem}` setzen** — das `#bulk-bar`-Element ist `position:fixed` am unteren Rand. Ohne Abstand verdeckt es den letzten Seiteninhalt. Diese Regel muss explizit gesetzt werden; das Template enthält sie bereits in `dashboard.html`.
 - **Links verifizieren** vor dem Einfügen: `curl -s -o /dev/null -w "%{http_code}" -L URL`. Faustregeln: `403` = meist Bot-Schutz, im Browser OK — behalten · `000` = tot — Link entfernen, ggf. Maps-Link behalten · Deep-Paths auf kleinen Sites oft `404` — auf Root kürzen. Tote Domains mit Ersatz in der Projekt-CLAUDE.md dokumentieren.
 - **Faktendaten nie schätzen** (Fahrzeiten, Preise, Öffnungszeiten) — immer gegen eine Quelle prüfen (z. B. OSRM `router.project-osrm.org` für Fahrzeiten).
 - Keine Script-/Hilfsdateien im Projektordner ablegen (Prüf-Snippets per Heredoc ausführen, siehe oben).
