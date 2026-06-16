@@ -1980,7 +1980,7 @@ var _bulkIds=new Set();
 function bulkToggle(cb){cb.checked?_bulkIds.add(cb.dataset.id):_bulkIds.delete(cb.dataset.id);_bulkUpdateBar();}
 function bulkToggleAll(cb){document.querySelectorAll('.bulk-cb').forEach(function(c){c.checked=cb.checked;cb.checked?_bulkIds.add(c.dataset.id):_bulkIds.delete(c.dataset.id);});_bulkUpdateBar();}
 function bulkClear(){_bulkIds.clear();document.querySelectorAll('.bulk-cb').forEach(function(c){c.checked=false;});var a=document.getElementById('bulk-select-all');if(a)a.checked=false;_bulkUpdateBar();}
-function _bulkUpdateBar(){var bar=document.getElementById('bulk-bar'),cnt=document.getElementById('bulk-count');if(!bar)return;bar.style.display=_bulkIds.size?'flex':'none';if(cnt)cnt.textContent=_bulkIds.size+' Eintrag'+(+(_bulkIds.size!==1?'einträge ausgewählt':'eintrag ausgewählt'));}
+function _bulkUpdateBar(){var bar=document.getElementById('bulk-bar'),cnt=document.getElementById('bulk-count');if(!bar)return;bar.style.display=_bulkIds.size?'flex':'none';if(cnt)cnt.textContent=_bulkIds.size+(_bulkIds.size!==1?' Einträge ausgewählt':' Eintrag ausgewählt');}
 // bulkDelete() ist projektspezifisch — hier als Stub; im eigenen Projekt ersetzen:
 // function bulkDelete(){showConfirm({icon:'❌',title:'Löschen',body:'<strong>'+_bulkIds.size+'</strong> Einträge löschen?',okLabel:'Löschen',okClass:'lb-coral',callback:async function(){/* API-Call */bulkClear();}});}
 </script>
