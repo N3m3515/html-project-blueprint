@@ -441,7 +441,7 @@ pre{font-family:'Courier New',Courier,monospace;font-size:11px;background:var(--
 .sec-body{overflow:hidden;transition:max-height .28s ease,opacity .22s ease;}
 .sec-body.folded{display:block !important;max-height:0 !important;opacity:0;pointer-events:none;}
 .back-btn{position:fixed;top:.75rem;left:.75rem;z-index:200;margin:0;}
-body{padding-top:3.4rem;}
+body{padding-top:3.4rem;padding-bottom:4rem;}
 
 /* === Baustein: Leer-Zustand === */
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:2.5rem 1rem;color:var(--tx3);font-size:13px;text-align:center;}
@@ -774,6 +774,7 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
   <a href="#rest-endpoints">🖧 Endpoints</a>
   <a href="#csr-generator">📜 CSR</a>
   <a href="#system-backups">💾 Backups</a>
+  <a href="#ui-bausteine">🧩 UI-Bausteine</a>
 </nav>
 
 <!-- Status-Matrix -->
@@ -1105,6 +1106,116 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
     <div id="backup-list" class="backup-list">
       <div class="edt-empty">Nicht geladen — Proxy konfigurieren und „Backups laden" klicken.</div>
     </div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<!-- UI-BAUSTEINE: Formular-System / Datentabelle + Bulk / Leer-Zustand -->
+<div class="sec" id="ui-bausteine">
+  <div class="sec-hd">
+    <span class="sec-sym">🧩</span>
+    <h2 class="sec-title">UI-Bausteine — Formular, Datentabelle, Bulk-Aktionen, Leer-Zustand</h2>
+    <button class="fold-btn" onclick="toggleFold('ui-bausteine-body',this)" aria-expanded="true" aria-controls="ui-bausteine-body">▾</button>
+  </div>
+  <div class="sec-body" id="ui-bausteine-body">
+    <div class="tip tip-blue"><span class="s">📌</span><span>Diese Sektion zeigt alle vier Bausteine im Zusammenspiel. In produktiven Projekten werden sie in die thematisch passenden Sektionen integriert — diese Demo-Sektion kann dann entfernt werden.</span></div>
+
+    <!-- Formular-System -->
+    <div class="sub" style="margin:.75rem 0 .5rem">Formular-System — <code>.form-section / .form-grid / .form-group / .radio-group</code></div>
+    <form onsubmit="return false;">
+      <div class="form-section">
+        <div class="form-section-title">Verbindungsparameter</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="demo-host">Hostname / IP</label>
+            <input type="text" id="demo-host" placeholder="192.168.1.10">
+          </div>
+          <div class="form-group">
+            <label for="demo-port">Port</label>
+            <input type="number" id="demo-port" placeholder="443" value="443">
+          </div>
+          <div class="form-group">
+            <label for="demo-proto">Protokoll</label>
+            <select id="demo-proto">
+              <option value="https">HTTPS</option>
+              <option value="http">HTTP</option>
+              <option value="ssh">SSH</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="demo-timeout">Timeout (s)</label>
+            <input type="number" id="demo-timeout" value="30">
+          </div>
+          <div class="form-group full">
+            <label for="demo-desc">Beschreibung <span style="color:var(--tx3)">(optional)</span></label>
+            <textarea id="demo-desc" rows="2" placeholder="Kurzbeschreibung des Endpunkts …"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">Priorität</div>
+        <div class="radio-group">
+          <label><input type="radio" name="demo-prio" value="low"> Niedrig</label>
+          <label><input type="radio" name="demo-prio" value="mid" checked> Mittel</label>
+          <label><input type="radio" name="demo-prio" value="high"> Hoch</label>
+          <label><input type="radio" name="demo-prio" value="crit"> Kritisch</label>
+        </div>
+      </div>
+      <div class="form-row">
+        <button class="lb lb-teal" type="submit">✓ Speichern</button>
+        <button class="lb" type="reset">↺ Zurücksetzen</button>
+      </div>
+    </form>
+
+    <!-- Datentabelle + Bulk-Aktionen -->
+    <div class="sub" style="margin:1.25rem 0 .5rem">Datentabelle — <code>.tbl-wrap / .tbl / td.mono / td.actions</code> + Bulk-Aktionen</div>
+    <div class="tip tip-amber"><span class="s">💡</span><span>Checkboxen aktivieren → die <strong>Bulk-Leiste</strong> erscheint am unteren Rand. Baut auf <code>bulkToggle</code> / <code>bulkToggleAll</code> / <code>bulkClear()</code> auf.</span></div>
+    <div class="tbl-wrap">
+      <table class="tbl" role="table">
+        <thead>
+          <tr>
+            <th style="width:32px"><input type="checkbox" id="bulk-select-all" onchange="bulkToggleAll(this)" aria-label="Alle auswählen"></th>
+            <th>Service</th><th>Host</th><th>Status</th><th class="mono" style="width:120px">IP-Adresse</th><th style="width:80px">Aktionen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox" class="bulk-cb" data-id="srv01" onchange="bulkToggle(this)" aria-label="srv01 auswählen"></td>
+            <td>Webserver</td><td>srv01.local</td><td><span class="b b-teal">ok</span></td><td class="mono">192.168.1.10</td>
+            <td class="actions"><button class="lb" onclick="showConfirm({icon:'✏️',title:'Bearbeiten',body:'srv01.local bearbeiten?',okLabel:'Öffnen',okClass:'lb-blue',callback:function(){}})">✏ Edit</button></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="bulk-cb" data-id="srv02" onchange="bulkToggle(this)" aria-label="srv02 auswählen"></td>
+            <td>Datenbank</td><td>srv02.local</td><td><span class="b b-amber">warn</span></td><td class="mono">192.168.1.11</td>
+            <td class="actions"><button class="lb" onclick="showConfirm({icon:'✏️',title:'Bearbeiten',body:'srv02.local bearbeiten?',okLabel:'Öffnen',okClass:'lb-blue',callback:function(){}})">✏ Edit</button></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="bulk-cb" data-id="srv03" onchange="bulkToggle(this)" aria-label="srv03 auswählen"></td>
+            <td>Cache / Redis</td><td>srv03.local</td><td><span class="b b-coral">crit</span></td><td class="mono">192.168.1.12</td>
+            <td class="actions"><button class="lb" onclick="showConfirm({icon:'✏️',title:'Bearbeiten',body:'srv03.local bearbeiten?',okLabel:'Öffnen',okClass:'lb-blue',callback:function(){}})">✏ Edit</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Leer-Zustand -->
+    <div class="sub" style="margin:1.25rem 0 .5rem">Leer-Zustand — <code>.empty / .ei</code></div>
+    <div style="border:var(--bw) solid var(--bdr);border-radius:var(--r-md);background:var(--bg2)">
+      <div class="empty">
+        <span class="ei">🔍</span>
+        Keine Einträge gefunden — Filter anpassen oder zuerst Daten laden.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk-Aktions-Leiste (fixed bottom) — zugehöriger Script-Block folgt weiter unten -->
+<div class="bulk-bar" id="bulk-bar" style="display:none" role="toolbar" aria-label="Bulk-Aktionen">
+  <span class="bulk-count" id="bulk-count"></span>
+  <div class="bulk-actions">
+    <button class="lb lb-coral" onclick="showConfirm({icon:'🗑',title:'Einträge löschen',body:'<strong>'+_bulkIds.size+'</strong> Einträge unwiderruflich löschen?',okLabel:'Löschen',okClass:'lb-coral',callback:function(){showToast('Gelöscht (Demo).','ok');bulkClear();}})">🗑 Löschen</button>
+    <button class="lb" onclick="bulkClear()">✕ Abwählen</button>
   </div>
 </div>
 
