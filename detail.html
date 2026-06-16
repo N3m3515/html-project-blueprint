@@ -519,6 +519,8 @@ a{text-underline-offset:3px;}
 h1,h2{margin:0;font:inherit;}
 body{font-size:13px;}
 .card-body,.ig-note,.poi-desc,.sc-desc,.edetail,.cg-intro,.tip,.ti-note{font-size:13px;}
+code{font-family:'Courier New',Courier,monospace;font-size:.875em;background:var(--bg3);border-radius:var(--r-xs);padding:1px 5px;color:var(--tx);}
+pre{font-family:'Courier New',Courier,monospace;font-size:11px;background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-sm);padding:10px 12px;overflow-x:auto;white-space:pre-wrap;word-break:break-all;color:var(--tx);margin:0;}
 .toc{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 1.25rem;}
 .toc a{font-size:11px;font-weight:500;padding:4px 10px;border-radius:var(--r-pill);background:var(--bg3);border:var(--bw) solid var(--bdr);color:var(--tx2);text-decoration:none;white-space:nowrap;}
 .toc a:hover{background:var(--bg4);color:var(--tx);text-decoration:none;}
@@ -537,6 +539,44 @@ body{font-size:13px;}
 .sec-body.folded{display:block !important;max-height:0 !important;opacity:0;pointer-events:none;}
 .back-btn{position:fixed;top:.75rem;left:.75rem;z-index:200;margin:0;}
 body{padding-top:3.4rem;}
+
+/* === Baustein: Leer-Zustand === */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:2.5rem 1rem;color:var(--tx3);font-size:13px;text-align:center;}
+.ei{font-size:2.25rem;line-height:1;display:block;}
+
+/* === Baustein: Formular-System === */
+/* Layout: .form-grid (2-spaltig) > .form-group (label+input) | .form-group.full (volle Breite) */
+/* Gruppierung: .form-section (Card-Wrapper) > .form-section-title (Abschnittsüberschrift) */
+/* Aktionszeile: .form-row (flex, Button-Gruppe) | .radio-group (gestylte Radio-Buttons) */
+.form-section{background:var(--bg2);border:var(--bw) solid var(--bdr);border-radius:var(--r-md);padding:1rem 1.125rem;margin-bottom:.875rem;}
+.form-section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--tx3);margin-bottom:.75rem;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.625rem .875rem;}
+.form-group{display:flex;flex-direction:column;gap:4px;}
+.form-group.full{grid-column:1/-1;}
+.form-group label{font-size:11px;font-weight:500;color:var(--tx2);}
+.form-group input,.form-group select,.form-group textarea{background:var(--bg3);border:var(--bw) solid var(--bdr2);border-radius:var(--r-sm);color:var(--tx);font:inherit;font-size:12px;padding:6px 9px;width:100%;box-sizing:border-box;outline:none;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue-bdr);background:var(--bg4);}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--tx3);}
+.form-group input:disabled,.form-group select:disabled{opacity:.45;cursor:not-allowed;}
+.form-group>span{font-size:11px;color:var(--tx3);}
+.form-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:.5rem;align-items:center;}
+.radio-group{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;}
+.radio-group label{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tx2);cursor:pointer;}
+.radio-group input[type=radio]{accent-color:var(--blue);cursor:pointer;}
+
+/* === Baustein: Datentabelle (read-only) === */
+/* Leichtgewichtige Tabelle für datenreiche, nicht-editierbare Inhalte (ergänzt .rt für Vergleich und .edt-table für Inline-Edit). */
+/* .mono auf <td>: Monospace für IP/MAC/UUID. .actions auf <td>: kompakte Button-Zelle ohne seitlichen Abstand. */
+.tbl-wrap{overflow-x:auto;border-radius:var(--r-md);border:var(--bw) solid var(--bdr);}
+.tbl{width:100%;border-collapse:collapse;font-size:12px;background:var(--bg2);}
+.tbl thead{background:var(--bg3);}
+.tbl th{text-align:left;padding:7px 10px;font-size:11px;font-weight:600;color:var(--tx2);border-bottom:var(--bw) solid var(--bdr2);white-space:nowrap;}
+.tbl td{padding:7px 10px;border-bottom:var(--bw) solid var(--bdr);color:var(--tx);vertical-align:top;line-height:1.45;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tbody tr:hover{background:var(--bg3);}
+.tbl td.mono{font-family:'Courier New',Courier,monospace;font-size:11px;}
+.tbl td.actions{white-space:nowrap;padding-right:6px;}
+.tbl .tbl-empty{padding:1.5rem;text-align:center;color:var(--tx3);}
 
 /* === Baustein: Checkliste === */
 .checklist{list-style:none;display:flex;flex-direction:column;gap:6px;margin:10px 0;}
@@ -1480,7 +1520,15 @@ function resetCalc(){
 </script>
 <!-- SCRIPT-BLOCK 7: Daten Export/Import + Tastatur-Shortcuts — OPTIONALE BAUSTEINE (gehört zur .data-tools-Leiste; identisch auf allen Seiten) -->
 <script>
-// Export/Import: sichert alle Projekt-Keys des localStorage als JSON-Datei (Blob-Download funktioniert auch bei file://).
+// downloadText: universelle Hilfsfunktion für Blob-Downloads (funktioniert auch bei file://).
+function downloadText(content,filename,mimeType){
+  var blob=new Blob([content],{type:mimeType||'text/plain'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1000);
+}
+// Export/Import: sichert alle Projekt-Keys des localStorage als JSON-Datei.
 // Löst die file://-Isolation: Daten lassen sich so zwischen Browsern/Rechnern umziehen.
 function exportData(){
   var out={};
@@ -1488,11 +1536,7 @@ function exportData(){
     var k=localStorage.key(i);
     if(k==='theme'||k==='design'||k==='favs'||/^(fold|ck|note|calc|ann|rating)-/.test(k))out[k]=localStorage.getItem(k);
   }
-  var a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,2)],{type:'application/json'}));
-  a.download='projekt-daten.json';
-  a.click();
-  URL.revokeObjectURL(a.href);
+  downloadText(JSON.stringify(out,null,2),'projekt-daten.json','application/json');
 }
 function importData(inp){
   var f=inp.files&&inp.files[0];

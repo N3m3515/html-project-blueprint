@@ -428,6 +428,8 @@ a{text-underline-offset:3px;}
 h1,h2{margin:0;font:inherit;}
 body{font-size:13px;}
 .tip{font-size:13px;}
+code{font-family:'Courier New',Courier,monospace;font-size:.875em;background:var(--bg3);border-radius:var(--r-xs);padding:1px 5px;color:var(--tx);}
+pre{font-family:'Courier New',Courier,monospace;font-size:11px;background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-sm);padding:10px 12px;overflow-x:auto;white-space:pre-wrap;word-break:break-all;color:var(--tx);margin:0;}
 .toc{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 1.25rem;}
 .toc a{font-size:11px;font-weight:500;padding:4px 10px;border-radius:var(--r-pill);background:var(--bg3);border:var(--bw) solid var(--bdr);color:var(--tx2);text-decoration:none;white-space:nowrap;}
 .toc a:hover{background:var(--bg4);color:var(--tx);text-decoration:none;}
@@ -440,6 +442,51 @@ body{font-size:13px;}
 .sec-body.folded{display:block !important;max-height:0 !important;opacity:0;pointer-events:none;}
 .back-btn{position:fixed;top:.75rem;left:.75rem;z-index:200;margin:0;}
 body{padding-top:3.4rem;}
+
+/* === Baustein: Leer-Zustand === */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:2.5rem 1rem;color:var(--tx3);font-size:13px;text-align:center;}
+.ei{font-size:2.25rem;line-height:1;display:block;}
+
+/* === Baustein: Formular-System === */
+/* Layout: .form-grid (2-spaltig) > .form-group (label+input) | .form-group.full (volle Breite) */
+/* Gruppierung: .form-section (Card-Wrapper) > .form-section-title (Abschnittsüberschrift) */
+/* Aktionszeile: .form-row (flex, Button-Gruppe) | .radio-group (gestylte Radio-Buttons) */
+.form-section{background:var(--bg2);border:var(--bw) solid var(--bdr);border-radius:var(--r-md);padding:1rem 1.125rem;margin-bottom:.875rem;}
+.form-section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--tx3);margin-bottom:.75rem;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.625rem .875rem;}
+.form-group{display:flex;flex-direction:column;gap:4px;}
+.form-group.full{grid-column:1/-1;}
+.form-group label{font-size:11px;font-weight:500;color:var(--tx2);}
+.form-group input,.form-group select,.form-group textarea{background:var(--bg3);border:var(--bw) solid var(--bdr2);border-radius:var(--r-sm);color:var(--tx);font:inherit;font-size:12px;padding:6px 9px;width:100%;box-sizing:border-box;outline:none;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue-bdr);background:var(--bg4);}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--tx3);}
+.form-group input:disabled,.form-group select:disabled{opacity:.45;cursor:not-allowed;}
+.form-group>span{font-size:11px;color:var(--tx3);}
+.form-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:.5rem;align-items:center;}
+.radio-group{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;}
+.radio-group label{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tx2);cursor:pointer;}
+.radio-group input[type=radio]{accent-color:var(--blue);cursor:pointer;}
+
+/* === Baustein: Datentabelle (read-only) === */
+/* Leichtgewichtige Tabelle für datenreiche, nicht-editierbare Inhalte (ergänzt .rt für Vergleich und .edt-table für Inline-Edit). */
+/* .mono auf <td>: Monospace für IP/MAC/UUID. .actions auf <td>: kompakte Button-Zelle ohne seitlichen Abstand. */
+.tbl-wrap{overflow-x:auto;border-radius:var(--r-md);border:var(--bw) solid var(--bdr);}
+.tbl{width:100%;border-collapse:collapse;font-size:12px;background:var(--bg2);}
+.tbl thead{background:var(--bg3);}
+.tbl th{text-align:left;padding:7px 10px;font-size:11px;font-weight:600;color:var(--tx2);border-bottom:var(--bw) solid var(--bdr2);white-space:nowrap;}
+.tbl td{padding:7px 10px;border-bottom:var(--bw) solid var(--bdr);color:var(--tx);vertical-align:top;line-height:1.45;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tbody tr:hover{background:var(--bg3);}
+.tbl td.mono{font-family:'Courier New',Courier,monospace;font-size:11px;}
+.tbl td.actions{white-space:nowrap;padding-right:6px;}
+.tbl .tbl-empty{padding:1.5rem;text-align:center;color:var(--tx3);}
+
+/* === Baustein: Bulk-Aktions-Leiste === */
+/* Setzt voraus: .tbl mit <input type=checkbox class="bulk-cb" data-id="…"> in jeder Zeile + id="bulk-select-all" in <th>. */
+/* body{padding-bottom:…} setzen, damit die fixe Leiste keinen Inhalt verdeckt. */
+.bulk-bar{position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--bg2);border-top:var(--bw) solid var(--blue-bdr);padding:.625rem clamp(1rem,4vw,2rem);display:none;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:0 -2px 12px rgba(0,0,0,.35);}
+.bulk-count{font-size:13px;font-weight:600;color:var(--tx);flex:1 1 auto;}
+.bulk-actions{display:flex;gap:6px;flex-wrap:wrap;}
 
 /* === Baustein: Back-to-top === */
 .totop{position:fixed;bottom:1rem;right:1rem;z-index:200;width:38px;height:38px;border-radius:50%;border:var(--bw) solid var(--bdr2);background:var(--bg3);color:var(--tx2);font-size:16px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s,background .15s;}
@@ -633,9 +680,11 @@ kbd{display:inline-block;background:var(--bg3);border:var(--bw) solid var(--bdr2
 /* === Baustein: Confirmation-Dialog === */
 .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:8000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
 .confirm-overlay.on{opacity:1;pointer-events:auto;}
-.confirm-panel{background:var(--bg2);border:var(--bw) solid var(--bdr2);border-radius:var(--r-lg);padding:1.5rem;max-width:420px;width:90%;box-shadow:var(--shadow-lift);}
-.confirm-panel h3{margin:0 0 0.75rem;font-size:15px;font-weight:600;color:var(--tx);}
-.confirm-msg{font-size:13px;color:var(--tx2);margin-bottom:1.25rem;line-height:1.5;}
+.confirm-panel{background:var(--bg2);border:var(--bw) solid var(--bdr2);border-radius:var(--r-lg);padding:1.5rem;max-width:440px;width:90%;box-shadow:var(--shadow-lift);}
+.confirm-header{display:flex;align-items:center;gap:10px;margin-bottom:.875rem;}
+.confirm-icon{font-size:1.5rem;line-height:1;flex-shrink:0;}
+.confirm-title{margin:0;font-size:15px;font-weight:600;color:var(--tx);}
+.confirm-body{font-size:13px;color:var(--tx2);margin-bottom:1.25rem;line-height:1.5;}
 .confirm-actions{display:flex;gap:0.5rem;justify-content:flex-end;}
 /* === Baustein: SSH-Backup-Manager === */
 .backup-list{display:flex;flex-direction:column;gap:0.5rem;}
@@ -1062,8 +1111,11 @@ document.documentElement.setAttribute('data-design',d);if(d==='material'){var ml
 <!-- Baustein: Confirmation-Dialog -->
 <div class="confirm-overlay" id="confirm-overlay" role="dialog" aria-modal="true" aria-label="Bestätigung erforderlich" onclick="if(event.target===this)closeConfirm()">
   <div class="confirm-panel">
-    <h3>⚠ Bestätigung</h3>
-    <div class="confirm-msg" id="confirm-msg"></div>
+    <div class="confirm-header">
+      <span class="confirm-icon" id="confirm-icon" aria-hidden="true">⚠️</span>
+      <h3 class="confirm-title" id="confirm-title">Bestätigung</h3>
+    </div>
+    <div class="confirm-body" id="confirm-body"></div>
     <div class="confirm-actions">
       <button class="lb" id="confirm-cancel" onclick="closeConfirm()">Abbrechen</button>
       <button class="lb lb-coral" id="confirm-ok">Bestätigen</button>
@@ -1400,14 +1452,13 @@ document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('clic
     D.certificates.forEach(function(cert){
       var exp=new Date(cert.expires);
       var days=Math.round((exp-certNow)/(1000*60*60*24));
-      var cls=days<14?'crit':days<30?'warn':'ok';
       certHtml+='<tr>'
         +'<td>'+esc(cert.host||'')+'</td>'
         +'<td>'+esc(String(cert.port||443))+'</td>'
         +'<td>'+esc(cert.subject||'')+'</td>'
         +'<td>'+esc(cert.issuer||'')+'</td>'
         +'<td style="white-space:nowrap">'+esc(cert.expires||'')+'</td>'
-        +'<td><span class="cert-days '+cls+'">'+(days<0?String(days)+' ⚠':days+' d')+'</span></td>'
+        +'<td>'+(certDaysBadge(days)||'<span class="b b-gray">—</span>')+'</td>'
         +'<td style="white-space:nowrap"><button class="lb cert-check-btn" data-host="'+esc(cert.host||'')+'" data-port="'+esc(String(cert.port||443))+'" onclick="checkCert(this)" title="Prüfen" aria-label="Prüfen: '+esc(cert.host||'')+'">🔍</button>'
         +' <button class="lb lb-teal cert-check-btn" data-id="'+esc(cert.id||cert.host||'')+'" onclick="csrFromCert(this.dataset.id)" title="CSR generieren" aria-label="CSR für '+esc(cert.host||'')+'">📜</button></td>'
         +'</tr>';
@@ -1433,6 +1484,27 @@ document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('clic
 // Sicherheitshinweis: clientSecret darf NIEMALS in sessionStorage/localStorage gespeichert werden.
 // baseUrl + clientId bleiben für die Browsersitzung im sessionStorage; Token wird bei Ablauf neu angefordert.
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);});}
+// statusBadge: mappt einen Status-String auf einen farbigen Badge. Unbekannte Werte erhalten b-gray.
+// statusMap-Beispiel: {'ok':'b-teal','warn':'b-amber','crit':'b-coral'}
+function statusBadge(label,statusMap){
+  if(!label)return '<span class="b b-gray">—</span>';
+  var cls=(statusMap&&statusMap[label])||'b-gray';
+  return '<span class="b '+esc(cls)+'">'+esc(label)+'</span>';
+}
+// certDaysBadge: erzeugt einen .cert-days-Span mit Ampelfarbe (crit<14 / warn<30 / ok).
+// Gibt null zurück wenn days kein gültiger Wert ist.
+function certDaysBadge(days){
+  if(typeof days!=='number'||isNaN(days))return null;
+  var cls=days<14?'crit':days<30?'warn':'ok';
+  return '<span class="cert-days '+cls+'">'+(days<0?String(days)+' ⚠':days+' d')+'</span>';
+}
+function downloadText(content,filename,mimeType){
+  var blob=new Blob([content],{type:mimeType||'text/plain'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1000);
+}
 
 // ── Toast-Notifications ──────────────────────────────────────────────────────
 function showToast(msg,type){
@@ -1445,12 +1517,24 @@ function showToast(msg,type){
 }
 
 // ── Confirmation-Dialog ──────────────────────────────────────────────────────
+// showConfirm(opts): opts = {icon, title, body, okLabel, okClass, callback}
+// confirmDialog(msg, cb): Alias für Rückwärtskompatibilität — ruft showConfirm() auf.
 var _confirmCb=null;
+function showConfirm(opts){
+  opts=opts||{};
+  var overlay=document.getElementById('confirm-overlay');
+  if(!overlay){if(window.confirm(opts.body||opts.title||''))if(opts.callback)opts.callback();return;}
+  var el=function(id){return document.getElementById(id);};
+  var icon=el('confirm-icon'),title=el('confirm-title'),body=el('confirm-body'),okBtn=el('confirm-ok');
+  if(icon)icon.textContent=opts.icon||'⚠️';
+  if(title)title.textContent=opts.title||'Bestätigung';
+  if(body)body.innerHTML=opts.body||'';
+  if(okBtn){okBtn.textContent=opts.okLabel||'Bestätigen';okBtn.className='lb '+(opts.okClass||'lb-coral');}
+  _confirmCb=opts.callback||null;
+  overlay.classList.add('on');document.body.style.overflow='hidden';if(okBtn)okBtn.focus();
+}
 function confirmDialog(msg,onConfirm){
-  var overlay=document.getElementById('confirm-overlay'),msgEl=document.getElementById('confirm-msg'),okBtn=document.getElementById('confirm-ok');
-  if(!overlay||!msgEl||!okBtn){if(window.confirm(msg))onConfirm();return;}
-  msgEl.textContent=msg;_confirmCb=onConfirm;
-  overlay.classList.add('on');document.body.style.overflow='hidden';okBtn.focus();
+  showConfirm({icon:'⚠️',title:'Bestätigung',body:typeof msg==='string'?msg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'',callback:onConfirm});
 }
 function closeConfirm(){
   var overlay=document.getElementById('confirm-overlay');
@@ -1602,10 +1686,7 @@ function csrDownload(){
   var pem=(document.getElementById('csr-result')||{}).textContent||'';
   if(!pem||pem==='(leer)'){showToast('Kein CSR vorhanden.','err');return;}
   var cn=((document.getElementById('csr-cn')||{}).value||'server').replace(/[^a-zA-Z0-9._-]/g,'_');
-  var blob=new Blob([pem],{type:'application/pkcs10'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=cn+'.csr';
-  document.body.appendChild(a);a.click();
-  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);
+  downloadText(pem,cn+'.csr','application/pkcs10');
 }
 
 // ── CSR-Prefill ───────────────────────────────────────────────────────────────
@@ -1747,7 +1828,7 @@ async function checkCert(btn){
     if(typeof data.days_remaining==='number'){
       var d=data.days_remaining;
       var tr=btn.closest('tr'),daysTd=tr&&tr.querySelector('.cert-days');
-      if(daysTd){daysTd.className='cert-days '+(d<14?'crit':d<30?'warn':'ok');daysTd.textContent=d<0?String(d)+' ⚠':d+' d';}
+      if(daysTd){var nb=certDaysBadge(d);if(nb)daysTd.outerHTML=nb;}
       showToast('Zertifikat '+host+': '+d+' Tage verbleibend.','ok');
     }else{showToast('Prüfung abgeschlossen.','info');}
   }catch(e){showToast('Prüfung fehlgeschlagen: '+e.message,'err');}
@@ -1768,6 +1849,29 @@ async function checkCert(btn){
   </div>
 </div>
 
+<!-- SCRIPT-BLOCK „Bulk-Aktions-Leiste" — OPTIONALER BAUSTEIN
+     Setzt voraus: .bulk-bar#bulk-bar im Body + .tbl mit Checkboxen.
+     Markup-Muster:
+       <input type="checkbox" class="bulk-cb" data-id="123" onchange="bulkToggle(this)"> in jeder Zeile
+       <input type="checkbox" id="bulk-select-all" onchange="bulkToggleAll(this)"> in <th>
+       <div class="bulk-bar" id="bulk-bar" style="display:none">
+         <span class="bulk-count" id="bulk-count"></span>
+         <div class="bulk-actions">
+           <button class="lb lb-coral" onclick="bulkDelete()">🗑 Löschen</button>
+           <button class="lb" onclick="bulkClear()">✕ Abwählen</button>
+         </div>
+       </div>
+     body{padding-bottom:4rem} setzen damit die fixe Leiste keinen Inhalt verdeckt. -->
+<script>
+var _bulkIds=new Set();
+function bulkToggle(cb){cb.checked?_bulkIds.add(cb.dataset.id):_bulkIds.delete(cb.dataset.id);_bulkUpdateBar();}
+function bulkToggleAll(cb){document.querySelectorAll('.bulk-cb').forEach(function(c){c.checked=cb.checked;cb.checked?_bulkIds.add(c.dataset.id):_bulkIds.delete(c.dataset.id);});_bulkUpdateBar();}
+function bulkClear(){_bulkIds.clear();document.querySelectorAll('.bulk-cb').forEach(function(c){c.checked=false;});var a=document.getElementById('bulk-select-all');if(a)a.checked=false;_bulkUpdateBar();}
+function _bulkUpdateBar(){var bar=document.getElementById('bulk-bar'),cnt=document.getElementById('bulk-count');if(!bar)return;bar.style.display=_bulkIds.size?'flex':'none';if(cnt)cnt.textContent=_bulkIds.size+' Eintrag'+(+(_bulkIds.size!==1?'einträge ausgewählt':'eintrag ausgewählt'));}
+// bulkDelete() ist projektspezifisch — hier als Stub; im eigenen Projekt ersetzen:
+// function bulkDelete(){showConfirm({icon:'❌',title:'Löschen',body:'<strong>'+_bulkIds.size+'</strong> Einträge löschen?',okLabel:'Löschen',okClass:'lb-coral',callback:async function(){/* API-Call */bulkClear();}});}
+</script>
+
 <!-- SCRIPT-BLOCK 7: Daten Export/Import + Tastatur-Shortcuts -->
 <script>
 var _LS_KEYS=['theme','design','fold-prefs','fold-eh-grid','favs'];
@@ -1775,7 +1879,7 @@ function exportData(){
   var out={};
   _LS_KEYS.forEach(function(k){var v=localStorage.getItem(k);if(v!==null)out[k]=v;});
   for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&(k.startsWith('ck-')||k.startsWith('note-')||k.startsWith('ann-')||k.startsWith('rating-')||k.startsWith('calc-')))out[k]=localStorage.getItem(k);}
-  var a=document.createElement('a');a.href='data:application/json,'+encodeURIComponent(JSON.stringify(out,null,2));a.download='dashboard-export.json';a.click();
+  downloadText(JSON.stringify(out,null,2),'dashboard-export.json','application/json');
 }
 function importData(inp){
   var f=inp.files[0];if(!f)return;

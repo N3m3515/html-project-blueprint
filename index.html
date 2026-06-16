@@ -499,6 +499,8 @@ a{text-underline-offset:3px;}
 h1,h2{margin:0;font:inherit;}
 body{font-size:13px;}
 .info-body,.tip,.pc-body,.pref,.eh-body{font-size:13px;}
+code{font-family:'Courier New',Courier,monospace;font-size:.875em;background:var(--bg3);border-radius:var(--r-xs);padding:1px 5px;color:var(--tx);}
+pre{font-family:'Courier New',Courier,monospace;font-size:11px;background:var(--bg3);border:var(--bw) solid var(--bdr);border-radius:var(--r-sm);padding:10px 12px;overflow-x:auto;white-space:pre-wrap;word-break:break-all;color:var(--tx);margin:0;}
 
 /* === Sektions-Fold === */
 .hero-title,.eh-title{display:flex;align-items:center;gap:10px;}
@@ -509,6 +511,10 @@ body{font-size:13px;}
 .folded{display:none !important;}
 .sec-body,.prefs,.eh-grid{overflow:hidden;transition:max-height .28s ease,opacity .22s ease;}
 .sec-body.folded,.prefs.folded,.eh-grid.folded{display:block !important;max-height:0 !important;opacity:0;pointer-events:none;}
+
+/* === Baustein: Leer-Zustand === */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:2.5rem 1rem;color:var(--tx3);font-size:13px;text-align:center;}
+.ei{font-size:2.25rem;line-height:1;display:block;}
 
 /* === Baustein: Filter & Favoriten === */
 .filterbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
@@ -1244,7 +1250,15 @@ function dtApply() {
 </script>
 <!-- SCRIPT-BLOCK „Daten Export/Import + Tastatur-Shortcuts" — OPTIONALE BAUSTEINE (gehört zur .data-tools-Leiste) -->
 <script>
-// Export/Import: sichert alle Projekt-Keys des localStorage als JSON-Datei (Blob-Download funktioniert auch bei file://).
+// downloadText: universelle Hilfsfunktion für Blob-Downloads (funktioniert auch bei file://).
+function downloadText(content,filename,mimeType){
+  var blob=new Blob([content],{type:mimeType||'text/plain'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1000);
+}
+// Export/Import: sichert alle Projekt-Keys des localStorage als JSON-Datei.
 // Löst die file://-Isolation: Daten lassen sich so zwischen Browsern/Rechnern umziehen.
 function exportData(){
   var out={};
@@ -1252,11 +1266,7 @@ function exportData(){
     var k=localStorage.key(i);
     if(k==='theme'||k==='design'||k==='favs'||/^(fold|ck|note|calc|ann|rating)-/.test(k))out[k]=localStorage.getItem(k);
   }
-  var a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,2)],{type:'application/json'}));
-  a.download='projekt-daten.json';
-  a.click();
-  URL.revokeObjectURL(a.href);
+  downloadText(JSON.stringify(out,null,2),'projekt-daten.json','application/json');
 }
 function importData(inp){
   var f=inp.files&&inp.files[0];
